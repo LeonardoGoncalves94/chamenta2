@@ -1,0 +1,14 @@
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/asn1/coer/COERIA5StringTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/datastructures/base/SubjectAssuranceTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/cryptography/JcePKCS12Test.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/datastructures/base/ValidityPeriodTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/asn1/coer/COERSequenceOfTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/asn1/coer/COERTagTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/asn1/coer/COERLengthDeterminantTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/datastructures/base/DurationTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/Main.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/asn1/coer/COERIntegerTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/asn1/coer/COEROctetStringTest.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/datastructures/base/Time32Test.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/datastructures/base/Time64Test.java
+/home/leonardo/Documentos/tese/v2x/src/test/java/com/multicert/v2x/asn1/coer/COERBitStringTest.java
