@@ -21,7 +21,7 @@
       <file leaf-file-name="CryptoHelper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/cryptography/CryptoHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
+            <state relative-caret-position="-270">
               <caret line="589" column="157" lean-forward="false" selection-start-line="589" selection-start-column="157" selection-end-line="589" selection-end-column="157" />
               <folding />
             </state>
@@ -31,7 +31,7 @@
       <file leaf-file-name="EnrollmentRequestGenerator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1485">
+            <state relative-caret-position="225">
               <caret line="126" column="70" lean-forward="false" selection-start-line="126" selection-start-column="64" selection-end-line="126" selection-end-column="70" />
               <folding>
                 <element signature="e#10020#10021#0" expanded="true" />
@@ -52,12 +52,22 @@
       <file leaf-file-name="SecuredDataGenerator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/generators/message/SecuredDataGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="825">
-              <caret line="126" column="40" lean-forward="false" selection-start-line="126" selection-start-column="40" selection-end-line="126" selection-end-column="40" />
+            <state relative-caret-position="216">
+              <caret line="109" column="0" lean-forward="true" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
               <folding>
                 <element signature="e#1589#1590#0" expanded="true" />
                 <element signature="e#1637#1638#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EnrollmentRequestGeneratorTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGeneratorTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="347">
+              <caret line="110" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -184,7 +194,6 @@
         <option value="$PROJECT_DIR$/src/test/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/datastructures/base/Signature.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGenerator.java" />
-        <option value="$PROJECT_DIR$/src/test/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGeneratorTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/datastructures/message/secureddata/EtsiTs103097Content.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/datastructures/certificaterequests/EtsiTs102941Data.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/datastructures/certificaterequests/EtsiTs102941DataContent.java" />
@@ -197,6 +206,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/cryptography/CryptoHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/cryptography/InvalidSignatureException.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/cryptography/ImcompleteRequestException.java" />
+        <option value="$PROJECT_DIR$/src/test/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGeneratorTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/multicert/v2x/generators/message/SecuredDataGenerator.java" />
       </list>
     </option>
@@ -212,7 +222,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="114" />
     <option name="y" value="540" />
     <option name="width" value="1906" />
@@ -833,12 +843,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="EnrollmentRequestGeneratorTest - 2018.08.24 at 11h 24m 24s.xml">
-      <configuration name="EnrollmentRequestGeneratorTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="EnrollmentRequestGeneratorTest - 2018.08.24 at 11h 25m 31s.xml">
-      <configuration name="EnrollmentRequestGeneratorTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="EnrollmentRequestGeneratorTest - 2018.08.24 at 11h 32m 56s.xml">
       <configuration name="EnrollmentRequestGeneratorTest" configurationId="JUnit" />
     </history-entry>
@@ -863,6 +867,12 @@
     <history-entry file="EnrollmentRequestGeneratorTest - 2018.08.24 at 16h 07m 27s.xml">
       <configuration name="EnrollmentRequestGeneratorTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="EnrollmentRequestGeneratorTest - 2018.08.24 at 18h 38m 35s.xml">
+      <configuration name="EnrollmentRequestGeneratorTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="EnrollmentRequestGeneratorTest - 2018.08.24 at 18h 40m 07s.xml">
+      <configuration name="EnrollmentRequestGeneratorTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -874,7 +884,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="114" y="540" width="1906" height="1046" extended-state="0" />
+    <frame x="-1" y="25" width="1922" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -886,11 +896,11 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32977587" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41541755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41541755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32891247" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25995696" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25773746" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20704375" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -968,7 +978,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGeneratorTest.java</url>
-          <line>110</line>
+          <line>109</line>
           <properties />
           <option name="timeStamp" value="235" />
         </line-breakpoint>
@@ -1294,14 +1304,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGeneratorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="70" column="71" lean-forward="true" selection-start-line="70" selection-start-column="27" selection-end-line="70" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/generators/certificate/EnrollmentCredentiaGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-435">
@@ -1353,14 +1355,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/cryptography/CryptoHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="589" column="157" lean-forward="false" selection-start-line="589" selection-start-column="157" selection-end-line="589" selection-end-column="157" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/cryptography/InvalidSignatureException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -1393,9 +1387,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGeneratorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="110" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/cryptography/CryptoHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-270">
+          <caret line="589" column="157" lean-forward="false" selection-start-line="589" selection-start-column="157" selection-end-line="589" selection-end-column="157" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1485">
+        <state relative-caret-position="225">
           <caret line="126" column="70" lean-forward="false" selection-start-line="126" selection-start-column="64" selection-end-line="126" selection-end-column="70" />
           <folding>
             <element signature="e#10020#10021#0" expanded="true" />
@@ -1414,8 +1424,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/multicert/v2x/generators/message/SecuredDataGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="126" column="40" lean-forward="false" selection-start-line="126" selection-start-column="40" selection-end-line="126" selection-end-column="40" />
+        <state relative-caret-position="216">
+          <caret line="109" column="0" lean-forward="true" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
           <folding>
             <element signature="e#1589#1590#0" expanded="true" />
             <element signature="e#1637#1638#0" expanded="true" />

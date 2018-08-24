@@ -84,14 +84,14 @@ public class SecuredDataGenerator
      * @throws SignatureException
      * @throws IOException
      */
-    public boolean verifySignedRequest(EtsiTs103097Data signedData, PublicKey canonicalPubKey) throws IllegalArgumentException, SignatureException, ImcompleteRequestException, BadContentTypeException
+    public void verifySignedRequest(EtsiTs103097Data signedData, PublicKey canonicalPubKey) throws IllegalArgumentException, SignatureException, ImcompleteRequestException, BadContentTypeException, IOException, InvalidSignatureException
     {
-        if(signedData.getContent().getType() != EtsiTs103097Content.EtsiTs103097ContentChoices.SIGNED_DATA){
+        if(signedData.getContent().getType() != EtsiTs103097Content.EtsiTs103097ContentChoices.SIGNED_DATA)
+        {
             throw new BadContentTypeException("Error verifying outer signature: Only signed EtsiTs103097Data can verified");
         }
 
 
-        try{
             SignedData sd = (SignedData) signedData.getContent().getValue();
             EtsiTs103097Data payloadData = sd.getTbsData().getPayload().getData();
             if(payloadData == null){
@@ -112,11 +112,13 @@ public class SecuredDataGenerator
             //Verify the inner signed  structure
             Boolean innerSignatureResult = verifyInnerSignature(InnerECRequestSignedForPOP);
 
-            return outerSignatureresult & innerSignatureResult;
+            //If a signature is invalid the whole request is invalid
+            if(!outerSignatureresult & innerSignatureResult)
+            {
+                throw new InvalidSignatureException("The signature does not verify");
+            }
 
-        }catch(Exception e){
-            throw new SignatureException("Error verifying message: " + e.getMessage(),e);
-        }
+
     }
 
     /**
