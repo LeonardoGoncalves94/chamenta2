@@ -19,4 +19,19 @@ public class SequenceOfPsidSspRange extends COERSequenceOf
     {
         super(new PsidSspRange());
     }
+
+    @Override
+    public String toString() {
+        String retval = "SequenceOfPsidSspRange [";
+        if(values != null){
+            for(int i=0; i< values.length -1;i++){
+                retval += values[i].toString().replace("PsidSspRange ", "") + ",";
+            }
+            if(values.length > 0){
+                retval += values[values.length-1].toString().replace("PsidSspRange ", "");
+            }
+        }
+        retval += "]";
+        return retval;
+    }
 }

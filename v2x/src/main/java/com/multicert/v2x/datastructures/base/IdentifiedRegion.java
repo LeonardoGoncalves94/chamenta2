@@ -77,4 +77,9 @@ public class IdentifiedRegion extends COERChoice
     {
         return (IdentifiedRegionTypes) choice;
     }
+
+    @Override
+    public String toString() {
+        return "IdentifiedRegion [" + value + "]";
+    }
 }

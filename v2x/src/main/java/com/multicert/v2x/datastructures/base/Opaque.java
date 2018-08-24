@@ -1,7 +1,11 @@
 package com.multicert.v2x.datastructures.base;
 
 import com.multicert.v2x.asn1.coer.COEROctetString;
+import org.bouncycastle.util.encoders.Hex;
 
+/**
+ * This class represents an unknown byte array with no lower or upper bounds.
+ */
 public class Opaque extends COEROctetString
 {
     /**
@@ -18,6 +22,11 @@ public class Opaque extends COEROctetString
     public Opaque()
     {
         super();
+    }
+
+    @Override
+    public String toString() {
+        return "Opaque [data=" + new String(Hex.encode(data)) + "]";
     }
 
 }

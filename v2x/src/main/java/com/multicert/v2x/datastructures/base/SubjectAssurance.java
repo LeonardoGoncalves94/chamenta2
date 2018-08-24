@@ -39,13 +39,15 @@ public class SubjectAssurance extends COEROctetString
         super(OCTET_STRING_LENGTH, OCTET_STRING_LENGTH);
     }
 
-    private void getSubjectAssurance()
+    private Integer getSubjectAssurance()
     {
         if(subjectAssurance == null)
         {
            int aux = data[0] & 0xff; // we apply a mask to read byte as an unsigned
            subjectAssurance = new Integer(aux);
+
         }
+        return subjectAssurance;
     }
 
     public int getAssuranceLevel()
@@ -58,6 +60,11 @@ public class SubjectAssurance extends COEROctetString
     {
         getSubjectAssurance();
         return subjectAssurance & 3;
+    }
+
+    @Override
+    public String toString() {
+        return "SubjectAssurance [subjectAssurance=" + getSubjectAssurance() + " (assuranceLevel=" + getAssuranceLevel() + ", confidenceLevel= " + getConfidenceLevel() +" )]";
     }
 
 }

@@ -2,10 +2,9 @@ package com.multicert.v2x.datastructures.certificaterequests;
 
 import com.multicert.v2x.asn1.coer.COERInteger;
 import com.multicert.v2x.asn1.coer.COERSequence;
+import com.multicert.v2x.datastructures.message.secureddata.EtsiTs103097Content;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class EtsiTs102941Data extends COERSequence
 {
@@ -52,6 +51,24 @@ public class EtsiTs102941Data extends COERSequence
         encode(dos);
         return baos.toByteArray();
     }
+
+    public EtsiTs102941Data(byte[] encoded) throws IOException
+    {
+        super(SEQUENCE_SIZE);
+        createSequence();
+
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(encoded));
+        decode(dis);
+    }
+
+    /**
+     *
+     * @return content
+     */
+    public EtsiTs102941DataContent getContent(){
+        return (EtsiTs102941DataContent) getComponentValue(CONTENT);
+    }
+
 
     public void createSequence()
     {

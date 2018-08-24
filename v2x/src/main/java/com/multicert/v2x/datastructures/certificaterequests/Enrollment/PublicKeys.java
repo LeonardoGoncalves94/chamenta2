@@ -55,4 +55,10 @@ public class PublicKeys extends COERSequence
     {
         return (PublicVerificationKey) getComponentValue(VERIFICATION_KEY);
     }
+
+    public String toString()
+    {
+        return "publicKeys [verificationKey=" + getVerificationKey().toString().replaceAll("PublicVerificationKey ", "") + ", encryptionKey=" + (getEncryptionKey() != null ? getEncryptionKey().toString().replaceAll("PublicEncryptionKey ", "") : "NULL") + "]";
+    }
+
 }

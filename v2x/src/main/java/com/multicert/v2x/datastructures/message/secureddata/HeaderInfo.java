@@ -15,15 +15,14 @@ public class HeaderInfo extends COERSequence
 	private static final int GENERATION_TIME = 1;
 	private static final int EXPIRY_TIME = 2;
 	private static final int GENERATION_LOCATION = 3;
-	private static final int P2PCD_LEARNING_REQUEST = 4;
-	private static final int MISSING_CRL_IDENTIFIER = 5;
+	private static final int P2PCD_LEARNING_REQUEST = 4; //always ABSENT in ETSI TS 103 097
+	private static final int MISSING_CRL_IDENTIFIER = 5; //always ABSENT in ETSI TS 103 097
 	private static final int ENCRYPTION_KEY = 6;
 
 	/**
 	 * Constructor used when encoding
 	 */
-	public HeaderInfo(Psid psid, Time64 generationTime, Time64 expiryTime, ThreeDLocation generationLocation,
-					  HashedId3 p2pcdLearningRequest, MissingCrlIdentifier missingCrlIdentifier, EncryptionKey encryptionKey) throws IOException
+	public HeaderInfo(Psid psid, Time64 generationTime, Time64 expiryTime, ThreeDLocation generationLocation,EncryptionKey encryptionKey) throws IOException
 	{
 		super(SEQUENCE_SIZE);
 		createSequence();
@@ -31,8 +30,8 @@ public class HeaderInfo extends COERSequence
 		setComponentValue(GENERATION_TIME, generationTime);
 		setComponentValue(EXPIRY_TIME, expiryTime);
 		setComponentValue(GENERATION_LOCATION, generationLocation);
-		setComponentValue(P2PCD_LEARNING_REQUEST, p2pcdLearningRequest);
-		setComponentValue(MISSING_CRL_IDENTIFIER, missingCrlIdentifier);
+		setComponentValue(P2PCD_LEARNING_REQUEST, null); //ABSENT
+		setComponentValue(MISSING_CRL_IDENTIFIER, null); //ABSENT
 		setComponentValue(ENCRYPTION_KEY, encryptionKey);
 	}
 
@@ -80,24 +79,7 @@ public class HeaderInfo extends COERSequence
     {
 		return (ThreeDLocation) getComponentValue(GENERATION_LOCATION);
 	}
-	
-	/**
-	 * 
-	 * @return p2pcdLearningRequest, optional, null if not set
-	 */
-	public HashedId3 getP2pcdLearningRequest()
-    {
-		return (HashedId3) getComponentValue(P2PCD_LEARNING_REQUEST);
-	}
-	
-	/**
-	 * 
-	 * @return missingCrlIdentifier, optional, null if not set
-	 */
-	public MissingCrlIdentifier getMissingCrlIdentifier()
-    {
-		return (MissingCrlIdentifier) getComponentValue(MISSING_CRL_IDENTIFIER);
-	}
+
 	
 	/**
 	 * 
@@ -117,6 +99,21 @@ public class HeaderInfo extends COERSequence
 		addComponent(P2PCD_LEARNING_REQUEST, true, new HashedId3(), null);
 		addComponent(MISSING_CRL_IDENTIFIER, true, new MissingCrlIdentifier(), null);
 		addComponent(ENCRYPTION_KEY, true, new EncryptionKey(), null);
+	}
+
+	@Override
+	public String toString() {
+		String retval = "HeaderInfo [\n"+
+				"  psid=" + getPsid().toString().replace("Psid ", "") +  ",\n"+
+				(getGenerationTime() != null ? "  generationTime=" + getGenerationTime().toString().replace("Time64 ", "")   +  ",\n" : "") +
+				(getExpiryTime() != null ? "  expiryTime=" + getExpiryTime().toString().replace("Time64 ", "")   +  ",\n" : "") +
+				(getGenerationLocation() != null ? "  generationLocation=" + getGenerationLocation().toString().replace("ThreeDLocation ", "")   +  ",\n" : "")+
+				(getEncryptionKey() != null ? "  encryptionKey=" + getEncryptionKey().toString().replace("EncryptionKey ", "")   +  "\n" : "")+
+				"]";
+		if(retval.endsWith(",\n]")){
+			retval = retval.substring(0, retval.length()-3) + "\n]";
+		}
+		return retval;
 	}
 
 }

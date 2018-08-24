@@ -74,4 +74,9 @@ public class ElevInt extends Uint16
 
         return -4095 + (encodedElevation - 0xF001);
     }
+
+    @Override
+    public String toString() {
+        return "ElevInt [" + getElevationInDecimeters() + "(" + Integer.toString(getEncodedElevation(),16)+ ")"+ "]";
+    }
 }

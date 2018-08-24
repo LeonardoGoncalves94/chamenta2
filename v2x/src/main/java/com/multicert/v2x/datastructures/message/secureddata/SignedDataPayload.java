@@ -15,7 +15,7 @@ public class SignedDataPayload extends COERSequence
 	/**
 	 * Constructor used when encoding
 	 */
-	public SignedDataPayload(Ieee1609Dot2Data data, HashedData extDataHash) throws IllegalArgumentException, IOException
+	public SignedDataPayload(EtsiTs103097Data data, HashedData extDataHash) throws IllegalArgumentException, IOException
 	{
 		super(SEQUENCE_SIZE);
 		createSequence();
@@ -39,8 +39,8 @@ public class SignedDataPayload extends COERSequence
 	 * 
 	 * @return data
 	 */
-	public Ieee1609Dot2Data getData(){
-		return (Ieee1609Dot2Data) getComponentValue(DATA);
+	public EtsiTs103097Data getData(){
+		return (EtsiTs103097Data) getComponentValue(DATA);
 	}
 	
 	/**
@@ -52,9 +52,16 @@ public class SignedDataPayload extends COERSequence
 	}
 	
 	private void createSequence(){
-		addComponent(DATA, true, new Ieee1609Dot2Data(), null);
+		addComponent(DATA, true, new EtsiTs103097Data(), null);
 		addComponent(EXTDATAHASH, true, new HashedData(), null);
 	}
 
+	@Override
+	public String toString() {
+		return "SignedDataPayload [\n" +
+				(getData() != null ? "  data=" + getData().toString().replace("EtsiTs103097Data ", "").replaceAll("\n", "\n  ")  + (getExtDataHash() != null ? ",\n" : "") : "") +
+				(getExtDataHash() != null ? "  extDataHash=" + getExtDataHash().toString().replace("HashedData ", "").replaceAll("\n", "\n  ")   : "") +
+				"\n]";
+	}
 	
 }

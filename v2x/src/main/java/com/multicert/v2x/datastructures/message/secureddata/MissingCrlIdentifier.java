@@ -68,5 +68,11 @@ public class MissingCrlIdentifier extends COERSequence
 		addComponent(CRACAID, false, new HashedId3(), null);
 		addComponent(CRLSERIES, false, new CrlSeries(), null);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "MissingCrlIdentifier [cracaid=" + getCracaid().toString().replace("HashedId3 ", "") + ", crlSeries=" + getCrlSeries().toString().replace("CrlSeries ", "")  + "]";
+	}
+
+
 }

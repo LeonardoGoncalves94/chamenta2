@@ -1,9 +1,7 @@
 package com.multicert.v2x.asn1.coer;
 
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +56,15 @@ public class COERSequence implements COEREncodable
         Component newComponent = new Component(optional, null, emptyValue,  defaultValue);
         sequenceValues.add(position, newComponent);
     }
+
+    /**
+     *
+     * @return the size of this sequence.
+     */
+    public int size(){
+        return sequenceValues.size();
+    }
+
 
     /**
      * Method to set the value at a given position in the COER Sequence.
@@ -133,6 +140,27 @@ public class COERSequence implements COEREncodable
         }
     }
 
+    @Override
+    public void decode(DataInputStream in) throws IOException {
+        List<Component> optionalFields = getOptionalComponents();
+        long preAmple = readPreamble(in, optionalFields.size());
+        for(int i=optionalFields.size()-1; i>=0; i--){
+            Component f = optionalFields.get(i);
+            f.present = (preAmple % 2 == 1);
+            preAmple = preAmple >>> 1;
+        }
+
+        for(Component f : sequenceValues){
+            if(!f.optional || f.present){
+                f.emptyValue.decode(in);
+                f.value = f.emptyValue;
+            }
+        }
+
+
+    }
+
+/**
     public void decode(DataInputStream in) throws IOException
     {
         List<Component> optionalComponents = getOptionalComponents();
@@ -144,7 +172,7 @@ public class COERSequence implements COEREncodable
             long preambleAux = mask & preamble;
             optionalComponents.get(i).present = (preambleAux > 0 ? true : false);
         }
-            for(Component c : sequenceValues) // For used for decoding all mandatory components and the components which are optional but present
+            for(Component c : sequenceValues) // For loop used for decoding all mandatory components and the components which are optional but present
             {
                 if(!c.optional || c.present)
                 {
@@ -154,7 +182,7 @@ public class COERSequence implements COEREncodable
             }
 
     }
-
+/**
     /**
      * Method to decode the preamble, which indicates the presence of the optional fields in the COERSequence
      *
@@ -185,7 +213,7 @@ public class COERSequence implements COEREncodable
         return optionalComponents;
     }
 
-    private class Component
+    private class Component implements Serializable
     {
         protected boolean optional;
         protected boolean present;
@@ -202,5 +230,20 @@ public class COERSequence implements COEREncodable
             this.emptyValue = emptyValue;
         }
     }
+
+    @Override
+    public String toString() {
+        String sequenceValueString = "";
+        for(int i=0;i<size();i++){
+            if(getComponentValue(i) != null){
+                sequenceValueString += getComponentValue(i).toString() + (i== size()-1?"":", ");
+            }else{
+                sequenceValueString += (i== size()-1?"NULL":"NULL, ");
+            }
+        }
+
+        return "COERSequence [" + sequenceValueString + "]]";
+    }
+
 
 }

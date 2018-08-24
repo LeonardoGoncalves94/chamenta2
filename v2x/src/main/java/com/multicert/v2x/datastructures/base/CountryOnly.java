@@ -23,4 +23,9 @@ public class CountryOnly extends Uint16
     {
         super();
     }
+
+    @Override
+    public String toString() {
+        return "CountryOnly [" + getValueAsLong() + "]";
+    }
 }

@@ -9,8 +9,6 @@ import static java.util.Arrays.copyOfRange;
 /**
  * Base class for all HasedIdX types.
  *
- * @author Leonardo Gonçalves, leonardo.goncalves@multicert.com
- *
  */
 public class HashedId extends COEROctetString
 {
@@ -40,5 +38,12 @@ public class HashedId extends COEROctetString
     public  HashedId (int hashedIdLength)
     {
         super(hashedIdLength, hashedIdLength);
+    }
+
+    /**
+     * @return the hash id value,
+     */
+    public byte[] getHashedId(){
+        return data;
     }
 }

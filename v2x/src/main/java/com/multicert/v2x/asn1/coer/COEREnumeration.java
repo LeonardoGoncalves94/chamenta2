@@ -69,11 +69,14 @@ public class COEREnumeration implements COEREncodable
         {
             ordinal = BigInteger.valueOf(firstValue);
         }
-        int lengthIndicator = firstValue & 0x7f;
+        else
+        {
+            int lengthIndicator = firstValue & 0x7f;
 
-        byte[] lengthValue = new byte[lengthIndicator];
-        in.read(lengthValue, 0, lengthIndicator);
-        ordinal = new BigInteger(lengthValue);
+            byte[] lengthValue = new byte[lengthIndicator];
+            in.read(lengthValue, 0, lengthIndicator);
+            ordinal = new BigInteger(lengthValue);
+        }
 
         enumerationValue = (COEREnumerationType)enumeration.getEnumConstants()[ordinal.intValue()];
     }
@@ -81,5 +84,10 @@ public class COEREnumeration implements COEREncodable
     public COEREnumerationType getValue ()
     {
         return this.enumerationValue;
+    }
+
+    @Override
+    public String toString() {
+        return "COEREnumeration [value=" + enumerationValue + "]";
     }
 }

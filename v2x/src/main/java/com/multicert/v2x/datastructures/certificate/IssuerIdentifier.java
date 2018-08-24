@@ -13,7 +13,7 @@ public class IssuerIdentifier extends COERChoice
     public enum IssuerIdentifiertypes implements COERChoiceEnumeration
     {
         SHA_256_AND_DIGEST,
-        SELF; //TODO VER MELHOR ESTE getENCODABLETYPE
+        SELF;
 
         public int myOrdinal()
         {
@@ -50,10 +50,35 @@ public class IssuerIdentifier extends COERChoice
     }
 
     /**
+     * Returns the type of id.
+     */
+    public IssuerIdentifiertypes getType(){
+        return (IssuerIdentifiertypes) choice;
+    }
+
+    /**
      * Constructor used when decoding
      */
     public IssuerIdentifier()
     {
         super(IssuerIdentifiertypes.class);
+    }
+
+    public HashAlgorithm getHashAlgoritm(){
+        if(getType() == IssuerIdentifiertypes.SELF){
+            return (HashAlgorithm) ((COEREnumeration) getValue()).getValue();
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        switch(getType()){
+            case SHA_256_AND_DIGEST:
+                return "IssuerIdentifier [" + choice + "=" + value.toString().replace("HashedId8 ", "") +"]";
+            case SELF:
+            default:
+                return "IssuerIdentifier [" + choice + "=" + getHashAlgoritm().toString() +"]";
+        }
     }
 }

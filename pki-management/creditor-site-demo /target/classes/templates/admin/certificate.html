@@ -37,7 +37,6 @@
 										<td th:text="${cert.issuer.caName}">Issuer</td>							
 										<td th:text="${cert.subject.caName}">Subject</td>
 										<td th:text="${cert.validity}">Validity</td>
-										<td th:text="${cert.regions}">Regions</td>
 										<td th:text="${cert.confidence}">Confidence</td>
 										<td th:text="${cert.assurance}">Assurance</td>												
 									</tr>
@@ -60,22 +59,28 @@
 													</div>
 													<div class="modal-body">													
 																
-														<form action="#" th:action="@{/admin/addrootcert}"
-															method="post" role="form">
+														<form action="#" th:action="@{/admin/addrootcert}" 
+															method="post" role="form" th:object="${certificateObj}"> <!-- Will try to populate this Certificate object -->
 																														
 														<div class="form-group">
-														<label for="issuer">Subject/Issuer</label>
-																<select name="issuer" id = "issuer" required>
+														<label for="subject">Subject/Issuer</label>
+																<select id = "subject" th:field="*{subject}" required> <!-- the "subject" certificate field will be populated by the selected option. The value passes through a <String CA> converter to get the CA from the database -->
  																	 <option th:each="ca : ${rootSubjects}" 
-          																	 th:value="${ca.caId}" 
+          																	 th:value="${ca.caId}"  
           																	 th:text="${ca.caName}"></option>
 																</select>
-															</div>										
+															</div>
+															
+															<div class="form-group">
+																 <input
+																	type="hidden" class="form-control" id="issuer"
+																	th:field="*{issuer}" required/>
+															</div>					
 															
 															<div class="form-group">
 																<label for="validity">Validity</label> <input
 																	type="number" class="form-control" id="validity"
-																	name="validity" required/>
+																	th:field="*{validity}" required/>
 															</div>	
 																																																												
 																																																																																				
@@ -84,10 +89,9 @@
 																<ul id = "countrylistId">
   																	<li th:each="country : ${countries}">
     																	<input type="checkbox" 
-    																			th:value="${country}"
+    																			th:value="${country.regionId}"
     																			th:text="${country.regionName}"
-    																			th:name="${countrylist}" />
-    																	
+    																			th:field="*{regions}" />												
   																	</li>
 																</ul>
 															</div>	
@@ -95,26 +99,27 @@
 															<div class="form-group">
 																<label for="confidence">Confidence (between 0 and 3)</label> <input
 																	type="number" min = "0" max = "3" class="form-control" id="confidence"
-																	name="confidence" required/>
+																	th:field = "*{confidence}" required/>
 															</div>	
 															<div class="form-group">
 																<label for="assurance">Assurance (between 0 and 7)</label> <input
 																	type="number" min = "0" max = "7" class="form-control" id="assurance"
-																	name="assurance" required/>
+																	th:field="*{assurance}" required/>
 															</div>	
 															
 																	<div class="form-group">
 																<label for="chainlength">Min. Chain Length</label> <input
-																	type="number" class="form-control" id="chainlength"
-																	name="chainlength" required/>
+																	type="number" class="form-control" id="minchain"
+																	th:field="*{minChain}" required/>
 															</div>
 															<div class="form-group">
 																<label for="chainrange">Chain Range</label> <input
 																	type="number" class="form-control" id="chainrange"
-																	name="chainrange" required/>
+																	th:field="*{chainRange}" required/>
 															</div>
 																																																			
-															<button type="submit" class="btn btn-default">Submit</button>
+															<button type="submit" class="btn btn-default" 
+																	th:onClick = "|javascript:getIssuer();|">Submit</button>
 														</form>
 														
 													</div>
@@ -144,11 +149,11 @@
 													<div class="modal-body">													
 																
 														<form action="#" th:action="@{/admin/addsubcert}"
-															method="post" role="form">
+															method="post" role="form" th:object="${certificateObj}">
 															
 														<div class="form-group">
 																<label for="subject">Subject</label>
-																<select name="subject" required>
+																<select th:field="*{subject}" required>
  																	 <option th:each="ca : ${subSubjects}" 
           																	 th:value="${ca.caId}" 
           																	 th:text="${ca.caName}"></option>
@@ -157,7 +162,7 @@
 																												
 														<div class="form-group">
 														<label for="issuer">Issuer</label>
-																<select name="issuer" required>
+																<select th:field="*{issuer}" required>
  																	 <option th:each="ca : ${issuers}" 
           																	 th:value="${ca.caId}" 
           																	 th:text="${ca.caName}"></option>
@@ -167,61 +172,49 @@
 															<div class="form-group">
 																<label for="validity">Validity (years)</label> <input
 																	type="number" class="form-control" id="validity"
-																	name="validity" required/>
+																	th:field="*{validity}" required/>
 															</div>	
-																																																																																					
-															<div class = "form-group">
-															<label for="countrylist">Region</label> 
-																<ul id = "countrylist">
+															
+																	<div class = "form-group">
+															<label for="countrylistId">Region</label> 
+																<ul id = "countrylistId">
   																	<li th:each="country : ${countries}">
     																	<input type="checkbox" 
-    																		th:value="${country}"
-    																		th:text="${country.regionName}"
-    																		th:name="${countrylist}" />
-    																	
+    																			th:value="${country.regionId}"
+    																			th:text="${country.regionName}"
+    																			th:field="*{regions}" />												
   																	</li>
 																</ul>
-															</div>	
+															</div>																																																																																																				
 															
 															<div class="form-group">
 																<label for="permissions">Permissions</label> <input
 																	type="number" class="form-control" id="permissions"
-																	name="permissions" />
+																	th:field="*{psId}" />
 															</div>	
 															
 															<div class="form-group">
 																<label for="confidence">Confidence (between 0 and 3)</label> <input
 																	type="number" min = "0" max = "3" class="form-control" id="confidence"
-																	name="confidence" required/>
+																	th:field="*{confidence}" required/>
 															</div>	
 															
 															<div class="form-group">
 																<label for="assurance">Assurance (between 0 and 7)</label> <input
 																	type="number" min = "0" max = "7" class="form-control" id="assurance"
-																	name="assurance" required/>
+																	th:field="*{assurance}" required/>
 															</div>	
-															
-																<div class="form-group">
-																<label for="cracaid">CracaId</label> <input
-																	type="text" class="form-control" id="cracaid"
-																	name="cracaid" required/>
-															</div>	
-															
-															<div class="form-group">
-																<label for="crlseries">CrlSeries</label> <input
-																	type="text" class="form-control" id="crlseries"
-																	name="crlseries" required/>
-															</div>	
+																								
 															
 															<div class="form-group">
 																<label for="chainlength">Min. Chain Length</label> <input
 																	type="number" class="form-control" id="chainlength"
-																	name="chainlength" required/>
+																	th:field="*{minChain}" required/>
 															</div>
 															<div class="form-group">
 																<label for="chainrange">Chain Range</label> <input
 																	type="number" class="form-control" id="chainrange"
-																	name="chainrange" required/>
+																	th:field="*{chainRange}" required/>
 															</div>
 																																																			
 															<button type="submit" class="btn btn-default">Submit</button>
@@ -251,5 +244,13 @@
 
 	</div>
 	<div th:include="layout :: footer" id="footer">(footer)</div>
+	<script th:inline="javascript">
+	<!-- Method that copies the subject field into the hidden isser field, used for root CA certificates where issuer = subject -->
+	function getIssuer(){
+	
+		$("#addRootCaCert").find("#issuer").val($("#addRootCaCert").find("#subject").val());
+		
+	}
+	</script>	
 </body>
 </html>

@@ -50,4 +50,9 @@ public class PublicEncryptionKey extends COERSequence
     {
         return (BasePublicEncryptionKey) getComponentValue(PUBLICKEY);
     }
+
+    @Override
+    public String toString() {
+        return "PublicEncryptionKey [supportedSymmAlg=" + getSupportedSymmalgorith() + ", publicKey=" + getPublicKey().toString().replace("BasePublicEncryptionKey ","") + "]";
+    }
 }

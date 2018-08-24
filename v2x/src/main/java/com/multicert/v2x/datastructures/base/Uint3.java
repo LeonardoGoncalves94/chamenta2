@@ -31,4 +31,9 @@ public class Uint3 extends COERInteger
     {
         super(LOWERBOUND, UPPERBOUND);
     }
+
+    @Override
+    public String toString() {
+        return "Uint3 [" + value + "]";
+    }
 }

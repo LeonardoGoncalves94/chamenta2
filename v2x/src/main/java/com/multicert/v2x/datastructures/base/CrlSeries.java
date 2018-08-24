@@ -23,4 +23,9 @@ public class CrlSeries extends Uint16
     {
         super();
     }
+
+    @Override
+    public String toString() {
+        return "CrlSeries [" + getValueAsLong() + "]";
+    }
 }

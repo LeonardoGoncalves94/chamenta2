@@ -66,6 +66,9 @@ public class BasePublicEncryptionKey extends COERChoice
         return (BasePublicEncryptionKeyTypes) choice;
     }
 
-
+    @Override
+    public String toString() {
+        return "BasePublicEncryptionKey [" + choice + "=" +  value.toString().replace("EccP256CurvePoint ", "") + "]";
+    }
 
 }

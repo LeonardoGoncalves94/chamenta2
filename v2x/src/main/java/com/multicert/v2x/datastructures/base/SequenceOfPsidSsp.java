@@ -28,4 +28,20 @@ public class SequenceOfPsidSsp extends COERSequenceOf
     {
         super(new PsidSsp());
     }
+
+
+    @Override
+    public String toString() {
+        String retval = "SequenceOfPsidSsp [";
+        if(values != null){
+            for(int i=0; i< values.length -1;i++){
+                retval += values[i].toString().replace("PsidSsp ", "") + ",";
+            }
+            if(values.length > 0){
+                retval += values[values.length-1].toString().replace("PsidSsp ", "");
+            }
+        }
+        retval += "]";
+        return retval;
+    }
 }

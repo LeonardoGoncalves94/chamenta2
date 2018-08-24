@@ -30,4 +30,9 @@ public class Uint16 extends COERInteger
     {
         super(LOWERBOUND, UPPERBOUND);
     }
+
+    @Override
+    public String toString() {
+        return "Uint16 [" + value + "]";
+    }
 }

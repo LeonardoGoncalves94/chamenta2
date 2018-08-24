@@ -2,6 +2,7 @@ package com.multicert.v2x.datastructures.base;
 
 import com.multicert.v2x.asn1.coer.COEROctetString;
 import com.multicert.v2x.asn1.coer.COERSequence;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
 
@@ -82,6 +83,12 @@ public class EciesP256EncryptedKey extends COERSequence
         addComponent(V, false, new EccP256CurvePoint(), null);
         addComponent(C, false, new COEROctetString(OCTETSTRING_SIZE, OCTETSTRING_SIZE), null);
         addComponent(T, false, new COEROctetString(OCTETSTRING_SIZE, OCTETSTRING_SIZE), null);
+    }
+
+
+    @Override
+    public String toString() {
+        return "EciesP256EncryptedKey [v=" + getV().toString().replaceAll("EccP256CurvePoint ", "") + ", s=" + new String(Hex.encode(getC())) + ", t=" + new String(Hex.encode(getT()))+ "]";
     }
 
 }

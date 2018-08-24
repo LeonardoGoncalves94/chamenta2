@@ -4,6 +4,7 @@ import com.multicert.v2x.asn1.coer.COERBitString;
 
 import java.io.IOException;
 
+
 public class EndEntityType extends COERBitString
 {
     private static final int BITSTRING_SIZE = 8;
@@ -28,13 +29,19 @@ public class EndEntityType extends COERBitString
         super(BITSTRING_SIZE);
     }
 
-    public boolean isApp() throws IOException
+    public boolean isApp()
     {
         return getFlag(APP);
     }
 
-    public boolean isEnrol() throws IOException
+    public boolean isEnrol()
     {
         return getFlag(ENROL);
+    }
+
+
+    @Override
+    public String toString() {
+        return "EndEntityType [app=" + isApp()+ ", enroll=" +  isEnrol() + "]";
     }
 }

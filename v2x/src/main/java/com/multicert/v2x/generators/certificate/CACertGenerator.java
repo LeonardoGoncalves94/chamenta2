@@ -11,15 +11,11 @@ import com.multicert.v2x.datastructures.base.BasePublicEncryptionKey.*;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.*;
 
 /**
- * Class for generating certificates for the root CA, enrollment CA and authorization authority.
- * Such certificates contain the subject's permissions to sign other certificates and to sign certificate response messages contained in a EtsiTs103097Data. (cert request permissions is ABSENT)
- * The app permissions are static (set by the certificate profile) therefore they are set on each certificate generation method
- *
- * @author Leonardo Gonçalves, leonardo.goncalves@multicert.com
+ * Class for generating certificates for the root CA, enrollment CA and authorization authority According to the their profiles.
+ * The resulting certificate is a Etsi certificate which corresponds to a single ExplicitCertificate definied in IEEE Std 16092, more information present on ETSI TS 103 097 Sections 6 - 7
  *
  */
 public class CACertGenerator extends CertificateGenerator
@@ -31,7 +27,7 @@ public class CACertGenerator extends CertificateGenerator
     }
 
     /**
-     * This method generates a root CA certificate according to the profile defined in the ETSI TS 103 097 standard
+     * This method generates a root CA certificate according to the profile defined in the ETSI TS 103 097 standard Clause 7.2.3
      * @param hostname a unique Root CA name, Required (according to the standard 103 097, the certificateId shall always be hostname for the rootCA)
      * @param validityPeriod the validity period for this certificate, Required
      * @param geographicRegionegion the validity region for this certificate, Required
@@ -39,27 +35,28 @@ public class CACertGenerator extends CertificateGenerator
      * @param confidenceLevel the confidence level for this certificate (0-3), Required
      * @param minChainDepth the minimal chain length of this PKI hierarchy, Required
      * @param chainDepthRange the chain depth range, see PsidGroupPermissions for details, Required
-     * @param issuerSigningAlgorithm the algorith used for signing and verifying the signature, Required
+     * @param issuerSigningAlgorithm the algorithm used for signing and verifying the signature, Required
+     * @param symmAlgorithm the algorithm of the symmetric key.
      * @param subjectKeypair The key pair to sign and verify this certificate, Required
-     * @param encPublicKeyAlgorithm Algorithm used for encryption, null if no encryption key should be included
-     * @param encPublicKey the public key for encryption, null if none
+     * @param encPublicKeyAlgorithm Algorithm used to encrypt the symmetric key, null if no encryption key should be included
+     * @param encPublicKey the public key used to encrypt the symmetric key, null if none
      * @return
      * @throws IOException
      * @throws NoSuchAlgorithmException
      * @throws SignatureException
      */
-    public CertificateBase generateRootCA(String hostname,
-                                          ValidityPeriod validityPeriod,
-                                          GeographicRegion geographicRegionegion,
-                                          int assuranceLevel,
-                                          int confidenceLevel,
-                                          int minChainDepth,
-                                          int chainDepthRange,
-                                          Signature.SignatureTypes issuerSigningAlgorithm,
-                                          KeyPair subjectKeypair,
-                                          SymmAlgorithm symmAlgorithm,
-                                          BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
-                                          PublicKey encPublicKey) throws IOException, NoSuchAlgorithmException, SignatureException
+    public EtsiTs103097Certificate generateRootCA(String hostname,
+                                                  ValidityPeriod validityPeriod,
+                                                  GeographicRegion geographicRegionegion,
+                                                  int assuranceLevel,
+                                                  int confidenceLevel,
+                                                  int minChainDepth,
+                                                  int chainDepthRange,
+                                                  Signature.SignatureTypes issuerSigningAlgorithm,
+                                                  KeyPair subjectKeypair,
+                                                  SymmAlgorithm symmAlgorithm,
+                                                  BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
+                                                  PublicKey encPublicKey) throws IOException, NoSuchAlgorithmException, SignatureException
     {
         CertificateId id = new CertificateId(new Hostname(hostname));
         SubjectAssurance subjectAssurance = new SubjectAssurance(assuranceLevel, confidenceLevel);
@@ -86,20 +83,19 @@ public class CACertGenerator extends CertificateGenerator
 
 
 
-        ToBeSignedCertificate toBeSignedCertificate = new ToBeSignedCertificate(id, new HashedId3(Hex.decode("000000")), new CrlSeries(0),  validityPeriod, geographicRegionegion, subjectAssurance,  appPermissions , certIssuePermissions, null, false, encryptionKey, verificationKeyIndicator);//To be signed data acording to ETSI profiles (ETSI103097 standard)
+        ToBeSignedCertificate toBeSignedCertificate = new ToBeSignedCertificate(id, validityPeriod, geographicRegionegion, subjectAssurance,  appPermissions,
+                certIssuePermissions, encryptionKey, verificationKeyIndicator);
 
         return generateCertificate(toBeSignedCertificate,null, subjectKeypair, issuerSigningAlgorithm);
     }
 
 
     /**
-     *
-     * @param hostname
-     * @param validityPeriod
-     * @param region
-     * @param subjectPermissions  indicate issuing permissions, i.e. permissions to sign an enrolment credential / authorization ticket with certain permissions
-     * @param cracaid
-     * @param crlSeries
+     *This method generates an Enrollment CA according to the profile defined in the ETSI TS 103 097 standard
+     * @param hostname the name of the subject CA, Required
+     * @param validityPeriod the validity for this certificate, Required
+     * @param region the region for the CA certificate, Required
+     * @param subjectPermissions indicate issuing permissions, i.e. permissions to sign an enrolment credential / authorization ticket with certain permissions
      * @param assuranceLevel
      * @param confidenceLevel
      * @param minChainDepth
@@ -116,23 +112,21 @@ public class CACertGenerator extends CertificateGenerator
      * @throws SignatureException
      * @throws NoSuchAlgorithmException
      */
-    public CertificateBase generateEnrollmentCa(String hostname,
-                                                ValidityPeriod validityPeriod,
-                                                GeographicRegion region,
-                                                PsidSspRange[] subjectPermissions,
-                                                byte[] cracaid,
-                                                int crlSeries,
-                                                int assuranceLevel,
-                                                int confidenceLevel,
-                                                int minChainDepth,
-                                                int chainDepthRange,
-                                                AlgorithmType issuerSigningAlgorithm,
-                                                PublicKey signPublicKey, // the enrollment CA public key to be certified
-                                                CertificateBase issuerCertificate,
-                                                KeyPair issuerCertificateKeyPair,
-                                                SymmAlgorithm symmAlgorithm,
-                                                BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
-                                                PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
+    public EtsiTs103097Certificate generateEnrollmentCa(String hostname,
+                                                         ValidityPeriod validityPeriod,
+                                                         GeographicRegion region,
+                                                         PsidSspRange[] subjectPermissions,
+                                                         int assuranceLevel,
+                                                         int confidenceLevel,
+                                                         int minChainDepth,
+                                                         int chainDepthRange,
+                                                         AlgorithmType issuerSigningAlgorithm,
+                                                         PublicKey signPublicKey,
+                                                         EtsiTs103097Certificate issuerCertificate,
+                                                         KeyPair issuerCertificateKeyPair,
+                                                         SymmAlgorithm symmAlgorithm,
+                                                         BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
+                                                         PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
     {
         CertificateId id = new CertificateId(new Hostname(hostname));
 
@@ -153,6 +147,7 @@ public class CACertGenerator extends CertificateGenerator
         PsidSsp[] values = {SignResponsePermissions};
         SequenceOfPsidSsp appPermissions = new SequenceOfPsidSsp(values);
 
+
         PublicEncryptionKey encryptionKey = null;
         if(symmAlgorithm != null && encPublicKeyAlgorithm != null && encPublicKey != null){
             encryptionKey = new PublicEncryptionKey(symmAlgorithm, new BasePublicEncryptionKey(encPublicKeyAlgorithm, convertToPoint(encPublicKeyAlgorithm, encPublicKey)));
@@ -163,19 +158,18 @@ public class CACertGenerator extends CertificateGenerator
         PublicVerificationKey verifyKeyIndicator = new PublicVerificationKey(getPublicVerificationKeyType(issuerSigningAlgorithm), convertToPoint(issuerSigningAlgorithm, signPublicKey));
         vki = new VerificationKeyIndicator(verifyKeyIndicator);
 
-        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, new HashedId3(cracaid), new CrlSeries(crlSeries), validityPeriod, region, subjectAssurance, appPermissions, certIssuePermissions, null, false, encryptionKey, vki);
-        return generateCertificate(tbs, issuerCertificate, issuerCertificateKeyPair, issuerSigningAlgorithm);
 
+
+        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, validityPeriod, region, subjectAssurance, appPermissions, certIssuePermissions, encryptionKey, vki);
+        return generateCertificate(tbs, issuerCertificate, issuerCertificateKeyPair, issuerSigningAlgorithm);
     }
 
     /**
-     *
-     * @param hostname
-     * @param validityPeriod
-     * @param region
-     * @param subjectPermissions  indicate issuing permissions, i.e. permissions to sign an enrolment credential / authorization ticket with certain permissions
-     * @param cracaid
-     * @param crlSeries
+     *This method generates an  Authorization CA according to the profile defined in the ETSI TS 103 097 standard
+     * @param hostname the name of the subject CA, Required
+     * @param validityPeriod the validity for this certificate, Required
+     * @param region the region for the CA certificate, Required
+     * @param subjectPermissions indicate issuing permissions, i.e. permissions to sign an enrolment credential / authorization ticket with certain permissions
      * @param assuranceLevel
      * @param confidenceLevel
      * @param minChainDepth
@@ -192,23 +186,21 @@ public class CACertGenerator extends CertificateGenerator
      * @throws SignatureException
      * @throws NoSuchAlgorithmException
      */
-    public CertificateBase generateAuthorizationAuthority(String hostname,
-                                                ValidityPeriod validityPeriod,
-                                                GeographicRegion region,
-                                                PsidSspRange[] subjectPermissions,
-                                                byte[] cracaid,
-                                                int crlSeries,
-                                                int assuranceLevel,
-                                                int confidenceLevel,
-                                                int minChainDepth,
-                                                int chainDepthRange,
-                                                AlgorithmType issuerSigningAlgorithm,
-                                                PublicKey signPublicKey,
-                                                CertificateBase issuerCertificate,
-                                                KeyPair issuerCertificateKeyPair,
-                                                SymmAlgorithm symmAlgorithm,
-                                                BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
-                                                PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
+    public EtsiTs103097Certificate generateAuthorizationAuthority(String hostname,
+                                                                  ValidityPeriod validityPeriod,
+                                                                  GeographicRegion region,
+                                                                  PsidSspRange[] subjectPermissions,
+                                                                  int assuranceLevel,
+                                                                  int confidenceLevel,
+                                                                  int minChainDepth,
+                                                                  int chainDepthRange,
+                                                                  AlgorithmType issuerSigningAlgorithm,
+                                                                  PublicKey signPublicKey,
+                                                                  EtsiTs103097Certificate issuerCertificate,
+                                                                  KeyPair issuerCertificateKeyPair,
+                                                                  SymmAlgorithm symmAlgorithm,
+                                                                  BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
+                                                                  PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
     {
         CertificateId id = new CertificateId(new Hostname(hostname));
 
@@ -239,7 +231,7 @@ public class CACertGenerator extends CertificateGenerator
         PublicVerificationKey verifyKeyIndicator = new PublicVerificationKey(getPublicVerificationKeyType(issuerSigningAlgorithm), convertToPoint(issuerSigningAlgorithm, signPublicKey));
         vki = new VerificationKeyIndicator(verifyKeyIndicator);
 
-        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, new HashedId3(cracaid), new CrlSeries(crlSeries), validityPeriod, region, subjectAssurance, appPermissions, certIssuePermissions, null, false, encryptionKey, vki);
+        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, validityPeriod, region, subjectAssurance, appPermissions, certIssuePermissions, encryptionKey, vki);
         return generateCertificate(tbs, issuerCertificate, issuerCertificateKeyPair, issuerSigningAlgorithm);
 
     }

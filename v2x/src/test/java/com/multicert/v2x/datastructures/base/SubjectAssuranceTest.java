@@ -20,8 +20,8 @@ public class SubjectAssuranceTest
         SubjectAssurance subjectAssuranceDecoded = new SubjectAssurance();
         subjectAssuranceDecoded.decode(dis);
 
-        assertEquals(7,subjectAssuranceDecoded.getAssuranceLevel());
-        assertEquals(3, subjectAssuranceDecoded.getConfidenceLevel());
+        assertEquals(subjectAssurance.toString(), subjectAssuranceDecoded.toString());
+
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -1,6 +1,7 @@
 package com.multicert.v2x.datastructures.base;
 
 import com.multicert.v2x.asn1.coer.*;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -13,7 +14,6 @@ import java.math.BigInteger;
  * type depends on the LSB of y: if the LSB of y is 0, type takes the value compressed-y-0, and if the LSB of y is 1, type takes the value compressed-y-1. If the point is
  * uncompressed, y is encoded explicitly as an unsigned integer of length 32 octets in network byte order.
  *
- * @author Leonardo Gonçalves, leonardo.goncalves@multicert.com
  */
 public class EccP256CurvePoint extends COERChoice
 {
@@ -40,7 +40,7 @@ public class EccP256CurvePoint extends COERChoice
                 case UNCOMPRESSED:
                     return new UncompressedEccPoint();
                 default:
-                    return new COEROctetString();
+                    return new COEROctetString(OCTETSTRING_SIZE,OCTETSTRING_SIZE);
             }
         }
     }
@@ -50,7 +50,7 @@ public class EccP256CurvePoint extends COERChoice
      */
     public EccP256CurvePoint(BigInteger x)
     {
-        super(EccP256CurvePointTypes.X_ONLY, new COEROctetString(EncodeHelper.padWithZeroes(integerToBytes(x),OCTETSTRING_SIZE),OCTETSTRING_SIZE,OCTETSTRING_SIZE)); // we transform BigInteger into array and add padding to the beginning
+        super(EccP256CurvePointTypes.X_ONLY, new COEROctetString(EncodeHelper.padWithZeroes(integerToBytes(x),OCTETSTRING_SIZE),OCTETSTRING_SIZE,OCTETSTRING_SIZE)); // The BigInteger is transformed into array and padding is added to the beginning
     }
 
 
@@ -68,7 +68,7 @@ public class EccP256CurvePoint extends COERChoice
             System.arraycopy(encodedPoint, 1, x, 0, OCTETSTRING_SIZE); //we decode the x coordinate from the encoded point
             byte[] y = new byte[OCTETSTRING_SIZE];
             System.arraycopy(encodedPoint, OCTETSTRING_SIZE+1, y, 0, OCTETSTRING_SIZE); //we decode the y coordinate from the encoded point
-            value = new UncompressedEccPoint(x,y); // creates a COER sequence, where the components are 2 octet strings, one for x and the other for y
+            value = new UncompressedEccPoint(x,y);
         }
         else
         {
@@ -153,6 +153,14 @@ public class EccP256CurvePoint extends COERChoice
             return EccP256CurvePointTypes.UNCOMPRESSED;
         }
         throw new IllegalArgumentException("Error in encoding ECC point: Invalid compress encoding");
+    }
+
+    @Override
+    public String toString() {
+        if(choice == EccP256CurvePointTypes.UNCOMPRESSED){
+            return "EccP256CurvePoint [" + choice + "=" +  value.toString().replace("UncompressedEccPoint ", "") + "]";
+        }
+        return "EccP256CurvePoint [" + choice + "=" +  new String(Hex.encode(((COEROctetString) value).getData())) + "]";
     }
 
 }

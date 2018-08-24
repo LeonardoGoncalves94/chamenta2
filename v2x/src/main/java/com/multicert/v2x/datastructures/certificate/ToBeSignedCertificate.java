@@ -3,9 +3,13 @@ package com.multicert.v2x.datastructures.certificate;
 import com.multicert.v2x.asn1.coer.COERNull;
 import com.multicert.v2x.asn1.coer.COERSequence;
 import com.multicert.v2x.datastructures.base.*;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.*;
 
+/**
+ *  this class represents the certificate's to be signed data according to the ETSI 103 097 standard
+ */
 public class ToBeSignedCertificate extends COERSequence
 {
     protected static final int SEQUENCE_SIZE = 12;
@@ -18,8 +22,8 @@ public class ToBeSignedCertificate extends COERSequence
     protected static final int ASSURANCE_LEVEL = 5;
     protected static final int APP_PERMISSIONS = 6;
     protected static final int CERT_ISSUE_PERMISSIONS = 7;
-    protected static final int CERT_REQUEST_PERMISSIONS = 8;
-    protected static final int CAN_REQUEST_ROLLOVER = 9;
+    protected static final int CERT_REQUEST_PERMISSIONS = 8; // this component is always absent
+    protected static final int CAN_REQUEST_ROLLOVER = 9; // this component is always absent
     protected static final int ECRYPTION_KEY = 10;
     protected static final int VERIFY_KEY_INDICATOR = 11;
 
@@ -27,25 +31,22 @@ public class ToBeSignedCertificate extends COERSequence
     /**
      * Constructor used when encoding
      */
-    public ToBeSignedCertificate(CertificateId id, HashedId3 cracaId, CrlSeries crlSeries,
+    public ToBeSignedCertificate(CertificateId id,
                                  ValidityPeriod validityPeriod, GeographicRegion region, SubjectAssurance assuranceLevel,
                                  SequenceOfPsidSsp appPermissions, SequenceOfPsidGroupPermissions certIssuePermissions,
-                                 SequenceOfPsidGroupPermissions certRequestPermissions, boolean canRequestRollover,
                                  PublicEncryptionKey encryptionKey, VerificationKeyIndicator verifyKeyIndicator) throws IOException{
         super(SEQUENCE_SIZE);
         createSequence();
         setComponentValue(ID, id);
-        setComponentValue(CARCA_ID, cracaId);
-        setComponentValue(CRL_SERIES, crlSeries);
+        setComponentValue(CARCA_ID, new HashedId3(Hex.decode("000000")));
+        setComponentValue(CRL_SERIES,  new CrlSeries(0));
         setComponentValue(VALIDITY_PERIOD, validityPeriod);
         setComponentValue(REGION, region);
         setComponentValue(ASSURANCE_LEVEL, assuranceLevel);
         setComponentValue(APP_PERMISSIONS, appPermissions);
         setComponentValue(CERT_ISSUE_PERMISSIONS, certIssuePermissions);
-        setComponentValue(CERT_REQUEST_PERMISSIONS, certRequestPermissions);
-        if(canRequestRollover){
-            setComponentValue(CAN_REQUEST_ROLLOVER, new COERNull());
-        }
+        setComponentValue(CERT_REQUEST_PERMISSIONS, null); //ABSENT
+        setComponentValue(CAN_REQUEST_ROLLOVER, null); //ABSENT
         setComponentValue(ECRYPTION_KEY, encryptionKey);
         setComponentValue(VERIFY_KEY_INDICATOR, verifyKeyIndicator);
     }
@@ -156,22 +157,6 @@ public class ToBeSignedCertificate extends COERSequence
     }
 
     /**
-     * @return the certRequestPermissions, always ABSENT
-     */
-    public SequenceOfPsidGroupPermissions getCertRequestPermissions()
-    {
-        return (SequenceOfPsidGroupPermissions) getComponentValue(CERT_REQUEST_PERMISSIONS);
-    }
-
-    /**
-     * @return the canRequestRollover, always ABSENT
-     */
-    public boolean isCanRequestRollover()
-    {
-        return getComponentValue(CAN_REQUEST_ROLLOVER) != null;
-    }
-
-    /**
      * @return the encryptionKey, optional
      */
     public PublicEncryptionKey getEncryptionKey()
@@ -185,6 +170,25 @@ public class ToBeSignedCertificate extends COERSequence
     public VerificationKeyIndicator getVerifyKeyIndicator()
     {
         return (VerificationKeyIndicator) getComponentValue(VERIFY_KEY_INDICATOR);
+    }
+
+
+    @Override
+    public String toString() {
+        return
+                "ToBeSignedCertificate [\n" +
+                        "  id=" + getId().toString().replaceAll("CertificateId ", "") + "\n" +
+                        "  cracaId=" + getCracaId().toString().replaceAll("HashedId3 ", "") + "\n" +
+                        "  crlSeries=" + getCrlSeries().toString().replaceAll("CrlSeries ", "") + "\n" +
+                        "  validityPeriod=" + getValidityPeriod().toString().replaceAll("ValidityPeriod ", "") + "\n" +
+                        "  region=" + ( getRegion() != null ? getRegion().toString().replaceAll("GeographicRegion ", "") : "NONE") + "\n" +
+                        "  assuranceLevel=" + ( getAssuranceLevel() != null ? getAssuranceLevel().toString().replaceAll("SubjectAssurance ", "") : "NONE") + "\n" +
+                        "  appPermissions=" + ( getAppPermissions() != null ? getAppPermissions().toString().replaceAll("SequenceOfPsidSsp ", "") : "NONE") + "\n" +
+                        "  certIssuePermissions=" + ( getCertIssuePermissions() != null ? getCertIssuePermissions().toString().replaceAll("SequenceOfPsidGroupPermissions ", "") : "NONE") + "\n" +
+                        "  encryptionKey=" + ( getEncryptionKey() != null ? getEncryptionKey().toString().replaceAll("PublicEncryptionKey ", "") : "NONE") + "\n" +
+                        "  verifyKeyIndicator=" + getVerifyKeyIndicator().toString().replace("VerificationKeyIndicator ", "") + "\n" +
+                        "]";
+
     }
 
 }

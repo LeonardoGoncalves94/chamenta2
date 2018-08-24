@@ -22,8 +22,6 @@ com/multicert/v2x/datastructures/base/EncryptionKey.class
 com/multicert/v2x/datastructures/base/ServiceSpecificPermissions.class
 com/multicert/v2x/asn1/coer/COERNull.class
 com/multicert/v2x/datastructures/certificate/SubjectPermissions.class
-com/multicert/v2x/datastructures/message/secureddata/Ieee1609Dot2Content.class
-com/multicert/v2x/datastructures/message/secureddata/Ieee1609Dot2Content$Ieee1609Dot2ContentChoices.class
 com/multicert/v2x/datastructures/base/IdentifiedRegion.class
 com/multicert/v2x/datastructures/certificate/CertificateId$1.class
 com/multicert/v2x/datastructures/certificaterequests/Enrollment/PublicKeys.class
@@ -33,7 +31,6 @@ com/multicert/v2x/datastructures/base/SspRange$1.class
 com/multicert/v2x/datastructures/base/Time32.class
 com/multicert/v2x/datastructures/base/CrlSeries.class
 com/multicert/v2x/datastructures/base/PublicEncryptionKey.class
-com/multicert/v2x/datastructures/message/secureddata/Ieee1609Dot2Data.class
 com/multicert/v2x/asn1/coer/COEROctetString.class
 com/multicert/v2x/datastructures/base/RectangularRegion.class
 com/multicert/v2x/datastructures/message/encrypteddata/AesCcmCiphertext.class
@@ -42,10 +39,10 @@ com/multicert/v2x/datastructures/base/EciesP256EncryptedKey.class
 com/multicert/v2x/datastructures/certificaterequests/EtsiTs102941DataContent.class
 com/multicert/v2x/datastructures/base/Latitude.class
 com/multicert/v2x/datastructures/base/ElevInt.class
+com/multicert/v2x/cryptography/DefaultKeystore.class
 com/multicert/v2x/IdentifiedRegions/Regions.class
 com/multicert/v2x/datastructures/base/OneEightyDegreeInt.class
 com/multicert/v2x/datastructures/base/Uint3.class
-com/multicert/v2x/generators/certificaterequest/AuthorizationTicketRequest.class
 com/multicert/v2x/datastructures/message/encrypteddata/RecipientInfo$1.class
 com/multicert/v2x/datastructures/base/Signature$1.class
 com/multicert/v2x/cryptography/Algorithm$Signature.class
@@ -73,12 +70,10 @@ com/multicert/v2x/datastructures/certificaterequests/Enrollment/EnrollmentReques
 com/multicert/v2x/generators/certificate/CACertGenerator.class
 com/multicert/v2x/cryptography/JcaUtils.class
 com/multicert/v2x/datastructures/message/secureddata/HashedData.class
-com/multicert/v2x/datastructures/certificate/CertificateBase.class
 com/multicert/v2x/datastructures/certificate/PsidGroupPermissions.class
 com/multicert/v2x/datastructures/base/Longitude.class
 com/multicert/v2x/datastructures/base/GeographicRegion$GeographicRegionTypes.class
 com/multicert/v2x/datastructures/certificaterequests/EtsiTs102941Data.class
-com/multicert/v2x/generators/certificaterequest/EnrollmentCredentialRequest.class
 com/multicert/v2x/datastructures/certificate/SequenceOfPsidGroupPermissions.class
 com/multicert/v2x/datastructures/certificate/VerificationKeyIndicator$VerificationKeyIndicatorTypes.class
 com/multicert/v2x/asn1/coer/COEREnumeration.class
@@ -168,4 +163,3 @@ com/multicert/v2x/cryptography/Algorithm$Symmetric.class
 com/multicert/v2x/datastructures/message/encrypteddata/SymmetricCiphertext.class
 com/multicert/v2x/datastructures/base/SequenceOfRegionAndSubregions.class
 com/multicert/v2x/datastructures/message/encrypteddata/RecipientInfo$RecipientInfoChoices.class
-com/multicert/v2x/datastructures/message/secureddata/Ieee1609Dot2Content$1.class

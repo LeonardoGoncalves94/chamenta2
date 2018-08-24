@@ -63,4 +63,9 @@ public class PKRecipientInfo extends COERSequence
 		addComponent(ENCKEY, false, new EncryptedDataEncryptionKey(), null);
 	}
 
+	@Override
+	public String toString() {
+		return "PKRecipientInfo [recipientId=" + getRecipientId().toString().replace("HashedId8 ", "") + ", encKey=" + getEncKey().toString().replace("EncryptedDataEncryptionKey ", "") + "]";
+	}
+
 }

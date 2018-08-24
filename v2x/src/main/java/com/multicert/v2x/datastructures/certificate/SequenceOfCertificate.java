@@ -11,13 +11,13 @@ public class SequenceOfCertificate extends COERSequenceOf
 	 */
 	public SequenceOfCertificate() throws IOException
 	{
-		super(new CertificateBase());
+		super(new EtsiTs103097Certificate());
 	}
 	
 	/**
 	 * Constructor used when encoding
 	 */
-	public SequenceOfCertificate(CertificateBase[] values)
+	public SequenceOfCertificate(EtsiTs103097Certificate[] values)
 	{
 		super(values);
 	}

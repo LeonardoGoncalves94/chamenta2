@@ -20,4 +20,20 @@ public class SequenceOfRecipientInfo extends COERSequenceOf
     {
 		super(new RecipientInfo());
 	}
+
+	@Override
+	public String toString() {
+
+		String retval = "SequenceOfRecipientInfo [";
+		if(values != null){
+			for(int i=0; i< values.length -1;i++){
+				retval += values[i].toString().replace("RecipientInfo ", "") + ",";
+			}
+			if(values.length > 0){
+				retval += values[values.length-1].toString().replace("RecipientInfo ", "");
+			}
+		}
+		retval += "]";
+		return retval;
+	}
 }

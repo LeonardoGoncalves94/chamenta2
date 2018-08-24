@@ -17,5 +17,9 @@ public class Latitude extends NinetyDegreeInt
         super();
     }
 
-
+    @Override
+    public String toString() {
+        long val = getValueAsLong();
+        return "Latitude [" + (val!= UNKNOWN ? val : "UNKNOWN") +"]";
+    }
 }

@@ -25,6 +25,7 @@ public class Signature extends COERChoice
             return new EcdsaP256Signature();
         }
 
+        //contains the algorithms to be used in the signature, such as the hash algorithm
         public Algorithm getAlgorithm()
         {
             switch (this)
@@ -61,5 +62,10 @@ public class Signature extends COERChoice
     public SignatureTypes getType()
     {
         return (SignatureTypes) choice;
+    }
+
+    @Override
+    public String toString() {
+        return "Signature [" + choice + "=" +  value + "]";
     }
 }

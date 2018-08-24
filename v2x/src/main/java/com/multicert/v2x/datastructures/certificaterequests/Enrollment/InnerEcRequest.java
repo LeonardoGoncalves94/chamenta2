@@ -3,9 +3,7 @@ package com.multicert.v2x.datastructures.certificaterequests.Enrollment;
 import com.multicert.v2x.asn1.coer.COERIA5String;
 import com.multicert.v2x.asn1.coer.COERSequence;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * This class encodes the InnerEcRequest of the enrollment certificate request. It contains:
@@ -48,7 +46,7 @@ public class InnerEcRequest extends COERSequence
     }
 
     /**
-     * Constructor used for encoding  using default current version (populates a sequence)
+     * Constructor used for encoding
      */
     public InnerEcRequest(String itsID, int version ,PublicKeys publicKeys, CertificateSubjectAttributes requestedSubectAttributes) throws IOException
     {
@@ -75,6 +73,17 @@ public class InnerEcRequest extends COERSequence
         createSequence();
 
     }
+
+
+    public InnerEcRequest(byte[] encoded) throws IOException
+    {
+        super(SEQUENCE_SIZE);
+        createSequence();
+
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(encoded));
+        decode(dis);
+    }
+
 
 
     private void createSequence() throws IOException
@@ -119,5 +128,16 @@ public class InnerEcRequest extends COERSequence
     {
          COERIA5String ia5String = (COERIA5String) getComponentValue(ITS_ID);
          return ia5String.getString();
+    }
+
+    @Override
+    public String toString() {
+        return
+                "innerEcRequest [\n" +
+                        "  id=" + getItsId() + "\n" +
+                        "  certificateFormat=" + getCertificateFormat()+ "\n" +
+                        "  publicKeys=" + getPublicKeys()+ "\n" +
+                        "  requestedSubjectAttributes=" + getRequestedSubjectAttributes()+ "\n" +
+                        "]";
     }
 }

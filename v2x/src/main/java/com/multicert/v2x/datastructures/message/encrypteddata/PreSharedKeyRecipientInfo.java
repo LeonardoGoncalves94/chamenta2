@@ -2,9 +2,10 @@ package com.multicert.v2x.datastructures.message.encrypteddata;
 
 
 import com.multicert.v2x.datastructures.base.HashedId8;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
- * This classis used to indicate a pre shared symmetric key that may be used to decrypt a SymmetricCiphertext.
+ * This class is used to indicate a pre shared symmetric key (HashedId8) that may be used to decrypt a SymmetricCiphertext.
  *
  */
 public class PreSharedKeyRecipientInfo extends HashedId8
@@ -22,5 +23,10 @@ public class PreSharedKeyRecipientInfo extends HashedId8
 	 */
 	public PreSharedKeyRecipientInfo(){
 	}
+
+    @Override
+    public String toString() {
+        return "PreSharedKeyRecipientInfo [" + new String(Hex.encode(getHashedId())) + "]";
+    }
 
 }

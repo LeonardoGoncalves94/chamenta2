@@ -1,10 +1,9 @@
 package com.multicert.v2x.asn1.coer;
 
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * COER encoding of a sequence-of following the section  17 of the ISO/IEC 8825-7:2015 standard
@@ -15,8 +14,9 @@ import java.math.BigInteger;
  */
 public class COERSequenceOf implements COEREncodable
 {
-    private COEREncodable[] values;
+    protected COEREncodable[] values;
     COEREncodable emptyValue;
+    protected byte[] emptyValueEncoded;
 
 
     /**
@@ -33,7 +33,11 @@ public class COERSequenceOf implements COEREncodable
     public COERSequenceOf(COEREncodable emptyValue)
     {
         this.emptyValue = emptyValue;
+        emptyValueEncoded =  EncodeHelper.serialize(emptyValue);
+        values = null;
     }
+
+
 
     @Override
     public void encode(DataOutputStream out) throws IOException
@@ -53,11 +57,18 @@ public class COERSequenceOf implements COEREncodable
         COERInteger length = new COERInteger(BigInteger.ZERO, null);
         length.decode(in);
         values = new COEREncodable[length.getValue().intValue()];
+
         for(int i = 0; i < (int)length.getValueAsLong(); i ++)
         {
-            values[i] = emptyValue; //TODO Ver no c2c...
+            values[i] = EncodeHelper.deserialize(emptyValueEncoded);
             values[i].decode(in);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "COERSequenceOf [sequenceValues="
+                + Arrays.toString(values) + "]";
     }
 
     public COEREncodable[] getValues()

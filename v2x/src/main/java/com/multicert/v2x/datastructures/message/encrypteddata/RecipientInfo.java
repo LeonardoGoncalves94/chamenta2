@@ -76,6 +76,9 @@ public class RecipientInfo extends COERChoice
 		return (RecipientInfoChoices) choice;
 	}
 
-
+	@Override
+	public String toString() {
+		return "RecipientInfo [" + choice + "=" + value.toString().replace("PreSharedKeyRecipientInfo ", "").replace("SymmRecipientInfo ", "").replace("PKRecipientInfo ", "") +"]";
+	}
 	
 }

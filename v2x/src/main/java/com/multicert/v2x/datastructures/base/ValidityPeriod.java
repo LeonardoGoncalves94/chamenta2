@@ -49,9 +49,24 @@ public class ValidityPeriod extends COERSequence
         addComponent(DURATION, false, new Duration(), null);
     }
 
+    /**
+     *
+     * @return the validity period start
+     */
+    public Time32 getStart(){
+        return (Time32) getComponentValue(START);
+    }
+
+    /**
+     *
+     * @return the validity period duration
+     */
+    public Duration getDuration(){
+        return (Duration) getComponentValue(DURATION);
+    }
+
     @Override
-    public String toString()
-    {
-        return "Start: "+ ((Time32)getComponentValue(START)).asDate()+ "Duration: "+ (Duration) getComponentValue(DURATION);
+    public String toString() {
+        return "ValidityPeriod [start=" + getStart() + ", duration=" + getDuration()+"]";
     }
 }

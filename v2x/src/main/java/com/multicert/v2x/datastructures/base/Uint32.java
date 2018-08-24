@@ -30,4 +30,9 @@ public class Uint32 extends COERInteger
     {
         super(LOWERBOUND, UPPERBOUND);
     }
+
+    @Override
+    public String toString() {
+        return "Uint32 [" + value + "]";
+    }
 }

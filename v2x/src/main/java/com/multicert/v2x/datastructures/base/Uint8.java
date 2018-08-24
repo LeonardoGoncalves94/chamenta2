@@ -31,4 +31,10 @@ public class Uint8 extends COERInteger
     {
         super(LOWERBOUND, UPPERBOUND);
     }
+
+
+    @Override
+    public String toString() {
+        return "Uint8 [" + value + "]";
+    }
 }

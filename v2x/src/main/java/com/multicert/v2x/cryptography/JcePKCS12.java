@@ -40,7 +40,7 @@ import org.bouncycastle.pkcs.jcajce.JcePKCSPBEInputDecryptorProviderBuilder;
 import org.bouncycastle.pkcs.jcajce.JcePKCSPBEOutputEncryptorBuilder;
 import org.bouncycastle.util.io.Streams;
 
-public class JcePKCS12
+public class JcePKCS12 implements DefaultKeystore
 {
     KeyStore keyStore;
 
@@ -52,16 +52,19 @@ public class JcePKCS12
 
         createPKCS12File(new FileOutputStream("id.p12"), key, chain);
 
-        //PKCS12PfxPdu pfx = readPKCS12File(new FileInputStream("id.p12"));
+       // PKCS12PfxPdu pfx = readPKCS12File(new FileInputStream("id.p12"));
 
         KeyStore pkcs12Store = KeyStore.getInstance("PKCS12", "BC");
 
-        pkcs12Store.load(null, JcaUtils.KEY_PASSWD);
+        //pkcs12Store.load(new FileInputStream("id.p12"), JcaUtils.KEY_PASSWD);
+
+        pkcs12Store.load(null, JcaUtils.KEY_PASSWD); //the file is corrupted and can not be loaded
 
         keyStore = pkcs12Store;
     }
 
 
+    @Override
     public void addKeyPair(KeyPair keys, String alias) throws Exception
     {
 
@@ -73,6 +76,7 @@ public class JcePKCS12
 
     }
 
+    @Override
     public KeyPair getKeyPair(String alias) throws Exception
     {
         try
@@ -88,6 +92,7 @@ public class JcePKCS12
 
     }
 
+    @Override
     public void printKestore() throws KeyStoreException
     {
         System.out.println("########## KeyStore Dump");

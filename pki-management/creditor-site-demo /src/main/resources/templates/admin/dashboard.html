@@ -26,15 +26,17 @@
 								<table class="table table-striped" id="dashtable">
 									<tr>
 										<th>CA</th>
-										<th>Has Encryption Key</th>
+										<th>Encryption Key</th>
+										<th>Signature Key</th>
 										<th>Certificate ID</th>	
 										<th>Issuer CA</th>	
 									</tr>
 									<tr th:each="ca : ${cas}">
 										<td th:text="${ca.caName}">CA Name</td>
-										<td th:text="${ca.keys} ? 'yes' : 'no' ">Has Encryption Key</td> <!-- Always displays yes, needs fixing -->
-										<td th:text="${ca.certificate} ? ${ca.certificate.certId} : 'n/a'">Has Certificate</td> 
-										<td th:text="${ca.certificate} ?  ${ca.certificate.issuer.caName} : 'n/a'">Issuer</td>
+										<td th:text="${ca.getEncryptionKey()} ?  ${ca.getEncryptionKey().alias} : 'none' ">Encryption Key</td> 
+										<td th:text="${ca.getSignatureKey()} ?  ${ca.getSignatureKey().alias} : 'none' "> Signature Key</td> 		
+										<td th:text="${ca.certificate} ? ${ca.certificate.certId} : 'none'">Certificate</td> 
+										<td th:text="${ca.certificate} ?  ${ca.certificate.issuer.caName} : 'none'">Issuer</td>
 															
 									</tr>
 								

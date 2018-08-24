@@ -9,7 +9,7 @@ import com.multicert.v2x.datastructures.base.SequenceOfIdentifiedRegion;
 import java.awt.*;
 
 /**
- * This class identifies the existing countries
+ * This class identifies the existing countries to specify the a region in the tests
  *
  */
 public class Countries

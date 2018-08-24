@@ -4,13 +4,14 @@ package com.multicert.v2x.datastructures.message.encrypteddata;
 import com.multicert.v2x.asn1.coer.COEROctetString;
 import com.multicert.v2x.asn1.coer.COERSequence;
 import com.multicert.v2x.datastructures.base.Opaque;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
 
 /**
  * This data structure contains a ciphertext for the AES-CCM symmetric algorithm.
  *
- * The plaintext resulting from the correct decryption of the ciphertext is a COER-encoded Ieee1609Dot2Data structure.
+ * The plaintext resulting from the correct decryption of the ciphertext is a COER-encoded EtsiTs103097Data structure.
  */
 public class AesCcmCiphertext extends COERSequence
 {
@@ -69,5 +70,10 @@ public class AesCcmCiphertext extends COERSequence
     {
 		addComponent(NOUNCE, false, new COEROctetString(12,12), null);
 		addComponent(CCMCIPHERTEXT, false, new Opaque(), null);
+	}
+
+	@Override
+	public String toString() {
+		return "AesCcmCiphertext [nounce=" + new String(Hex.encode(getNounce())) + ", ccmCipherText=" + new String(Hex.encode(getCcmCipherText())) + "]";
 	}
 }

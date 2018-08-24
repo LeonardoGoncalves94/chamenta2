@@ -25,4 +25,9 @@ public class COERNull implements COEREncodable
 
     }
 
+    @Override
+    public String toString() {
+        return "COERNull []";
+    }
+
 }

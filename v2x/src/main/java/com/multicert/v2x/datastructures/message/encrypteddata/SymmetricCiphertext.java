@@ -58,4 +58,9 @@ public class SymmetricCiphertext extends COERChoice
 		return (SymmetricCiphertextChoices) choice;
 	}
 
+	@Override
+	public String toString() {
+		return "SymmetricCiphertext [" + choice + "=" + value.toString().replace("AesCcmCiphertext ", "") +"]";
+	}
+
 }

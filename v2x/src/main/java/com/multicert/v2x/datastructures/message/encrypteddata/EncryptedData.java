@@ -55,4 +55,11 @@ public class EncryptedData extends COERSequence
 		addComponent(CIPHERTEXT, false, new SymmetricCiphertext(), null);
 	}
 
+	@Override
+	public String toString() {
+		return "EncryptedData [\n" +
+				"  recipients=" + getRecipients().toString().replace("SequenceOfRecipientInfo ", "") + ",\n" +
+				"  ciphertext=" + getCipherText().toString().replace("SymmetricCiphertext ", "") + "\n]";
+	}
+
 }

@@ -65,4 +65,9 @@ public class PublicVerificationKey extends COERChoice
     {
         return (PublicVerificationKeyTypes) choice;
     }
+
+    @Override
+    public String toString() {
+        return "PublicVerificationKey [" + choice + "=" +  value.toString().replace("EccP256CurvePoint ", "") + "]";
+    }
 }

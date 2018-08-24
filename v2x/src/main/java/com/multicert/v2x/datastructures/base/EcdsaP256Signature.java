@@ -2,6 +2,7 @@ package com.multicert.v2x.datastructures.base;
 
 import com.multicert.v2x.asn1.coer.COEROctetString;
 import com.multicert.v2x.asn1.coer.COERSequence;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
 
@@ -57,5 +58,10 @@ public class EcdsaP256Signature extends COERSequence
     private void createSequence(){
         addComponent(R, false, new EccP256CurvePoint(), null);
         addComponent(S, false, new COEROctetString(OCTETSTRING_SIZE, OCTETSTRING_SIZE), null);
+    }
+
+    @Override
+    public String toString() {
+        return "EcdsaP256Signature [r=" + getR().toString().replaceAll("EccP256CurvePoint ", "") + ", s=" + new String(Hex.encode(getS())) + "]";
     }
 }

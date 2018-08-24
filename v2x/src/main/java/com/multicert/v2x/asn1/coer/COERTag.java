@@ -9,7 +9,6 @@ import java.util.Map;
  *
  * COER Tags are encoded only as part of the encoding of a choice type, where the tag indicates which alternative of the choice type is the chosen alternative
  *
- * @author Leonardo Gonçalves, leonardo.goncalves@multicert.com
  */
 public class COERTag implements COEREncodable
 {
@@ -120,5 +119,7 @@ public class COERTag implements COEREncodable
 
         }
     }
+
+
 
 }

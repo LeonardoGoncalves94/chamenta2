@@ -59,11 +59,11 @@ public class COERBitString implements COEREncodable
      * @return true if bit is set.
      * @throws IllegalArgumentException if position is out of bounds.
      */
-    public boolean getFlag(int position) throws IOException
+    public boolean getFlag(int position) throws IllegalArgumentException
     {
         if(position >= length || position < 0)
         {
-            throw new IOException("Error getting flag: position "+ position +" is out of the BitString bounds");
+            throw new IllegalArgumentException("Error getting flag: position "+ position +" is out of the BitString bounds");
         }
         long mask = 1 << position;
         return (bitString & mask) > 0;
@@ -77,11 +77,11 @@ public class COERBitString implements COEREncodable
      * @param flag true if bit at position is to be set
      * @throws IllegalArgumentException if position is out of bounds.
      */
-    public void setFlag(int position, boolean flag) throws IOException
+    public void setFlag(int position, boolean flag) throws IllegalArgumentException
     {
         if(position >= length || position < 0)
         {
-            throw new IOException("Error setting flag: position "+ position +" is out of the BitString bounds");
+            throw new IllegalArgumentException("Error setting flag: position "+ position +" is out of the BitString bounds");
         }
         if(flag)
         {
@@ -176,5 +176,11 @@ public class COERBitString implements COEREncodable
         in.read(value); //reads DataIputStream into the value array
         BigInteger bigInteger = new BigInteger(1,value);
         bitString = bigInteger.longValue() >>> notUsedBits;
+    }
+
+    @Override
+    public String toString() {
+        return "COERBitString [bitString=" + BigInteger.valueOf(bitString).toString(16) + ( length != null ?  ", length=" + length : "")
+                + "]";
     }
 }

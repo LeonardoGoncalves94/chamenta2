@@ -1,5 +1,7 @@
 package com.multicert.v2x.datastructures.base;
 
+import org.bouncycastle.util.encoders.Hex;
+
 /**
  * HashedId3 is an hashed based identifier for other data structures. The HashedId3 for a given data structure is calculated
  * by calculating the SHA-256 hash of the encoded data structure and then taking the three least significant bytes of
@@ -29,5 +31,10 @@ public class HashedId3 extends HashedId
     public HashedId3()
     {
         super(HASHED_ID_LENGTH);
+    }
+
+    @Override
+    public String toString() {
+        return "HashedId3 [" + new String(Hex.encode(data)) + "]";
     }
 }

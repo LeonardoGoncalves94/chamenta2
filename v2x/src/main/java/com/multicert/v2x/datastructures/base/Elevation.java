@@ -18,4 +18,10 @@ public class Elevation extends ElevInt
     {
         super();
     }
+
+
+    @Override
+    public String toString() {
+        return "Elevation [" + getElevationInDecimeters() + "(" + Integer.toString(getEncodedElevation(),16)+ ")"+ "]";
+    }
 }

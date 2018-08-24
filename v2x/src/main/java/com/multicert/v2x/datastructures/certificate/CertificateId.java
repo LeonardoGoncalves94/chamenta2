@@ -1,11 +1,9 @@
 package com.multicert.v2x.datastructures.certificate;
 
-import com.multicert.v2x.asn1.coer.COERChoice;
-import com.multicert.v2x.asn1.coer.COERChoiceEnumeration;
-import com.multicert.v2x.asn1.coer.COEREncodable;
-import com.multicert.v2x.asn1.coer.COERNull;
+import com.multicert.v2x.asn1.coer.*;
 import com.multicert.v2x.datastructures.base.Hostname;
 import com.multicert.v2x.datastructures.base.IdentifiedRegion;
+import org.bouncycastle.util.encoders.Hex;
 
 public class CertificateId extends COERChoice
 {
@@ -14,9 +12,7 @@ public class CertificateId extends COERChoice
     public enum CertificateIdTypes implements COERChoiceEnumeration
     {
         NAME,
-        NONE,
-        BINARY_ID, // not used by etsi ts 103 097
-        LINKAGE_DATA; //notused by etsu ts 103 097
+        NONE;
 
         public int myOrdinal() {
             return this.ordinal();
@@ -41,7 +37,7 @@ public class CertificateId extends COERChoice
      */
     public CertificateId(Hostname name) throws IllegalArgumentException
     {
-        super(CertificateIdTypes.NAME, name); //posso passar o int ordinal em vez do item da enum? super(CertificateIdChoices.NAME.myOrdinal(), name);
+        super(CertificateIdTypes.NAME, name);
     }
 
     /**
@@ -53,6 +49,12 @@ public class CertificateId extends COERChoice
         this.choiceEnum = CertificateIdTypes.class;
     }
 
+    /**
+     * Returns the type of id.
+     */
+    public CertificateIdTypes getType(){
+        return (CertificateIdTypes) choice;
+    }
 
     /**
      *
@@ -61,5 +63,16 @@ public class CertificateId extends COERChoice
     public CertificateIdTypes getChoice()
     {
         return (CertificateIdTypes) choice;
+    }
+
+    @Override
+    public String toString() {
+        switch(getType()){
+            case NONE:
+                return "CertificateId [" + choice +"]";
+            default:
+                return "CertificateId [" + choice + "=" + value.toString().replace("Hostname ", "") +"]";
+
+        }
     }
 }

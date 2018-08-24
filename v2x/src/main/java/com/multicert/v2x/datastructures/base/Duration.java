@@ -63,6 +63,6 @@ public class Duration extends COERChoice
 
     @Override
     public String toString() {
-        return "Choice: "+ choice + "Duration:" + ((Uint16) value).getValueAsLong();
+        return "Choice:"+ choice + " Duration:" + ((Uint16) value).getValueAsLong();
     }
 }

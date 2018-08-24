@@ -30,7 +30,7 @@ public class GeographicRegion extends COERChoice
                 case POLYGONALREGION:
                     return new PolygonalRegion();
                 default:
-                        return new SequenceOfIdentifiedRegion();
+                    return new SequenceOfIdentifiedRegion();
             }
         }
     }
@@ -87,6 +87,11 @@ public class GeographicRegion extends COERChoice
     public GeographicRegionTypes getChoice()
     {
         return (GeographicRegionTypes) choice;
+    }
+
+    @Override
+    public String toString() {
+        return "GeographicRegion [" + value + "]";
     }
 
 

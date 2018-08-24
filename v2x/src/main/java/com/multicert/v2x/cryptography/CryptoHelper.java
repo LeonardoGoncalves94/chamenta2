@@ -5,9 +5,10 @@ import com.multicert.v2x.asn1.coer.EncodeHelper;
 import com.multicert.v2x.datastructures.base.*;
 import com.multicert.v2x.datastructures.base.EccP256CurvePoint.*;
 import com.multicert.v2x.datastructures.base.Signature;
-import com.multicert.v2x.datastructures.certificate.CertificateBase;
+import com.multicert.v2x.datastructures.certificate.EtsiTs103097Certificate;
 import com.multicert.v2x.datastructures.message.encrypteddata.EncryptedDataEncryptionKey;
 import com.multicert.v2x.datastructures.message.encrypteddata.EncryptedDataEncryptionKey.*;
+import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.DLSequence;
@@ -36,7 +37,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.*;
-import java.security.cert.Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
 
@@ -58,7 +58,7 @@ public class CryptoHelper {
     protected static final int AES_PARAM = 128;
     protected KeyFactory keyFactory;
     protected MessageDigest sha256Digest;
-    protected JcePKCS12 jcePKCS12;
+    protected DefaultKeystore jcePKCS12;
     protected IESCipher iesCipher = new IESCipher(new IESEngine(new ECDHCBasicAgreement(),
             new KDF2BytesGenerator(new SHA256Digest()),
             new Mac(new SHA256Digest(),128)));
@@ -68,7 +68,7 @@ public class CryptoHelper {
 
 
     /**
-     * Constructor used when instantiating a cryptohelper with a different provider
+     * Constructor used when instantiating a cryptohelper
      * @param provider
      * @throws NoSuchProviderException
      * @throws NoSuchAlgorithmException
@@ -87,10 +87,10 @@ public class CryptoHelper {
             brainpoolp256r1P256Generator = KeyPairGenerator.getInstance("ECDSA", provider);
             brainpoolp256r1P256Generator.initialize(brainpoolp256r1P256Spec, secureRandom);
             aesGenerator = KeyGenerator.getInstance("AES", provider);
+            sha256Digest = MessageDigest.getInstance("SHA-256","BC");
+            keyFactory = KeyFactory.getInstance("ECDSA", "BC");
             aesGenerator.init(AES_PARAM);
             jcePKCS12 = new JcePKCS12();
-
-            //TODO ecqvHelper = new ECQVHelper(this);
         }
         catch (InvalidAlgorithmParameterException e)
         {
@@ -161,10 +161,10 @@ public class CryptoHelper {
     }
 
     /**
-     * Method that converts a public key of a given algorithm to a EccP256CurvePoint structure
+     * Method that converts a public key of a given algorithm to a EccP256CurvePoint structure (encode point)
      *
      */
-    public EccP256CurvePoint getECPoint(AlgorithmType alg, EccP256CurvePointTypes type, PublicKey publicKey) throws IllegalArgumentException, InvalidKeySpecException, IOException
+    public EccP256CurvePoint publicKeyToEccPoint(AlgorithmType alg, EccP256CurvePointTypes type, PublicKey publicKey) throws IllegalArgumentException, InvalidKeySpecException, IOException
     {
         if(! (publicKey instanceof java.security.interfaces.ECPublicKey))
         {
@@ -186,9 +186,9 @@ public class CryptoHelper {
     }
 
     /**
-     * Help method that converts ECC point into public key
+     * Help method that converts ECC point into public key (decode the point)
      */
-    public Object getPublicKey(AlgorithmType alg, EccP256CurvePoint eccPoint) throws InvalidKeySpecException {
+    public Object eccPointToPublicKey(AlgorithmType alg, EccP256CurvePoint eccPoint) throws InvalidKeySpecException {
         switch(eccPoint.getType()){
             case FILL:
                 throw new InvalidKeySpecException("Unsupported EccPoint type: fill");
@@ -233,19 +233,29 @@ public class CryptoHelper {
         return (BCECPublicKey) keyFactory.generatePublic(keySpec);
     }
 
-    public Signature signCertificateRequest(byte[] tbsData, PrivateKey signerPrivateKey, AlgorithmType signingAlgorithm) throws NoSuchAlgorithmException, IOException, SignatureException
+    /**
+     * Metho used to sign an enrollment request when the vehicle does not have a certificate
+     * @param tbsData
+     * @param signerPrivateKey
+     * @param signingAlgorithm
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     * @throws SignatureException
+     */
+    public Signature signEcRequest(byte[] tbsData, PrivateKey signerPrivateKey, AlgorithmType signingAlgorithm) throws NoSuchAlgorithmException, IOException, SignatureException
     {
         if(signingAlgorithm == null){
             throw new IllegalArgumentException("Error signing certificate request: no signature algorithm specified");
         }
 
         byte[] messageDigest = digest(tbsData, signingAlgorithm);
-        signMessageDigest(messageDigest, signingAlgorithm, signerPrivateKey);
-        return null;
+        return signMessageDigest(messageDigest, signingAlgorithm, signerPrivateKey);
+
     }
 
 
-    public Signature signMessage(byte[] tbsData, AlgorithmType signingAlgorithm, CertificateBase issuerCertificate, PrivateKey signingKey) throws SignatureException
+    public Signature signMessage(byte[] tbsData, AlgorithmType signingAlgorithm, EtsiTs103097Certificate issuerCertificate, PrivateKey signingKey) throws SignatureException
     {
         if(signingAlgorithm.getAlgorithm().getSignature() == null)
         {
@@ -270,12 +280,12 @@ public class CryptoHelper {
     }
 
     /**
-     * This method creates a certificate digest to be used in the certificate's signature according to the ieee1609.2 standards
+     * This method creates a certificate digest according to the ieee1609.2 standards
      * @param tbsData the to be signed certificate data
      * @param hashAlgorithm the algorithm to ude
      * @param issuerCertificate the certificate used for signing
      */
-    public byte[] digestCertificate(byte[] tbsData, AlgorithmType hashAlgorithm, CertificateBase issuerCertificate) throws NoSuchAlgorithmException, IOException
+    public byte[] digestCertificate(byte[] tbsData, AlgorithmType hashAlgorithm, EtsiTs103097Certificate issuerCertificate) throws NoSuchAlgorithmException, IOException
     {
         byte[] dataDigest = digest(tbsData, hashAlgorithm);
         byte[] signerDigest;
@@ -366,6 +376,133 @@ public class CryptoHelper {
         throw new SignatureException("Error creating signature");
     }
 
+
+    /**
+     * Method that verifies a signature given the signing certificate
+     * @param message the signed message
+     * @param signature the signature
+     * @param signerCert the certificate of the signer
+     * @return
+     * @throws IllegalArgumentException
+     * @throws SignatureException
+     * @throws IOException
+     */
+    public boolean verifySignature(
+            byte[] message,
+            Signature signature,
+            EtsiTs103097Certificate signerCert)
+            throws IllegalArgumentException, SignatureException, IOException {
+
+            PublicVerificationKey pubVerKey = (PublicVerificationKey) signerCert.getToBeSigned().getVerifyKeyIndicator().getValue();
+            EccP256CurvePoint eccPoint = (EccP256CurvePoint) pubVerKey.getValue();
+
+            AlgorithmType alg = getSignatureAlgorithm(signature.getType());
+            Algorithm.Signature sigAlg = alg.getAlgorithm().getSignature();
+            if(sigAlg == null){
+                throw new IllegalArgumentException("Error no signature algorithm specified");
+            }
+            try{
+                return verifySignatureDigest(digestCertificate(message,alg, signerCert), signature, (PublicKey) eccPointToPublicKey(alg, eccPoint));
+            }catch(Exception e){
+                if(e instanceof IllegalArgumentException){
+                    throw (IllegalArgumentException) e;
+                }
+                if(e instanceof IOException){
+                    throw (IOException) e;
+                }
+                if(e instanceof SignatureException){
+                    throw (SignatureException) e;
+                }
+
+                throw new SignatureException("Internal error verifying signature " + e.getClass().getSimpleName() + ": " + e.getMessage(), e);
+            }
+
+
+    }
+
+    /**
+     * Method that verifies a signature given the public key
+     * @param message the signed message
+     * @param signature the signature
+     * @param publicKey the public key to decrypt the signature
+     * @return
+     * @throws IllegalArgumentException
+     * @throws SignatureException
+     * @throws IOException
+     */
+    public boolean verifySignature(
+            byte[] message,
+            Signature signature,
+            PublicKey publicKey)
+            throws IllegalArgumentException, SignatureException, IOException {
+
+        AlgorithmType alg = getSignatureAlgorithm(signature.getType());
+        Algorithm.Signature sigAlg = alg.getAlgorithm().getSignature();
+        if(sigAlg == null){
+            throw new IllegalArgumentException("Error no signature algorithm specified");
+        }
+        try{
+            return verifySignatureDigest(digest(message,alg), signature, publicKey);
+        }catch(Exception e){
+            if(e instanceof IllegalArgumentException){
+                throw (IllegalArgumentException) e;
+            }
+            if(e instanceof IOException){
+                throw (IOException) e;
+            }
+            if(e instanceof SignatureException){
+                throw (SignatureException) e;
+            }
+
+            throw new SignatureException("Internal error verifying signature " + e.getClass().getSimpleName() + ": " + e.getMessage(), e);
+        }
+
+    }
+
+
+    public boolean verifySignatureDigest(
+            byte[] digest,
+            Signature signature,
+            PublicKey publicKey) throws IllegalArgumentException,
+            SignatureException, IOException {
+
+        AlgorithmType alg = getSignatureAlgorithm(signature.getType());
+        Algorithm.Signature sigAlg = alg.getAlgorithm().getSignature();
+        if(sigAlg == null){
+            throw new IllegalArgumentException("Error no signature algorithm specified");
+        }
+
+        try{
+            EcdsaP256Signature ecdsaSignature = (EcdsaP256Signature) signature.getValue();
+
+            // Create Signature Data
+            EccP256CurvePoint xPoint = ecdsaSignature.getR();
+            BigInteger r = new BigInteger(1,((COEROctetString) xPoint.getValue()).getData());
+            ASN1Integer asn1R = new ASN1Integer(r);
+            ASN1Integer asn1S = new ASN1Integer(EncodeHelper.readFixedFieldSizeKey(sigAlg.size, new ByteArrayInputStream(ecdsaSignature.getS())));
+            DLSequence dLSequence = new DLSequence(new ASN1Encodable[]{asn1R, asn1S});
+            byte[] dERSignature = dLSequence.getEncoded();
+
+            java.security.Signature sig = java.security.Signature.getInstance("NONEwithECDSA", provider);
+            sig.initVerify(publicKey);
+            sig.update(digest);
+            return sig.verify(dERSignature);
+        }catch(Exception e){
+            if(e instanceof IllegalArgumentException){
+                throw (IllegalArgumentException) e;
+            }
+            if(e instanceof IOException){
+                throw (IOException) e;
+            }
+            if(e instanceof SignatureException){
+                throw (SignatureException) e;
+            }
+
+            throw new SignatureException("Internal error verifying signature " + e.getClass().getSimpleName() + ": " + e.getMessage(), e);
+        }
+    }
+
+
     protected ECCurve getECCurve (AlgorithmType alg)
     {
         if (alg.getAlgorithm().getSignature() == Algorithm.Signature.ECDSA_NIST_P256)
@@ -380,6 +517,22 @@ public class CryptoHelper {
         throw new IllegalArgumentException("Unsupported EC Algorithm: " + alg);
     }
 
+    /**
+     * Help method to get the signature algorithm from its type
+     */
+    protected AlgorithmType getSignatureAlgorithm(Signature.SignatureTypes sigType) {
+        switch (sigType) {
+            case ECDSA_NIST_P256_SIGNATURE:
+                return PublicVerificationKey.PublicVerificationKeyTypes.ECDSA_NIST_P256;
+            case ECDSA_BRAINPOOL_P256R1_SIGNATURE:
+            default:
+                return PublicVerificationKey.PublicVerificationKeyTypes.ECDSA_BRAINPOOL_P256r1;
+        }
+    }
+
+    /**
+     * Help method to get the signature type from its algorithm
+     */
     protected Signature.SignatureTypes getSignatureType(AlgorithmType signingAlgorithm)
     {
         if(signingAlgorithm.getAlgorithm().getSignature() == Algorithm.Signature.ECDSA_NIST_P256)
@@ -434,6 +587,15 @@ public class CryptoHelper {
     }
 
 
+    public byte[] symmetricDecrypt(AlgorithmType alg, byte[] data, Key symmetricKey, byte[] nounce) throws IllegalArgumentException, GeneralSecurityException{
+
+        Cipher c = getSymmetricCihper(alg);
+        c.init(Cipher.DECRYPT_MODE, symmetricKey, new IvParameterSpec(nounce));
+
+        return c.doFinal(data);
+    }
+
+
     protected Cipher getSymmetricCihper(AlgorithmType alg) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException
     {
         if(alg.getAlgorithm().getSymmetric() != Algorithm.Symmetric.AES_128_CCM)
@@ -450,6 +612,9 @@ public class CryptoHelper {
         return cipher.doFinal(data);
     }
 
+    /**
+     * Help method to perform a ECIES encryption of a symmetric key.
+     */
     public EncryptedDataEncryptionKey eceisEncryptSymmetricKey(EncryptedDataEncryptionKeyTypes keyType, AlgorithmType alg, PublicKey encryptionKey, SecretKey symmKey) throws IOException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException
     {
         byte[] keyData = symmKey.getEncoded();
@@ -470,12 +635,37 @@ public class CryptoHelper {
         EciesP256EncryptedKey key = new EciesP256EncryptedKey(p,c,t);
         return new EncryptedDataEncryptionKey(keyType, key);
     }
+    /**
+     * Help method to perform a ECIES decryption of a symmetric key.
+     */
+    public SecretKey eceisDecryptSymmetricKey(EncryptedDataEncryptionKey encryptedDataEncryptionKey, PrivateKey decryptionKey, AlgorithmType alg) throws IllegalArgumentException, GeneralSecurityException, IOException{
+        try{
+            EncryptedDataEncryptionKeyTypes keyType = encryptedDataEncryptionKey.getType();
+            iesCipher.engineInit(Cipher.DECRYPT_MODE, decryptionKey, new IESParameterSpec(null, null, 128,-1, null, true),secureRandom);
+
+            byte[] encryptedData = new byte[keyType.getVLength() + alg.getAlgorithm().getSymmetric().getKeyLength() + keyType.getOutputTagLength()];
+
+
+            EciesP256EncryptedKey eciesP256EncryptedKey = (EciesP256EncryptedKey) encryptedDataEncryptionKey.getValue();
+            ECPublicKey pubKey = (ECPublicKey) eccPointToPublicKey(alg, eciesP256EncryptedKey.getV());
+            BCECPublicKey bcPubKey = toBCECPublicKey(alg, pubKey);
+
+            System.arraycopy(bcPubKey.getQ().getEncoded(true), 0, encryptedData, 0, keyType.getVLength());
+            System.arraycopy(eciesP256EncryptedKey.getC(), 0, encryptedData, keyType.getVLength(), alg.getAlgorithm().getSymmetric().getKeyLength());
+            System.arraycopy(eciesP256EncryptedKey.getT(), 0, encryptedData, keyType.getVLength()+alg.getAlgorithm().getSymmetric().getKeyLength(), keyType.getOutputTagLength());
+
+            byte[] decryptedData = iesCipher.engineDoFinal(encryptedData, 0, encryptedData.length);
+            return new SecretKeySpec(decryptedData, "AES");
+        }catch(BadPaddingException e){
+            throw new InvalidKeyException("Error decrypting symmetric key using supplied private key: " + e.getMessage(), e);
+        }
+    }
 
 
     /**
      * This method generated the HashedId8 certificate identifier value
      */
-    public HashedId8 getCertificateHashId(CertificateBase certificate, AlgorithmType hashAlgorithm) throws IOException, NoSuchAlgorithmException
+    public HashedId8 getCertificateHashId(EtsiTs103097Certificate certificate, AlgorithmType hashAlgorithm) throws IOException, NoSuchAlgorithmException
     {
         return new HashedId8(digest(certificate.getEncoded(), hashAlgorithm));
     }

@@ -31,5 +31,10 @@ public class Hostname extends COERUTF8String
         super(LOWER_BOUND,UPPER_BOUND);
     }
 
+    @Override
+    public String toString() {
+        return "Hostname [" + getUTF8String() + "]";
+    }
+
 
 }

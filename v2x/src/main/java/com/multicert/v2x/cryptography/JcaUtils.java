@@ -88,7 +88,10 @@ public class JcaUtils
 	    return new JcaX509CertificateConverter().setProvider("BC").getCertificate(certBldr.build(signer));
 	}
 
-
+    /**
+     * Help method that generates a dummy certificate so we can store keypairs on the keystore
+     * @param keyPair the keypair to store
+     */
     public static X509Certificate createDummyRootCert(KeyPair keyPair)
             throws Exception
     {

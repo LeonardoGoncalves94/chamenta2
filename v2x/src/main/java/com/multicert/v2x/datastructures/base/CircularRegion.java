@@ -38,5 +38,25 @@ public class CircularRegion extends COERSequence
         addComponent(RADIUS, false, new Uint16(), null);
     }
 
+    /**
+     *
+     * @return the northwest position
+     */
+    public TwoDLocation getCenter(){
+        return (TwoDLocation) getComponentValue(CENTER);
+    }
+
+    /**
+     *
+     * @return the radius in meter
+     */
+    public int getRadius(){
+        return (int) ((Uint16) getComponentValue(RADIUS)).getValueAsLong();
+    }
+
+    @Override
+    public String toString() {
+        return "CircularRegion [center=" + getCenter().toString().replace("TwoDLocation ", "") + ", radius=" +  getRadius() + "]";
+    }
 
 }

@@ -82,14 +82,27 @@
 			<groupId>net.sourceforge.nekohtml</groupId>
 			<artifactId>nekohtml</artifactId>
 			<!-- $NO-MVN-MAN-VER$ -->
+			
+		</dependency>
+		<!-- integration with Swagger API doc generation http://goo.gl/J5FQDM -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.5.0</version>
 		</dependency>
 
-
-
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
-
-
-
+	
 	<build>
 		<plugins>
 			<plugin>

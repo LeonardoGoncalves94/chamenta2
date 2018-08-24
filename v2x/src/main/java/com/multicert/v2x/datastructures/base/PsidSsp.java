@@ -39,10 +39,31 @@ public class PsidSsp extends COERSequence
         createSequence();
     }
 
+    /**
+     *
+     * @return psid value
+     */
+    public Psid getPsid(){
+        return (Psid) getComponentValue(PSID);
+    }
+
+    /**
+     *
+     * @return the service specific permissions
+     */
+    public ServiceSpecificPermissions getSSP(){
+        return (ServiceSpecificPermissions) getComponentValue(SERVICE_SPECIFIC_PERMISSIONS);
+    }
+
     private void createSequence()
     {
         addComponent(PSID, false, new Psid(), null);
         addComponent(SERVICE_SPECIFIC_PERMISSIONS, true, new ServiceSpecificPermissions(), null);
+    }
+
+    @Override
+    public String toString() {
+        return "PsidSsp [psid=" + getPsid().toString().replaceAll("Psid ", "") + ", ssp=" + (getSSP() != null ? getSSP().toString().replaceAll("ServiceSpecificPermissions ", "") : "NULL") + "]";
     }
 
 }

@@ -54,7 +54,7 @@
 															<h4 class="modal-title">Edit Key Data</h4>
 														</div>
 														<div class="modal-body">
-
+SSSS
 															<form action="#" th:action="@{/admin/editkey}"
 																method="post" role="form">													
 																<div class="form-group">
@@ -116,17 +116,17 @@
 													<div class="modal-body">
 
 														<form action="#" th:action="@{/admin/addkey}"
-															method="post" role="form">														
+															method="post" role="form" th:object="${keyObj}">														
 																																																																											
 															<div class="form-group">
 																<label for="alias">Key Alias</label> <input
 																	type="text" class="form-control" id="alias"
-																	name="alias" required/>
+																	th:field="*{alias}" required/>
 															</div>	
 															
 															<div class="form-group">
-															<label for="algorithm">Key Algorithm</label>														
-																<select name="algorithm" id = "alg_list" required>
+															<label for="alg_list">Key Algorithm</label>														
+																<select id = "alg_list" th:field="*{algorithm}" required>
  																	 <option th:each="alg : ${allAlgorithms}" 
           																	 th:value="${alg}" 
           																	 th:text="${alg}"></option>
@@ -134,15 +134,22 @@
 															</div>
 															
 															<div class="form-group">
+																<input
+																	type="hidden" class="form-control" id="keyType"
+																	th:field="*{keyType}"/>
+															</div>	
+															
+															<div class="form-group">
 															<label for="algorithm">Belongs to CA</label>	
-																<select name="ca" id = "ca_list" required>
+																<select id = "ca_list" th:field="*{ca}" required>
  																	 <option th:each="ca : ${cas}" 
           																	 th:value="${ca.caId}" 
           																	 th:text="${ca.caName}"></option>
 																</select>
 															</div>
 																									
-															<button type="submit" class="btn btn-default">Submit</button>
+															<button type="submit" class="btn btn-default"
+															th:onClick = "|javascript:getKeyType();|">Submit</button>
 														</form>
 
 													</div>
@@ -179,6 +186,18 @@ function fillModal(keyId, alias, algorithm, caName, caId){
 	$("#editKeyDataModel").find("#alias").val(alias);
 	$("#editKeyDataModel").find("#algorithm").val(algorithm);	
 	$("#editKeyDataModel").find("#ca").val(caName);
+}
+</script>
+
+<script th:inline="javascript">
+function getKeyType(){
+	
+	if($("#alg_list").val() == "ECDSA-Nist" || $("#alg_list").val() == "ECDSA-Brainpool"){
+		$("#addCaDataModel").find("#keyType").val("Signature");
+	} else {
+		$("#addCaDataModel").find("#keyType").val("Encryption");
+	}
+
 }
 </script>
 </body>

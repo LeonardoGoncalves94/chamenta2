@@ -64,4 +64,42 @@ public class PsidGroupPermissions extends COERSequence
         addComponent(CHAIN_LENGTH_RANGE, true, new COERInteger(), new COERInteger(0));
         addComponent(EE_TYPE, false, new EndEntityType(), null);
     }
+
+    /**
+     *
+     * @return appPermissions
+     */
+    public SubjectPermissions getAppPermissions(){
+        return (SubjectPermissions) getComponentValue(SUBJECT_PERMISSIONS);
+    }
+
+    /**
+     *
+     * @return minChainDepth
+     */
+    public int getMinChainDepth(){
+        return (int) ((COERInteger) getComponentValue(MIN_CHAIN_LENGTH)).getValueAsLong();
+    }
+
+    /**
+     *
+     * @return chainDepthRange
+     */
+    public int getChainDepthRange(){
+        return (int) ((COERInteger) getComponentValue(CHAIN_LENGTH_RANGE)).getValueAsLong();
+    }
+
+    /**
+     *
+     * @return eeType
+     */
+    public EndEntityType getEEType(){
+        return (EndEntityType) getComponentValue(EE_TYPE);
+    }
+
+    @Override
+    public String toString() {
+        return "PsidGroupPermissions [appPermissions=" + getAppPermissions().toString().replaceAll("SubjectPermissions ", "") + ", minChainDepth=" + getMinChainDepth()
+                + ", chainDepthRange=" + getChainDepthRange() + ", eeType=" + getEEType().toString().replaceAll("EndEntityType ", "")  + "]";
+    }
 }

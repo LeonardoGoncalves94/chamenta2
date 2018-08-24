@@ -91,5 +91,10 @@ public class EncryptedDataEncryptionKey extends COERChoice
     {
 		return (EncryptedDataEncryptionKeyTypes) choice;
 	}
+
+    @Override
+    public String toString() {
+        return "EncryptedDataEncryptionKey [" + choice + "=" + value.toString().replace("EciesP256EncryptedKey ", "") +"]";
+    }
 	
 }

@@ -1,13 +1,5 @@
-import com.multicert.v2x.IdentifiedRegions.Countries;
 import com.multicert.v2x.cryptography.CryptoHelper;
-import com.multicert.v2x.datastructures.base.*;
-import com.multicert.v2x.datastructures.base.Signature;
-import com.multicert.v2x.datastructures.certificate.CertificateBase;
 import com.multicert.v2x.generators.certificate.CACertGenerator;
-
-
-import java.security.*;
-import java.util.Date;
 
 /**
  * This class will demostrate how to create the CA hierarchy, the enrollment certificates and authorization tickets for the vehicles, and the requests for such certificates
@@ -32,7 +24,7 @@ public class Main
         Countries.CountryTypes[] countries = {Countries.CountryTypes.SPAIN, Countries.CountryTypes.PORTUGAL};
         GeographicRegion rootCAValidityRegion = Countries.getGeographicRegion(countries);
 
-        CertificateBase rootCACertificate = caCertGenerator.generateRootCA("RootCA",rootCAValidityPeriod,rootCAValidityRegion,
+        EtsiTs103097Certificate rootCACertificate = caCertGenerator.generateRootCA("RootCA",rootCAValidityPeriod,rootCAValidityRegion,
                 7,3,3, -1,
                 Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE,rootCASigningKeys,
                 SymmAlgorithm.AES_128_CCM, BasePublicEncryptionKey.BasePublicEncryptionKeyTypes.ECIES_NIST_P256,

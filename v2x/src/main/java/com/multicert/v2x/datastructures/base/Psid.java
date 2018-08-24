@@ -20,10 +20,23 @@ public class Psid extends COERInteger
     }
 
     /**
+     * Constructor used when encoding a psid in hex format
+     */
+    public Psid(String psidValueHex) throws NumberFormatException{
+        super(new BigInteger(psidValueHex, 16),BigInteger.ZERO,null);
+    }
+
+    /**
      * Constructor used when decoding
      */
     public Psid()
     {
         super(BigInteger.ZERO,null);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Psid [" + getValue().toString() + "(0x" + getValue().toString(16)+ ")"+ "]";
     }
 }

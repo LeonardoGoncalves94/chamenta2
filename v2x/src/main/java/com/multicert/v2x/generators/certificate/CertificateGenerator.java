@@ -4,7 +4,7 @@ import com.multicert.v2x.cryptography.Algorithm;
 import com.multicert.v2x.cryptography.AlgorithmType;
 import com.multicert.v2x.cryptography.CryptoHelper;
 import com.multicert.v2x.datastructures.base.*;
-import com.multicert.v2x.datastructures.certificate.CertificateBase;
+import com.multicert.v2x.datastructures.certificate.EtsiTs103097Certificate;
 import com.multicert.v2x.datastructures.certificate.IssuerIdentifier;
 import com.multicert.v2x.datastructures.certificate.ToBeSignedCertificate;
 
@@ -14,7 +14,6 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.SignatureException;
-import java.security.cert.Certificate;
 import java.security.spec.InvalidKeySpecException;
 
 public class CertificateGenerator
@@ -36,9 +35,9 @@ public class CertificateGenerator
         {
             if(isCompressed)
             {
-                return cryptoHelper.getECPoint(alg, EccP256CurvePoint.EccP256CurvePointTypes.COMPRESSED_Y_0, pk);
+                return cryptoHelper.publicKeyToEccPoint(alg, EccP256CurvePoint.EccP256CurvePointTypes.COMPRESSED_Y_0, pk);
             }
-            return cryptoHelper.getECPoint(alg, EccP256CurvePoint.EccP256CurvePointTypes.UNCOMPRESSED, pk);
+            return cryptoHelper.publicKeyToEccPoint(alg, EccP256CurvePoint.EccP256CurvePointTypes.UNCOMPRESSED, pk);
 
         } catch (InvalidKeySpecException e) {
             throw new IllegalArgumentException("Error, invalid keyspec: " + e.getMessage());
@@ -61,7 +60,7 @@ public class CertificateGenerator
         return null;
     }
 
-    public CertificateBase generateCertificate(ToBeSignedCertificate toBeSignedCertificate, CertificateBase issuerCertificate, KeyPair issuerKeypair, AlgorithmType signingAlgorithm) throws IOException, NoSuchAlgorithmException, SignatureException
+    public EtsiTs103097Certificate generateCertificate(ToBeSignedCertificate toBeSignedCertificate, EtsiTs103097Certificate issuerCertificate, KeyPair issuerKeypair, AlgorithmType signingAlgorithm) throws IOException, NoSuchAlgorithmException, SignatureException
     {
         byte[] toBeSignedData = toBeSignedCertificate.getEncoded();
         IssuerIdentifier issuerIdentifier;
@@ -76,7 +75,7 @@ public class CertificateGenerator
                 issuerIdentifier = new IssuerIdentifier(certId);
             }
             Signature signature = cryptoHelper.signMessageDigest(toBeSignedData, signingAlgorithm, issuerKeypair.getPrivate());
-            return new CertificateBase(issuerIdentifier, toBeSignedCertificate, signature);
+            return new EtsiTs103097Certificate(issuerIdentifier, toBeSignedCertificate, signature);
         }
         catch(NoSuchAlgorithmException e)
         {

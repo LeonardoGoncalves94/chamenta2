@@ -1,5 +1,7 @@
 package com.multicert.v2x.asn1.coer;
 
+import org.bouncycastle.util.encoders.Hex;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -102,6 +104,11 @@ public class COEROctetString implements COEREncodable
             in.read(data);
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "COEROctetStream [data=" + new String(Hex.encode(data)) + "]";
     }
 
 }

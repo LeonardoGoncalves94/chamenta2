@@ -26,4 +26,19 @@ public class SequenceOfIdentifiedRegion extends COERSequenceOf
     {
         super(new IdentifiedRegion());
     }
+
+    @Override
+    public String toString() {
+        String retval = "SequenceOfIdentifiedRegion [";
+        if(values != null){
+            for(int i=0; i< values.length -1;i++){
+                retval += values[i].toString().replace("IdentifiedRegion ", "") + ",";
+            }
+            if(values.length > 0){
+                retval += values[values.length-1].toString().replace("IdentifiedRegion ", "");
+            }
+        }
+        retval += "]";
+        return retval;
+    }
 }

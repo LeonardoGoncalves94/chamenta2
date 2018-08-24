@@ -5,6 +5,7 @@ import com.multicert.v2x.cryptography.AlgorithmType;
 import com.multicert.v2x.cryptography.CryptoHelper;
 import com.multicert.v2x.datastructures.base.*;
 import com.multicert.v2x.datastructures.certificate.*;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.security.KeyPair;
@@ -25,7 +26,6 @@ public class AuthorizationTicketGenerator extends CertificateGenerator
 
     /**
      *
-     * @param hostname
      * @param validityPeriod
      * @param region
      * @param appPermissions used to indicate message signing permissions, i.e. permissions to sign v2x messages
@@ -46,24 +46,23 @@ public class AuthorizationTicketGenerator extends CertificateGenerator
      * @throws SignatureException
      * @throws NoSuchAlgorithmException
      */
-    public CertificateBase generateAuthorizationTicket(String hostname,
-                                                        ValidityPeriod validityPeriod,
-                                                        GeographicRegion region,
-                                                        PsidSsp[] appPermissions,
-                                                        PsidSspRange[] certRequestPermissions,
-                                                        byte[] cracaid,
-                                                        int crlSeries,
-                                                        int assuranceLevel,
-                                                        int confidenceLevel,
-                                                        AlgorithmType issuerSigningAlgorithm,
-                                                        PublicKey signPublicKey,
-                                                        CertificateBase issuerCertificate,
-                                                        KeyPair issuerCertificateKeyPair,
-                                                        SymmAlgorithm symmAlgorithm,
-                                                        BasePublicEncryptionKey.BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
-                                                        PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
+    public EtsiTs103097Certificate generateAuthorizationTicket(ValidityPeriod validityPeriod,
+                                                               GeographicRegion region,
+                                                               PsidSsp[] appPermissions,
+                                                               PsidSspRange[] certRequestPermissions,
+                                                               byte[] cracaid,
+                                                               int crlSeries,
+                                                               int assuranceLevel,
+                                                               int confidenceLevel,
+                                                               AlgorithmType issuerSigningAlgorithm,
+                                                               PublicKey signPublicKey,
+                                                               EtsiTs103097Certificate issuerCertificate,
+                                                               KeyPair issuerCertificateKeyPair,
+                                                               SymmAlgorithm symmAlgorithm,
+                                                               BasePublicEncryptionKey.BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
+                                                               PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
     {
-        CertificateId id = new CertificateId(new Hostname(hostname));
+        CertificateId id = new CertificateId(); // certificateId is set to NONE
 
         if(appPermissions == null)
         {
@@ -78,10 +77,6 @@ public class AuthorizationTicketGenerator extends CertificateGenerator
             sp = new SubjectPermissions(SubjectPermissions.SubjectPermissionsTypes.EXPLICIT, new SequenceOfPsidSspRange(certRequestPermissions));
         }
 
-        PsidGroupPermissions pgp =  new PsidGroupPermissions(sp, 0, 0, new EndEntityType(true, false));
-
-        SequenceOfPsidGroupPermissions certReqPermissions = new SequenceOfPsidGroupPermissions(new PsidGroupPermissions[] {pgp});
-
 
         PublicEncryptionKey encryptionKey = null;
         if(symmAlgorithm != null && encPublicKeyAlgorithm != null && encPublicKey != null){
@@ -93,7 +88,7 @@ public class AuthorizationTicketGenerator extends CertificateGenerator
         PublicVerificationKey publicVerificationKey = new PublicVerificationKey(getPublicVerificationKeyType(issuerSigningAlgorithm), convertToPoint(issuerSigningAlgorithm, signPublicKey));
         verificationKeyIndicator = new VerificationKeyIndicator(publicVerificationKey);
 
-        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, new HashedId3(cracaid), new CrlSeries(crlSeries), validityPeriod, region, subjectAssurance, appPerms, null, certReqPermissions, false, encryptionKey, verificationKeyIndicator);
+        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, validityPeriod, region, subjectAssurance, appPerms, null, encryptionKey, verificationKeyIndicator);
 
         return generateCertificate(tbs, issuerCertificate, issuerCertificateKeyPair, issuerSigningAlgorithm);
     }

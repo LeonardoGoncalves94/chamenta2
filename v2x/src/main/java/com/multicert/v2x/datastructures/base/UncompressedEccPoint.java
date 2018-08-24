@@ -2,13 +2,13 @@ package com.multicert.v2x.datastructures.base;
 
 import com.multicert.v2x.asn1.coer.COEROctetString;
 import com.multicert.v2x.asn1.coer.COERSequence;
+import com.multicert.v2x.asn1.coer.EncodeHelper;
+import org.bouncycastle.util.encoders.Hex;
 
 import java.io.IOException;
 
 /**
  * This class represents the x and y coordinates of a ECC Point
- *
- * @author Leonardo Gonçalves, leonardo.goncalves@multicert.com
  *
  */
 public class UncompressedEccPoint extends COERSequence
@@ -28,6 +28,8 @@ public class UncompressedEccPoint extends COERSequence
     {
         super(SEQUENCE_SIZE);
         createSequence();
+        x = EncodeHelper.padWithZeroes(x, OCTETSTRING_SIZE);
+        y = EncodeHelper.padWithZeroes(y, OCTETSTRING_SIZE);
         setComponentValue(X, new COEROctetString(x ,OCTETSTRING_SIZE, OCTETSTRING_SIZE));
         setComponentValue(Y, new COEROctetString(y, OCTETSTRING_SIZE, OCTETSTRING_SIZE));
     }
@@ -44,8 +46,8 @@ public class UncompressedEccPoint extends COERSequence
 
     public void createSequence()
     {
-        addComponent(X, false, new COEROctetString(), null);
-        addComponent(Y, false, new COEROctetString(), null);
+        addComponent(X, false, new COEROctetString(OCTETSTRING_SIZE,OCTETSTRING_SIZE), null);
+        addComponent(Y, false, new COEROctetString(OCTETSTRING_SIZE,OCTETSTRING_SIZE), null);
     }
 
     /**
@@ -60,6 +62,11 @@ public class UncompressedEccPoint extends COERSequence
      */
     public byte[] getY(){
         return ((COEROctetString) getComponentValue(Y)).getData();
+    }
+
+    @Override
+    public String toString() {
+        return "UncompressedEccPoint [x=" + new String(Hex.encode(getX())) + ", y=" + new String(Hex.encode(getY())) + "]";
     }
 
 }

@@ -16,4 +16,10 @@ public class Longitude extends OneEightyDegreeInt
     public Longitude(long value) {
         super(value);
     }
+
+    @Override
+    public String toString() {
+        long val = getValueAsLong();
+        return "Longitude [" + (val!= UNKNOWN ? val : "UNKNOWN") +"]";
+    }
 }

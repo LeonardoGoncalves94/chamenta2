@@ -3,14 +3,20 @@ package com.multicert.v2x.datastructures.certificaterequests;
 import com.multicert.v2x.asn1.coer.COERChoice;
 import com.multicert.v2x.asn1.coer.COERChoiceEnumeration;
 import com.multicert.v2x.asn1.coer.COEREncodable;
-import com.multicert.v2x.datastructures.message.secureddata.Ieee1609Dot2Data;
+import com.multicert.v2x.datastructures.certificaterequests.Enrollment.InnerEcResponse;
+import com.multicert.v2x.datastructures.message.secureddata.EtsiTs103097Data;
+
+import java.io.IOException;
+
+import static com.multicert.v2x.datastructures.certificaterequests.EtsiTs102941DataContent.EtsiTs102941DataContentTypes.ENROLLMENT_RESPONSE;
 
 
 public class EtsiTs102941DataContent extends COERChoice
 {
     public enum EtsiTs102941DataContentTypes implements COERChoiceEnumeration
     {
-        ENROLLMENT_REQUEST; //TODO EXTEND OTHER TYPES HERE
+        ENROLLMENT_REQUEST, //TODO EXTEND OTHER TYPES HERE
+        ENROLLMENT_RESPONSE;
 
         public int myOrdinal()
         {
@@ -18,18 +24,33 @@ public class EtsiTs102941DataContent extends COERChoice
         }
 
         @Override
-        public COEREncodable getEncodableType()
+        public COEREncodable getEncodableType() throws IOException
         {
-            return new Ieee1609Dot2Data();
+
+            switch(this)
+            {
+                case ENROLLMENT_REQUEST:
+                    return new EtsiTs103097Data(); //corresponds to the InnerEcRequestSignedForPOP
+                default:
+                    return new InnerEcResponse();
+            }
         }
     }
 
     /**
-     * Constructor used when encoding
+     * Constructor used when encoding the type ENROLLMENT_REQUEST
      */
-    public EtsiTs102941DataContent(EtsiTs102941DataContentTypes type, Ieee1609Dot2Data InnerECRequestSignedForPOP)
+    public EtsiTs102941DataContent(EtsiTs102941DataContentTypes type, EtsiTs103097Data InnerECRequestSignedForPOP)
     {
         super(type, InnerECRequestSignedForPOP);
+    }
+
+    /**
+     * Constructor used when encoding the type ENROLLMENT_RESPONSE
+     */
+    public EtsiTs102941DataContent(InnerEcResponse innerEcResponse)
+    {
+        super(ENROLLMENT_RESPONSE, innerEcResponse);
     }
 
     /**
@@ -43,7 +64,7 @@ public class EtsiTs102941DataContent extends COERChoice
     /**
      * Returns the unit of the Duration, which is an item of DurationChoices
      */
-    public EtsiTs102941DataContentTypes getChoice()
+    public EtsiTs102941DataContentTypes getType()
     {
         return (EtsiTs102941DataContentTypes) choice;
     }

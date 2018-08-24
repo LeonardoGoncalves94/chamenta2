@@ -56,4 +56,9 @@ public class Time32 extends Uint32
         Moment m = Moment.of(value.longValue() + SECONDS_FROM_ZERO_TO_2004, TimeScale.TAI); // add the seconds elapsed from ZERO to 2004
         return TemporalType.JAVA_UTIL_DATE.from(m);
     }
+
+    @Override
+    public String toString() {
+        return "Time32 [timeStamp=" + asDate() + " (" + getValueAsLong() + ")]";
+    }
 }

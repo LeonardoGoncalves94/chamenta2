@@ -41,7 +41,7 @@ public class COERChoice implements COEREncodable
 
     public void encode(DataOutputStream out) throws IOException
     {
-        COERTag tag = new COERTag(COERTag.APPLICATION_TAG_CLASS, choice.myOrdinal());
+        COERTag tag = new COERTag(COERTag.CONTEXT_SPECIFIC_TAG_CLASS, choice.myOrdinal());
         tag.encode(out);
         value.encode(out);
     }
@@ -62,6 +62,6 @@ public class COERChoice implements COEREncodable
 
     @Override
     public String toString() {
-        return "COERChoice (choice=" + choice + ", value=" + value + ")";
+        return "COERChoice [choice=" + choice + ", value=" + value + "]";
     }
 }

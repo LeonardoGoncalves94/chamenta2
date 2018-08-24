@@ -26,8 +26,6 @@ public class EnrollmentCredentiaGenerator extends CertificateGenerator
      * @param validityPeriod
      * @param region
      * @param certRequestPermissions
-     * @param cracaid
-     * @param crlSeries
      * @param assuranceLevel
      * @param confidenceLevel
      * @param issuerSigningAlgorithm
@@ -42,21 +40,19 @@ public class EnrollmentCredentiaGenerator extends CertificateGenerator
      * @throws SignatureException
      * @throws NoSuchAlgorithmException
      */
-    public CertificateBase generateEnrollmentCredential(String hostname,
-                                                        ValidityPeriod validityPeriod,
-                                                        GeographicRegion region,
-                                                        PsidSspRange[] certRequestPermissions,
-                                                        byte[] cracaid,
-                                                        int crlSeries,
-                                                        int assuranceLevel,
-                                                        int confidenceLevel,
-                                                        AlgorithmType issuerSigningAlgorithm,
-                                                        PublicKey signPublicKey,
-                                                        CertificateBase issuerCertificate,
-                                                        KeyPair issuerCertificateKeyPair,
-                                                        SymmAlgorithm symmAlgorithm,
-                                                        BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
-                                                        PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
+    public EtsiTs103097Certificate generateEnrollmentCredential(String hostname,
+                                                                ValidityPeriod validityPeriod,
+                                                                GeographicRegion region,
+                                                                PsidSspRange[] certRequestPermissions,
+                                                                int assuranceLevel,
+                                                                int confidenceLevel,
+                                                                AlgorithmType issuerSigningAlgorithm,
+                                                                PublicKey signPublicKey,
+                                                                EtsiTs103097Certificate issuerCertificate,
+                                                                KeyPair issuerCertificateKeyPair,
+                                                                SymmAlgorithm symmAlgorithm,
+                                                                BasePublicEncryptionKeyTypes encPublicKeyAlgorithm,
+                                                                PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
     {
         CertificateId id = new CertificateId(new Hostname(hostname));
 
@@ -66,10 +62,6 @@ public class EnrollmentCredentiaGenerator extends CertificateGenerator
         }else{
             sp = new SubjectPermissions(SubjectPermissionsTypes.EXPLICIT, new SequenceOfPsidSspRange(certRequestPermissions));
         }
-
-        PsidGroupPermissions pgp =  new PsidGroupPermissions(sp, 0, 0, new EndEntityType(true, false));
-
-        SequenceOfPsidGroupPermissions certReqPermissions = new SequenceOfPsidGroupPermissions(new PsidGroupPermissions[] {pgp});
 
 
         PublicEncryptionKey encryptionKey = null;
@@ -87,7 +79,7 @@ public class EnrollmentCredentiaGenerator extends CertificateGenerator
         PublicVerificationKey publicVerificationKey = new PublicVerificationKey(getPublicVerificationKeyType(issuerSigningAlgorithm), convertToPoint(issuerSigningAlgorithm, signPublicKey));
         verificationKeyIndicator = new VerificationKeyIndicator(publicVerificationKey);
 
-        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, new HashedId3(cracaid), new CrlSeries(crlSeries), validityPeriod, region, subjectAssurance, appPermissions, null, certReqPermissions, false, encryptionKey, verificationKeyIndicator);
+        ToBeSignedCertificate tbs = new ToBeSignedCertificate(id, validityPeriod, region, subjectAssurance, appPermissions, null,  encryptionKey, verificationKeyIndicator);
 
         return generateCertificate(tbs, issuerCertificate, issuerCertificateKeyPair, issuerSigningAlgorithm);
     }

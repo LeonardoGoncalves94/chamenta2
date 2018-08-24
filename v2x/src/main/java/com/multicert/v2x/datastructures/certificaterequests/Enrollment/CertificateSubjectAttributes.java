@@ -105,5 +105,17 @@ public class CertificateSubjectAttributes extends COERSequence
         return (SequenceOfPsidGroupPermissions) getComponentValue(CERT_ISSUE_PERMISSIONS);
     }
 
+    @Override
+    public String toString() {
+        return
+                "CertificateSubjectAttributes [\n" +
+                        "  id=" + ( getId() != null ? getId().toString().replaceAll("CertificateId ", "") : "NONE") + "\n" +
+                        "  validity=" + ( getValidityPeriod() != null ? getValidityPeriod().toString().replaceAll("ValidityPeriod ", "") : "NONE") + "\n" +
+                        "  region=" + ( getRegion() != null ? getRegion().toString().replaceAll("GeographicRegion ", "") : "NONE") + "\n" +
+                        "  assurance=" + ( getAssuranceLevel() != null ? getAssuranceLevel().toString().replaceAll("SubjectAssurance ", "") : "NONE") + "\n" +
+                        "  appPermissions=" + ( getAppPermissions() != null ? getAppPermissions().toString().replaceAll("SequenceOfPsidSsp ", "") : "NONE") + "\n" +
+                        "  issuePermissions=" + ( getCertIssuePermissions() != null ? getCertIssuePermissions().toString().replaceAll("SequenceOfPsidGroupPermissions ", "") : "NONE") + "\n" +
+                        "]";
+    }
 }
 

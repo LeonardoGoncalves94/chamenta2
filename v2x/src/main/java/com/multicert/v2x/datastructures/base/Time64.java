@@ -53,4 +53,9 @@ public class Time64 extends Uint64
         Moment moment = Moment.of(elapsedTime + SECONDS_FROM_ZERO_TO_2004,nanoSeconds, TimeScale.TAI);
         return TemporalType.JAVA_UTIL_DATE.from(moment);
     }
+
+    @Override
+    public String toString() {
+        return "Time64 [timeStamp=" + asDate() + " (" + getValue() + ")]";
+    }
 }
