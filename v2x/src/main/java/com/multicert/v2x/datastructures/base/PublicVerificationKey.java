@@ -6,7 +6,7 @@ import com.multicert.v2x.asn1.coer.COEREncodable;
 import com.multicert.v2x.cryptography.Algorithm;
 import com.multicert.v2x.cryptography.AlgorithmType;
 
-import java.io.IOException;
+import java.io.*;
 
 public class PublicVerificationKey extends COERChoice
 {
@@ -57,6 +57,27 @@ public class PublicVerificationKey extends COERChoice
     public PublicVerificationKey() {
         super(PublicVerificationKeyTypes.class);
     }
+
+    /**
+     * Constructor decoding a certificate from an encoded byte array.
+     * @param encodedPublicKey encoding of the public verification key
+     * @throws IOException   if communication problems occurred during serialization.
+     */
+    public PublicVerificationKey(byte[] encodedPublicKey) throws IOException{
+        super(PublicVerificationKeyTypes.class);
+
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(encodedPublicKey));
+        decode(dis);
+    }
+
+    public byte[] getEncoded() throws IOException
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+        encode(dos);
+        return baos.toByteArray();
+    }
+
 
     /**
      * @return the type of key.

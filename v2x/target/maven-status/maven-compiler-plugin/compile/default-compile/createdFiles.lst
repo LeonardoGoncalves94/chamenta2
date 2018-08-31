@@ -25,6 +25,7 @@ com/multicert/v2x/datastructures/certificate/SubjectPermissions.class
 com/multicert/v2x/datastructures/base/IdentifiedRegion.class
 com/multicert/v2x/datastructures/certificate/CertificateId$1.class
 com/multicert/v2x/datastructures/certificaterequests/Enrollment/PublicKeys.class
+com/multicert/v2x/cryptography/UnknownItsException.class
 com/multicert/v2x/datastructures/base/Duration$DurationTypes.class
 com/multicert/v2x/cryptography/Mac.class
 com/multicert/v2x/datastructures/base/SspRange$1.class

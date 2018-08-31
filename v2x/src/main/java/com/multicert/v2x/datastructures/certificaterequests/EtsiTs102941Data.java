@@ -52,6 +52,11 @@ public class EtsiTs102941Data extends COERSequence
         return baos.toByteArray();
     }
 
+    /**
+     * Constructor used when decoding an EtsiTs102941Data given the encoded value
+     * @param encoded
+     * @throws IOException
+     */
     public EtsiTs102941Data(byte[] encoded) throws IOException
     {
         super(SEQUENCE_SIZE);

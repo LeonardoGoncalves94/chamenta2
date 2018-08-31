@@ -22,6 +22,8 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class generates secured data such as encrypted and signed data, also it decrypts and verifies said data
@@ -30,6 +32,9 @@ public class SecuredDataGenerator
 {
     private static final int CURRENT_VERSION = EtsiTs103097Data.CURRENT_VERSION;
     protected CryptoHelper cryptoHelper;
+
+    private  SecretKey sharedKey;
+    private InnerEcRequest innerEcRequest;
 
     public SecuredDataGenerator(CryptoHelper cryptoHelper)
     {
@@ -84,41 +89,54 @@ public class SecuredDataGenerator
      * @throws SignatureException
      * @throws IOException
      */
-    public void verifySignedRequest(EtsiTs103097Data signedData, PublicKey canonicalPubKey) throws IllegalArgumentException, SignatureException, ImcompleteRequestException, BadContentTypeException, IOException, InvalidSignatureException
+    public void verifySignedRequest(EtsiTs103097Data signedData, PublicKey canonicalPubKey) throws IllegalArgumentException, SignatureException, ImcompleteRequestException, BadContentTypeException, IOException, InvalidSignatureException, InvalidKeySpecException
     {
         if(signedData.getContent().getType() != EtsiTs103097Content.EtsiTs103097ContentChoices.SIGNED_DATA)
         {
             throw new BadContentTypeException("Error verifying outer signature: Only signed EtsiTs103097Data can verified");
         }
+        SignedData sd = (SignedData) signedData.getContent().getValue();
+        EtsiTs103097Data payloadData = sd.getTbsData().getPayload().getData();
+        if(payloadData == null){
+            throw new ImcompleteRequestException("Error verifying outer signature, no payload data found");
+        }
 
+        Boolean outerSignatureResult = false;
+        //try to verify the outer signature using the shared vehicle canonical public key
+        try
+        {
+            outerSignatureResult = cryptoHelper.verifySignature(sd.getTbsData().getEncoded(), sd.getSignature(), canonicalPubKey);
 
-            SignedData sd = (SignedData) signedData.getContent().getValue();
-            EtsiTs103097Data payloadData = sd.getTbsData().getPayload().getData();
-            if(payloadData == null){
-                throw new ImcompleteRequestException("Error verifying outer signature, no payload data found");
-            }
-            //verify the outer signature using the shared vehicle canonical public key
-            Boolean outerSignatureresult =  cryptoHelper.verifySignature(sd.getTbsData().getEncoded(), sd.getSignature(), canonicalPubKey);
+        }
+        catch (Exception e)
+        {
+            throw new InvalidSignatureException("problem while verifying outer signature");
+        }
 
-            //Get to the inner signed structure
-            EtsiTs102941Data etsiTs102941Data =  new EtsiTs102941Data(((Opaque) payloadData.getContent().getValue()).getData());
-            if(etsiTs102941Data.getContent().getType() != EtsiTs102941DataContent.EtsiTs102941DataContentTypes.ENROLLMENT_REQUEST)
-            {
-                throw new BadContentTypeException("Error verifying EcRequest: specified structure is not and enrollment credential request");
-            }
-            EtsiTs103097Data InnerECRequestSignedForPOP = (EtsiTs103097Data)etsiTs102941Data.getContent().getValue();
+         //Get to the inner signed structure
+        EtsiTs102941Data etsiTs102941Data =  new EtsiTs102941Data(((Opaque) payloadData.getContent().getValue()).getData());
+        if(etsiTs102941Data.getContent().getType() != EtsiTs102941DataContent.EtsiTs102941DataContentTypes.ENROLLMENT_REQUEST)
+        {
+            throw new BadContentTypeException("Error verifying EcRequest: specified structure is not and enrollment credential request");
+        }
+        EtsiTs103097Data InnerECRequestSignedForPOP = (EtsiTs103097Data)etsiTs102941Data.getContent().getValue();
 
+        Boolean innerSignatureResult = false;
+        //try Verify the inner signed  structure
+        try
+        {
+            innerSignatureResult = verifyInnerSignature(InnerECRequestSignedForPOP);
+        }
+        catch (Exception e)
+        {
+            throw new InvalidSignatureException("problem while verifying inner signature");
+        }
 
-            //Verify the inner signed  structure
-            Boolean innerSignatureResult = verifyInnerSignature(InnerECRequestSignedForPOP);
-
-            //If a signature is invalid the whole request is invalid
-            if(!outerSignatureresult & innerSignatureResult)
-            {
-                throw new InvalidSignatureException("The signature does not verify");
-            }
-
-
+        //If a signature is invalid the whole request is invalid
+        if(!(outerSignatureResult & innerSignatureResult))
+        {
+            throw new InvalidSignatureException("The signature does not verify");
+        }
     }
 
     /**
@@ -126,14 +144,12 @@ public class SecuredDataGenerator
 
      * @return
      */
-    private Boolean verifyInnerSignature(EtsiTs103097Data InnerECRequestSignedForPOP) throws SignatureException, BadContentTypeException, ImcompleteRequestException
+    private Boolean verifyInnerSignature(EtsiTs103097Data InnerECRequestSignedForPOP) throws SignatureException, BadContentTypeException, ImcompleteRequestException, IOException, InvalidKeySpecException
     {
         if(InnerECRequestSignedForPOP.getContent().getType() != EtsiTs103097Content.EtsiTs103097ContentChoices.SIGNED_DATA){
             throw new BadContentTypeException("Error verifying inner signature: Only signed EtsiTs103097Data can verified");
         }
 
-        try
-        {
             SignedData sd = (SignedData) InnerECRequestSignedForPOP.getContent().getValue();
             EtsiTs103097Data payloadData = sd.getTbsData().getPayload().getData();
             if (payloadData == null)
@@ -141,72 +157,29 @@ public class SecuredDataGenerator
                 throw new ImcompleteRequestException("Error verifying inner signature, no payload data found");
             }
 
-            InnerEcRequest innerEcRequest = new InnerEcRequest(((Opaque) payloadData.getContent().getValue()).getData());
+            innerEcRequest = new InnerEcRequest(((Opaque) payloadData.getContent().getValue()).getData());
 
-            PublicKey verificationKey = getRequestPublicKey(innerEcRequest);
+            PublicKey verificationKey = getRequestPublicKey();
 
             return cryptoHelper.verifySignature(sd.getTbsData().getEncoded(), sd.getSignature(), verificationKey);
 
-        } catch (IOException e)
-        {
-            throw new SignatureException("Error verifying inner signature signature: " + e.getMessage(),e);
-        } catch (InvalidKeySpecException e)
-        {
-            e.printStackTrace();
-        }
-        return true;
 
     }
 
-    /**Method that returns the innerECRequest structure from a signed EcRequest (must be decrypted first)
-     * This method is used to simplify the reading of the request
-     * @param signedRequest the decrypted Enrollment Credential request
-     * @return the innerEcRequest structure
+    /**
+     * Method that returns the innerECRequest structure
      * @throws IOException
      */
     public InnerEcRequest getInnerEcRequest(EtsiTs103097Data signedRequest) throws IOException
     {
-
-        if(signedRequest.getContent().getType() != EtsiTs103097Content.EtsiTs103097ContentChoices.SIGNED_DATA){
-            throw new IllegalArgumentException("Error getting innerEcRequest: No outer signed data found");
-        }
-
-        SignedData sd = (SignedData) signedRequest.getContent().getValue();
-        EtsiTs103097Data payloadData = sd.getTbsData().getPayload().getData();
-        if(payloadData == null){
-            throw new IllegalArgumentException("Error no outer payload data found");
-        }
-
-        EtsiTs102941Data etsiTs102941Data =  new EtsiTs102941Data(((Opaque) payloadData.getContent().getValue()).getData());
-
-        if(etsiTs102941Data.getContent().getType() != EtsiTs102941DataContent.EtsiTs102941DataContentTypes.ENROLLMENT_REQUEST)
-        {
-            throw new IllegalArgumentException("Error getting innerEcRequest: specified structure is not and enrollment credential request");
-        }
-        EtsiTs103097Data InnerECRequestSignedForPOP = (EtsiTs103097Data)etsiTs102941Data.getContent().getValue();
-
-        if(InnerECRequestSignedForPOP.getContent().getType() != EtsiTs103097Content.EtsiTs103097ContentChoices.SIGNED_DATA){
-            throw new IllegalArgumentException("Error getting innerEcRequest: No inner signed data found");
-        }
-
-        SignedData innserSd = (SignedData) InnerECRequestSignedForPOP.getContent().getValue();
-        EtsiTs103097Data innerPayload = innserSd.getTbsData().getPayload().getData();
-        if (innerPayload == null)
-        {
-            throw new IllegalArgumentException("Error no payload data found");
-        }
-
-        InnerEcRequest innerEcRequest = new InnerEcRequest(((Opaque) payloadData.getContent().getValue()).getData());
-
         return innerEcRequest;
     }
-
 
     /**
      * Help method to read the ITS public key from the request
      * @return
      */
-    public PublicKey getRequestPublicKey(InnerEcRequest innerEcRequest) throws InvalidKeySpecException
+    public PublicKey getRequestPublicKey() throws InvalidKeySpecException
     {
         AlgorithmType sigAlgorithm = innerEcRequest.getPublicKeys().getVerificationKey().getType();
         EccP256CurvePoint point = (EccP256CurvePoint) innerEcRequest.getPublicKeys().getVerificationKey().getValue();
@@ -234,6 +207,7 @@ public class SecuredDataGenerator
         return new EtsiTs103097Data(etsiTs103097Content);
     }
 
+
     /**
      * Method that decrypts data a to certificate receiver (CERT_RECIP_INFO)
      * @param  encryptedData the data to decrypt
@@ -241,8 +215,9 @@ public class SecuredDataGenerator
      * @param privateKey the private key associated with the receiver certificate
      *
      */
-    public byte[] decryptEncryptedData(EtsiTs103097Data encryptedData, EtsiTs103097Certificate receiverCert, PrivateKey privateKey) throws IOException, GeneralSecurityException, IncorrectRecipientException, BadContentTypeException
+    public byte[] decryptEncryptedData(EtsiTs103097Data encryptedData, EtsiTs103097Certificate receiverCert, PrivateKey privateKey) throws IOException, GeneralSecurityException, IncorrectRecipientException, BadContentTypeException, DecryptionException
     {
+
 
         if(encryptedData.getContent().getType() != EtsiTs103097Content.EtsiTs103097ContentChoices.ENCRYPTED_DATA){
 
@@ -267,13 +242,14 @@ public class SecuredDataGenerator
                 {
                     PKRecipientInfo pkRecInfo = (PKRecipientInfo) recipientInfo.getValue();
                     decryptionKey = cryptoHelper.eceisDecryptSymmetricKey(pkRecInfo.getEncKey(), privateKey, pkRecInfo.getEncKey().getType());
+                    sharedKey = decryptionKey;
 
                     SymmetricCiphertext symmetricCiphertext = data.getCipherText();
 
                     return cryptoHelper.symmetricDecrypt(symmetricCiphertext.getType(), getEncryptedData(symmetricCiphertext), decryptionKey, getNounce(symmetricCiphertext));
                 }catch(Exception e)
                 {
-                    throw new EncryptionException("Error decrypting data");
+                    throw new DecryptionException("Error decrypting data");
                 }
 
             }
@@ -281,6 +257,11 @@ public class SecuredDataGenerator
 
         throw new IncorrectRecipientException("Error decrypting data, no matching receiver info could be found to retrieve the decryption key.");
 
+    }
+
+    public SecretKey getSharedKey()
+    {
+        return sharedKey;
     }
 
 
@@ -390,7 +371,5 @@ public class SecuredDataGenerator
                 return aesCcmCiphertext.getNounce();
         }
     }
-
-
 
 }

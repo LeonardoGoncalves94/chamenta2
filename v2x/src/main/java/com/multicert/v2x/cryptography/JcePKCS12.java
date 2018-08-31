@@ -56,7 +56,7 @@ public class JcePKCS12 implements DefaultKeystore
 
         KeyStore pkcs12Store = KeyStore.getInstance("PKCS12", "BC");
 
-        //pkcs12Store.load(new FileInputStream("id.p12"), JcaUtils.KEY_PASSWD);
+        //pkcs12Store.load(new FileInputStream("id.p12"), JcaUtils.KEY_PASSWD); //not working, file seems to be corrupted or password wrong
 
         pkcs12Store.load(null, JcaUtils.KEY_PASSWD); //the file is corrupted and can not be loaded
 

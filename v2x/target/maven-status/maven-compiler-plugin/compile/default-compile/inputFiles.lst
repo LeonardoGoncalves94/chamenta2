@@ -13,6 +13,7 @@
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/Longitude.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/GeographicRegion.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/generators/certificate/CertificateGenerator.java
+/home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/cryptography/IncorrectRecipientException.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/message/secureddata/EtsiTs103097Content.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/certificate/SubjectPermissions.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/cryptography/Mac.java
@@ -22,6 +23,7 @@
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/message/encrypteddata/PKRecipientInfo.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/SubjectAssurance.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/EccP256CurvePoint.java
+/home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/cryptography/ImcompleteRequestException.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/HashedId3.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/message/secureddata/HashedData.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/Uint64.java
@@ -41,6 +43,7 @@
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/asn1/coer/COEREnumeration.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/certificaterequests/Enrollment/EnrollmentResonseCode.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/asn1/coer/COERBitString.java
+/home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/cryptography/InvalidSignatureException.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/certificaterequests/Enrollment/EnrollmentRequest.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/generators/certificaterequest/AuthorizationRequestGenerator.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/certificate/CertificateId.java
@@ -103,6 +106,7 @@
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/CircularRegion.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/generators/certificaterequest/EnrollmentRequestGenerator.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/PublicEncryptionKey.java
+/home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/cryptography/UnknownItsException.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/asn1/coer/COERTag.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/asn1/coer/COERUTF8String.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/certificate/PsidGroupPermissions.java
@@ -114,6 +118,7 @@
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/SequenceOfRegionAndSubregions.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/Uint32.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/Opaque.java
+/home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/cryptography/BadContentTypeException.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/asn1/coer/COERChoice.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/CountryAndRegions.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/RegionAndSubregions.java
@@ -124,6 +129,7 @@
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/SymmAlgorithm.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/certificate/SequenceOfPsidGroupPermissions.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/IdentifiedRegions/SubRegions.java
+/home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/cryptography/DecryptionException.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/RectangularRegion.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/datastructures/base/EcdsaP256Signature.java
 /home/leonardo/Documentos/tese/v2x/src/main/java/com/multicert/v2x/IdentifiedRegions/Countries.java
