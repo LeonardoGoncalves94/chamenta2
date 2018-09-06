@@ -37,9 +37,9 @@ public class PkiGenerator
         //-------------------------Generate the RootCA-----------------------------------
 
         // Generate a reference to the Root CA Keys
-        KeyPair rootCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias1");
+        KeyPair rootCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
         Signature.SignatureTypes rootSigAlgorithm = Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE;
-        KeyPair rootCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_BRAINPOOL_P256R1_SIGNATURE, "alias2");
+        KeyPair rootCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_BRAINPOOL_P256R1_SIGNATURE);
         BasePublicEncryptionKey.BasePublicEncryptionKeyTypes rootEncAlg = BasePublicEncryptionKey.BasePublicEncryptionKeyTypes.ECIES_BRAINPOOL_P256r1;
 
 
@@ -58,8 +58,8 @@ public class PkiGenerator
         //-------------------------Generate the EnrollmentCA-----------------------------------
 
         // Generate a reference to the Root CA Keys
-        KeyPair enrollmentCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias3");
-        enrollmentCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias4");
+        KeyPair enrollmentCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
+        enrollmentCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
         BasePublicEncryptionKey.BasePublicEncryptionKeyTypes enrollmentEncAlg = BasePublicEncryptionKey.BasePublicEncryptionKeyTypes.ECIES_NIST_P256;
 
         ValidityPeriod enrollmentPeriod = new ValidityPeriod(new Date(), Duration.DurationTypes.YEARS, 5);
@@ -79,8 +79,8 @@ public class PkiGenerator
         //-------------------------Generate the authorization CA-----------------------------------
 
         // Generate a reference to the Root CA Keys
-        KeyPair authorizationCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias3");
-        KeyPair authorizationCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias4");
+        KeyPair authorizationCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
+        KeyPair authorizationCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
         BasePublicEncryptionKey.BasePublicEncryptionKeyTypes authorizationEncAlg = BasePublicEncryptionKey.BasePublicEncryptionKeyTypes.ECIES_NIST_P256;
 
         ValidityPeriod authorizationPeriod = new ValidityPeriod(new Date(), Duration.DurationTypes.YEARS, 3);

@@ -18,7 +18,6 @@ com/multicert/v2x/asn1/coer/COERLengthDeterminantTest.class
 com/multicert/v2x/datastructures/base/UncompressedEccPointTest.class
 com/multicert/v2x/datastructures/certificate/SubjectPermissionsTest.class
 com/multicert/v2x/datastructures/certificate/SequenceOfPsidGroupPermissionsTest.class
-com/multicert/v2x/cryptography/JcePKCS12Test.class
 com/multicert/v2x/asn1/coer/COERIA5StringTest.class
 com/multicert/v2x/asn1/coer/COERSequenceOfTest.class
 com/multicert/v2x/asn1/coer/COERTagTest.class

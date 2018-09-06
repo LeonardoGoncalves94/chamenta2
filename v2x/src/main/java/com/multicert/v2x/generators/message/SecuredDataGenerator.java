@@ -7,6 +7,7 @@ import com.multicert.v2x.datastructures.base.*;
 import com.multicert.v2x.datastructures.base.Signature;
 import com.multicert.v2x.datastructures.certificate.EtsiTs103097Certificate;
 
+import com.multicert.v2x.datastructures.certificate.SequenceOfPsidGroupPermissions;
 import com.multicert.v2x.datastructures.certificaterequests.Enrollment.InnerEcRequest;
 import com.multicert.v2x.datastructures.certificaterequests.EtsiTs102941Data;
 import com.multicert.v2x.datastructures.certificaterequests.EtsiTs102941DataContent;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 /**
  * This class generates secured data such as encrypted and signed data, also it decrypts and verifies said data
+ * An object of SecuredDataGenerator should be instantiated per message
  */
 public class SecuredDataGenerator
 {
@@ -170,13 +172,13 @@ public class SecuredDataGenerator
      * Method that returns the innerECRequest structure
      * @throws IOException
      */
-    public InnerEcRequest getInnerEcRequest(EtsiTs103097Data signedRequest) throws IOException
+    public InnerEcRequest getInnerEcRequest() throws IOException
     {
         return innerEcRequest;
     }
 
     /**
-     * Help method to read the ITS public key from the request
+     * Help method to read the ITS public key from the decrypted and verified  request
      * @return
      */
     public PublicKey getRequestPublicKey() throws InvalidKeySpecException
@@ -187,6 +189,19 @@ public class SecuredDataGenerator
         PublicKey verificationKey = (PublicKey) cryptoHelper.eccPointToPublicKey(sigAlgorithm,point);
         return verificationKey;
     }
+
+
+    /**
+     * Help method to read requested cert issue permissions the decrypted and verified request
+     * @return
+     */
+    public SequenceOfPsidGroupPermissions getCertIssuePermissions()
+    {
+
+        return innerEcRequest.getRequestedSubjectAttributes().getCertIssuePermissions();
+    }
+
+
 
 
 

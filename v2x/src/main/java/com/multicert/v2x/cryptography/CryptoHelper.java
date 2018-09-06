@@ -58,7 +58,6 @@ public class CryptoHelper {
     protected static final int AES_PARAM = 128;
     protected KeyFactory keyFactory;
     protected MessageDigest sha256Digest;
-    protected DefaultKeystore jcePKCS12;
     protected IESCipher iesCipher = new IESCipher(new IESEngine(new ECDHCBasicAgreement(),
             new KDF2BytesGenerator(new SHA256Digest()),
             new Mac(new SHA256Digest(),128)));
@@ -90,7 +89,6 @@ public class CryptoHelper {
             sha256Digest = MessageDigest.getInstance("SHA-256","BC");
             keyFactory = KeyFactory.getInstance("ECDSA", "BC");
             aesGenerator.init(AES_PARAM);
-            jcePKCS12 = new JcePKCS12();
         }
         catch (InvalidAlgorithmParameterException e)
         {
@@ -104,7 +102,7 @@ public class CryptoHelper {
      *
      * Use ECDSA_NIST_P256_SIGNATURE for Nist generator and ECDSA_BRAINPOOL_P256R1_SIGNATURE for Brainpool generator
      */
-    public KeyPair genKeyPair(AlgorithmType algorithm, String alias) throws Exception
+    public KeyPair genKeyPair(AlgorithmType algorithm) throws Exception
     {
 
         if(algorithm == null)
@@ -114,34 +112,17 @@ public class CryptoHelper {
         if(algorithm.getAlgorithm().getSignature() == Algorithm.Signature.ECDSA_NIST_P256)
         {
             KeyPair keys = ecNistP256Generator.generateKeyPair();
-            jcePKCS12.addKeyPair(keys, alias);
             return keys;
 
         }
         if(algorithm.getAlgorithm().getSignature() == Algorithm.Signature.ECDSA_BRAINPOOL_P256R1)
         {
             KeyPair keys = brainpoolp256r1P256Generator.generateKeyPair();
-            jcePKCS12.addKeyPair(keys, alias);
             return keys;
         }
         throw new IllegalArgumentException("Error generating key pair: Unsupported algorithm" + algorithm);
     }
 
-    /**
-     * Method that generates a keypair given a digital signing algorithm
-     *
-     * Use ECDSA_NIST_P256_SIGNATURE for Nist generator and ECDSA_BRAINPOOL_P256R1_SIGNATURE for Brainpool generator
-     */
-    public KeyPair getKeyPair( String alias) throws Exception
-    {
-        return jcePKCS12.getKeyPair(alias);
-
-    }
-
-    public void printKeyStore() throws Exception
-    {
-        jcePKCS12.printKestore();
-    }
 
     public SecretKey genSecretKey(AlgorithmType alg)
     {

@@ -39,22 +39,22 @@ public class EnrollmentResponseGenerator extends SecuredDataGenerator
 
     /**
      * This method generates the enrollment response
-     * @param request the encrypted request (see InnerEcResponse class and ETSI TS 102 941 for more information for more information), REQUIRED
+     * @param request the signed request i.e. the outer signed structure (see InnerEcResponse class and ETSI TS 102 941 for more information for more information), REQUIRED
      * @param preSharedKey the pre-shared symmetric key present on the original request, REQUIRED
      * @param responseCode the result of the enrollment credential request validation
      * @param enrollmentCredential the enrollment credential to deliver to the ITS station, null if none, OPTIONAL
      * @param EAcertificate The certificate of the EA that will generate this response, REQUIRED
-     * @param EAprivateKey EA private key corresponding to its publicVerificationKey found in the referenced EA certificate(will be used to sign this enrollment response), REQUIRED
+     * @param EAsigKeys The EA signature keys, the private key will be used to sign this enrollment response,  REQUIRED
      * @param signingAlgorithm The algorithm which will be used to sign this enrollment  response, REQUIRED
      */
     public EtsiTs103097Data generateEcResponse(EtsiTs103097Data request, SecretKey preSharedKey, EnrollmentResonseCode responseCode, EtsiTs103097Certificate enrollmentCredential,
-                                               EtsiTs103097Certificate EAcertificate, PrivateKey EAprivateKey, AlgorithmType signingAlgorithm) throws IOException, GeneralSecurityException
+                                               EtsiTs103097Certificate EAcertificate, KeyPair EAsigKeys, AlgorithmType signingAlgorithm) throws IOException, GeneralSecurityException
     {
         InnerEcResponse inncerEcResponse = createInnerEcResponse(request,responseCode,enrollmentCredential);
 
         EtsiTs102941Data etsiTs102941Data = createEtsiTs102941Data(inncerEcResponse);
 
-        EtsiTs103097Data etsiTs102941DataSigned = createResponseSignedData(etsiTs102941Data, EAcertificate, EAprivateKey, signingAlgorithm);
+        EtsiTs103097Data etsiTs102941DataSigned = createResponseSignedData(etsiTs102941Data, EAcertificate, EAsigKeys.getPrivate(), signingAlgorithm);
 
         EtsiTs103097Data etsiTs103097DataEncrypted = createRequestEncryptedData(etsiTs102941DataSigned, preSharedKey);
 

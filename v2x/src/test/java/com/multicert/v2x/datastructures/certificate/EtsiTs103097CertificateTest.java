@@ -32,8 +32,8 @@ public class EtsiTs103097CertificateTest
 
 
         // Generate a reference to the Root CA Keys
-        KeyPair rootCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias1");
-        KeyPair rootCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_BRAINPOOL_P256R1_SIGNATURE, "alias2");
+        KeyPair rootCASigningKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
+        KeyPair rootCAEncryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_BRAINPOOL_P256R1_SIGNATURE);
 
 
         // certificate validity info

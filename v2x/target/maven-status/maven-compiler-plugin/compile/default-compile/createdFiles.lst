@@ -40,7 +40,6 @@ com/multicert/v2x/datastructures/base/EciesP256EncryptedKey.class
 com/multicert/v2x/datastructures/certificaterequests/EtsiTs102941DataContent.class
 com/multicert/v2x/datastructures/base/Latitude.class
 com/multicert/v2x/datastructures/base/ElevInt.class
-com/multicert/v2x/cryptography/DefaultKeystore.class
 com/multicert/v2x/IdentifiedRegions/Regions.class
 com/multicert/v2x/datastructures/base/OneEightyDegreeInt.class
 com/multicert/v2x/datastructures/base/Uint3.class
@@ -69,7 +68,6 @@ com/multicert/v2x/asn1/coer/COERSequenceOf.class
 com/multicert/v2x/datastructures/base/SequenceOfOctetString.class
 com/multicert/v2x/datastructures/certificaterequests/Enrollment/EnrollmentRequest.class
 com/multicert/v2x/generators/certificate/CACertGenerator.class
-com/multicert/v2x/cryptography/JcaUtils.class
 com/multicert/v2x/datastructures/message/secureddata/HashedData.class
 com/multicert/v2x/datastructures/certificate/PsidGroupPermissions.class
 com/multicert/v2x/datastructures/base/Longitude.class
@@ -126,7 +124,6 @@ com/multicert/v2x/datastructures/base/SubjectAssurance.class
 com/multicert/v2x/datastructures/base/UncompressedEccPoint.class
 com/multicert/v2x/datastructures/base/Elevation.class
 com/multicert/v2x/datastructures/base/Time64.class
-com/multicert/v2x/cryptography/JcePKCS12.class
 com/multicert/v2x/asn1/coer/COERChoiceEnumeration.class
 com/multicert/v2x/datastructures/certificate/SequenceOfCertificate.class
 com/multicert/v2x/datastructures/certificaterequests/Authorization/AuthorizationRequest.class

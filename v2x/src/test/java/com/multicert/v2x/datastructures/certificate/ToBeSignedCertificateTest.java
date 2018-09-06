@@ -32,11 +32,11 @@ public class ToBeSignedCertificateTest
         try
         {
 
-            KeyPair signingKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias1");
+            KeyPair signingKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
             Signature.SignatureTypes issuerSigningAlgorithm = Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE;
             PublicKey signPublicKey = signingKeys.getPublic();
 
-            KeyPair encryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_BRAINPOOL_P256R1_SIGNATURE, "alias2");
+            KeyPair encryptionKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_BRAINPOOL_P256R1_SIGNATURE);
             BasePublicEncryptionKey.BasePublicEncryptionKeyTypes encPublicKeyAlgorithm = BasePublicEncryptionKey.BasePublicEncryptionKeyTypes.ECIES_NIST_P256;
             PublicKey encPublicKey = encryptionKeys.getPublic();
 

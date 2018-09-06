@@ -25,7 +25,6 @@ public class EnrollmentCredentiaGenerator extends CertificateGenerator
      * @param hostname
      * @param validityPeriod
      * @param region
-     * @param certRequestPermissions
      * @param assuranceLevel
      * @param confidenceLevel
      * @param issuerSigningAlgorithm
@@ -43,7 +42,6 @@ public class EnrollmentCredentiaGenerator extends CertificateGenerator
     public EtsiTs103097Certificate generateEnrollmentCredential(String hostname,
                                                                 ValidityPeriod validityPeriod,
                                                                 GeographicRegion region,
-                                                                PsidSspRange[] certRequestPermissions,
                                                                 int assuranceLevel,
                                                                 int confidenceLevel,
                                                                 AlgorithmType issuerSigningAlgorithm,
@@ -55,14 +53,6 @@ public class EnrollmentCredentiaGenerator extends CertificateGenerator
                                                                 PublicKey encPublicKey) throws IOException, SignatureException, NoSuchAlgorithmException
     {
         CertificateId id = new CertificateId(new Hostname(hostname));
-
-        SubjectPermissions sp;
-        if(certRequestPermissions == null){
-            sp = new SubjectPermissions(SubjectPermissionsTypes.ALL, null);
-        }else{
-            sp = new SubjectPermissions(SubjectPermissionsTypes.EXPLICIT, new SequenceOfPsidSspRange(certRequestPermissions));
-        }
-
 
         PublicEncryptionKey encryptionKey = null;
         if(symmAlgorithm != null && encPublicKeyAlgorithm != null && encPublicKey != null){

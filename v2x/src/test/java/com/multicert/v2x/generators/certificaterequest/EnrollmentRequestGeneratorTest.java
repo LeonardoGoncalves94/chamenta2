@@ -47,10 +47,10 @@ public class EnrollmentRequestGeneratorTest
         CryptoHelper cryptoHelper = new CryptoHelper("BC");
         requestGenerator = new EnrollmentRequestGenerator(cryptoHelper,false);
 
-        KeyPair keyPair = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias1"); //a keypair to be certified
+        KeyPair keyPair = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE); //a keypair to be certified
         Signature.SignatureTypes keyPairAlgorithm = Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE;
 
-        KeyPair cankeyPair = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias2"); //a canonical keypair
+        KeyPair cankeyPair = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE); //a canonical keypair
         cannonicalPubKey = cankeyPair.getPublic();
 
 

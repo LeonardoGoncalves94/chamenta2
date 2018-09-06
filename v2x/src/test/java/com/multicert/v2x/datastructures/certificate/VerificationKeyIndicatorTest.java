@@ -25,7 +25,7 @@ public class VerificationKeyIndicatorTest
         CryptoHelper cryptoHelper = new CryptoHelper("BC");
         CertificateGenerator certificateGenerator = new CACertGenerator(cryptoHelper, false);
 
-        KeyPair signingKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE, "alias1");
+        KeyPair signingKeys = cryptoHelper.genKeyPair(Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE);
         Signature.SignatureTypes issuerSigningAlgorithm = Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE;
         PublicKey signPublicKey = signingKeys.getPublic();
 
