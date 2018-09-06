@@ -36,7 +36,7 @@ public class RAController {
 	            consumes = {"application/json"},
 	            produces = {"application/json"})
 	    @ResponseStatus(HttpStatus.CREATED)
-	    @ApiOperation(value = "Configure a vehicle within the RASerice.", notes = "The request should be composed of the vehicle's unique name and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).")
+	    @ApiOperation(value = "Configure a vehicle within the RASerice.", notes = "The request should be composed of the vehicle's unique name (9 char long) and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).")
 	    public String configureVehicle(@RequestBody VehiclePojo vehicle,
 	                                 HttpServletRequest request, HttpServletResponse response) {
 	    	Vehicle createdVehicle;

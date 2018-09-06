@@ -1,6 +1,8 @@
 package com.multicert.project.v2x.client;
 
 import java.security.KeyPair;
+import java.security.PublicKey;
+import java.util.Base64;
 
 public class Vehicle {
 	
@@ -36,6 +38,16 @@ public class Vehicle {
 	public void sendDEMN()
 	{
 		
+	}
+	
+	public String toString()
+	{
+		PublicKey pubKey = canonicalPair.getPublic();
+		 return
+	                "vehicle [\n" +
+	                        "  id=" + itsId + "\n" +
+	                        "  canonicalPubKey=" + Base64.getEncoder().encodeToString(pubKey.getEncoded()) + "\n" +	             
+	                        "]";
 	}
 	
 }
