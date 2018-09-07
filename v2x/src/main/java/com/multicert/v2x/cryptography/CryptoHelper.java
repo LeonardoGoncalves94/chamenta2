@@ -512,6 +512,22 @@ public class CryptoHelper {
     }
 
     /**
+     * Help method to get the public verification key type from its algorithm
+     */
+    public PublicVerificationKey.PublicVerificationKeyTypes getVerificationKeyType(AlgorithmType alg)
+    {
+        if(alg.getAlgorithm().getSignature() == Algorithm.Signature.ECDSA_NIST_P256)
+        {
+            return PublicVerificationKey.PublicVerificationKeyTypes.ECDSA_NIST_P256;
+        }
+        if(alg.getAlgorithm().getSignature() == Algorithm.Signature.ECDSA_BRAINPOOL_P256R1)
+        {
+            return PublicVerificationKey.PublicVerificationKeyTypes.ECDSA_BRAINPOOL_P256r1;
+        }
+        throw new IllegalArgumentException("Unsupported key algorithm: "+alg);
+    }
+
+    /**
      * Help method to get the signature type from its algorithm
      */
     protected Signature.SignatureTypes getSignatureType(AlgorithmType signingAlgorithm)
@@ -527,6 +543,11 @@ public class CryptoHelper {
         throw new IllegalArgumentException("Unsupported Signature algorithm: "+signingAlgorithm);
     }
 
+    /**
+     * Help method to get the curve from the signature algorithm
+     * @param alg
+     * @return
+     */
     protected ECParameterSpec getECParameterSpec(AlgorithmType alg)
     {
         if(alg.getAlgorithm().getSignature() == Algorithm.Signature.ECDSA_NIST_P256)

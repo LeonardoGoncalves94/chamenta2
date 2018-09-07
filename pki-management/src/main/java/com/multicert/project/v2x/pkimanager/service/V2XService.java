@@ -27,9 +27,9 @@ import com.multicert.v2x.datastructures.message.secureddata.EtsiTs103097Data;
 public interface V2XService {
 
 	/**
-	 * Method that generates a KeyPair
+	 *Method that generates an elliptic curve key pair (can be used for signature and encryption)
 	 * @param alias the desired alias
-	 * @param algorithm the algorithm of the key pair
+	 * @param algorithm the algorithm of the key pair, the possible types are present in the Signature.SignatureTypes Enum
 	 * @return 
 	 */
 	KeyPair genKeyPair(String algorithm) throws Exception;

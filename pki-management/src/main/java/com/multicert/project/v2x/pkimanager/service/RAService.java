@@ -36,7 +36,7 @@ public interface RAService {
 	 * @param responseMessage a message to the vehicle 
 	 * @return
 	 */
-	Response genEcResponse(Request ecRequest, byte[] encodedResponse, String responseMessage);
+	Response genEcResponse(Request ecRequest, String encodedResponse, String responseMessage);
 	
 	Response getResponse(long responseId);
 	

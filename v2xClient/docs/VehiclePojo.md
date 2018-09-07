@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**publicKey** | **java.util.List&lt;byte[]&gt;** |  |  [optional]
+**publicKey** | **String** |  |  [optional]
 **vehicleId** | **String** |  |  [optional]
 
 

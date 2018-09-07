@@ -15,7 +15,7 @@ public class VehiclePojo {
 	
 	private String vehicleId;
 	
-	private byte[] canonicalPublicKey;
+	private String canonicalPublicKey;
 
 	public String getVehicleId() {
 		return vehicleId;
@@ -25,11 +25,11 @@ public class VehiclePojo {
 		this.vehicleId = vehicleId;
 	}
 
-	public byte[] getPublicKey() {
+	public String getPublicKey() {
 		return canonicalPublicKey;
 	}
 
-	public void setPublicKey(byte[] publicKey) {
+	public void setPublicKey(String publicKey) {
 		this.canonicalPublicKey = publicKey;
 	}
 	

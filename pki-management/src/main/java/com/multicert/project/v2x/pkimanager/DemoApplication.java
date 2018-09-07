@@ -9,7 +9,7 @@ import com.multicert.v2x.cryptography.CryptoHelper;
 public class DemoApplication {
 
 	public static void main(String[] args) throws Exception {	
-		JavaKeyStore jks = new JavaKeyStore();
+		JavaKeyStore jks = new JavaKeyStore(); //initialize the keystore
 		JavaKeyStore.printKestore();
 		SpringApplication.run(DemoApplication.class, args);
 	}

@@ -6,6 +6,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.PublicKey;
 
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,7 +76,8 @@ public class RAServiceImpl implements RAService {
 			throw new IncorrectRecipientException ("Error validating EcRequest: Recipient CA does not exist");
 		}
 		
-		byte[] encodedEcRequest = ecRequest.getRequestEncoded();
+		String stringEcRequest = ecRequest.getRequestEncoded();
+		byte[] encodedEcRequest = Hex.decode(stringEcRequest);
 		
 		return caService.validateEcRequest(encodedEcRequest, canonicalKey, destination);
 	}
@@ -108,10 +110,11 @@ public class RAServiceImpl implements RAService {
 	 */
 	private Vehicle pojoToVehicle(VehiclePojo vehicleP) throws BadContentTypeException
 	{
-		byte[] encodedVerificationKey = vehicleP.getPublicKey();
+		String stringVerificationKey = vehicleP.getPublicKey();
+		byte[] encodedVerificationKey = Hex.decode(stringVerificationKey); //String public verification key to encoded encoded public verification key
 		
 		try {
-			PublicVerificationKey decodedVerificationKey = new PublicVerificationKey(encodedVerificationKey);
+			PublicVerificationKey decodedVerificationKey = new PublicVerificationKey(encodedVerificationKey); //decode the public verification key
 		
 			PublicKey canonicalKey = v2xService.extractPublicKey(decodedVerificationKey);
 			String vehicleId = vehicleP.getVehicleId();
@@ -125,7 +128,7 @@ public class RAServiceImpl implements RAService {
 		
 	}
 	@Override
-	public Response genEcResponse(Request ecRequest, byte[]encodedResponse, String resposneMessage)
+	public Response genEcResponse(Request ecRequest, String encodedResponse, String resposneMessage)
 	{
 		Response ecResponse =  new Response(ecRequest.getRequestOrigin(), ecRequest.getRequestDestination(),true, resposneMessage, encodedResponse);
 		saveResponse(ecResponse); 

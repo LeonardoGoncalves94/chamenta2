@@ -65,6 +65,7 @@ public class KeyManagementServiceImpl implements KeyManagementService {
 		//save the key pair in the keystore
 		JavaKeyStore.addKeyPair(keypair, key.getAlias());
 		JavaKeyStore.printKestore();
+		
 		//save the key pair data on the database
 		saveOrUpdateKeyData(key);
 	}

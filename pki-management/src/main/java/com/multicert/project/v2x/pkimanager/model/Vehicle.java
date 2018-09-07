@@ -32,7 +32,6 @@ public class Vehicle {
 	private String vehicleId;
 	
 	@Column(name="pubKey")
-	@NotEmpty(message = "please provide a public key")
 	private PublicKey canonicalPublicKey;
 
 	public String getVehicleId() {

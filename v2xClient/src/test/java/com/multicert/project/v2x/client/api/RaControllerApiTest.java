@@ -13,7 +13,6 @@
 
 package com.multicert.project.v2x.client.api;
 
-import com.multicert.project.v2x.client.invoker.ApiException;
 import com.multicert.project.v2x.client.model.Request;
 import com.multicert.project.v2x.client.model.Response;
 import com.multicert.project.v2x.client.model.VehiclePojo;
@@ -33,13 +32,13 @@ public class RaControllerApiTest {
     /**
      * Configure a vehicle within the RASerice.
      *
-     * The request should be composed of the vehicle&#39;s unique name and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).
+     * The request should be composed of the vehicle&#39;s unique name (9 char long) and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void configureVehicleUsingPOSTTest() throws ApiException {
+    public void configureVehicleUsingPOSTTest() {
         VehiclePojo vehicle = null;
         String response = api.configureVehicleUsingPOST(vehicle);
 
@@ -55,7 +54,7 @@ public class RaControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void requestEnrollmentCertUsingPOSTTest() throws ApiException {
+    public void requestEnrollmentCertUsingPOSTTest() {
         Request ecRequest = null;
         Response response = api.requestEnrollmentCertUsingPOST(ecRequest);
 

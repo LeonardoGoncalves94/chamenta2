@@ -23,13 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Response
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-05T11:42:30.831+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-07T17:25:28.225+01:00")
 public class Response {
   @JsonProperty("requestDestination")
   private String requestDestination = null;
 
   @JsonProperty("requestEncoded")
-  private java.util.List<byte[]> requestEncoded = null;
+  private String requestEncoded = null;
 
   @JsonProperty("requestId")
   private Long requestId = null;
@@ -61,16 +61,8 @@ public class Response {
     this.requestDestination = requestDestination;
   }
 
-  public Response requestEncoded(java.util.List<byte[]> requestEncoded) {
+  public Response requestEncoded(String requestEncoded) {
     this.requestEncoded = requestEncoded;
-    return this;
-  }
-
-  public Response addRequestEncodedItem(byte[] requestEncodedItem) {
-    if (this.requestEncoded == null) {
-      this.requestEncoded = new java.util.ArrayList<byte[]>();
-    }
-    this.requestEncoded.add(requestEncodedItem);
     return this;
   }
 
@@ -79,11 +71,11 @@ public class Response {
    * @return requestEncoded
   **/
   @ApiModelProperty(value = "")
-  public java.util.List<byte[]> getRequestEncoded() {
+  public String getRequestEncoded() {
     return requestEncoded;
   }
 
-  public void setRequestEncoded(java.util.List<byte[]> requestEncoded) {
+  public void setRequestEncoded(String requestEncoded) {
     this.requestEncoded = requestEncoded;
   }
 

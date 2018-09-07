@@ -23,24 +23,16 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * VehiclePojo
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-05T11:42:30.831+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-07T17:25:28.225+01:00")
 public class VehiclePojo {
   @JsonProperty("publicKey")
-  private java.util.List<byte[]> publicKey = null;
+  private String publicKey = null;
 
   @JsonProperty("vehicleId")
   private String vehicleId = null;
 
-  public VehiclePojo publicKey(java.util.List<byte[]> publicKey) {
+  public VehiclePojo publicKey(String publicKey) {
     this.publicKey = publicKey;
-    return this;
-  }
-
-  public VehiclePojo addPublicKeyItem(byte[] publicKeyItem) {
-    if (this.publicKey == null) {
-      this.publicKey = new java.util.ArrayList<byte[]>();
-    }
-    this.publicKey.add(publicKeyItem);
     return this;
   }
 
@@ -49,11 +41,11 @@ public class VehiclePojo {
    * @return publicKey
   **/
   @ApiModelProperty(value = "")
-  public java.util.List<byte[]> getPublicKey() {
+  public String getPublicKey() {
     return publicKey;
   }
 
-  public void setPublicKey(java.util.List<byte[]> publicKey) {
+  public void setPublicKey(String publicKey) {
     this.publicKey = publicKey;
   }
 

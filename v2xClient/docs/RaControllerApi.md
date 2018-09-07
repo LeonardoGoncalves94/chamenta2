@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 Configure a vehicle within the RASerice.
 
-The request should be composed of the vehicle&#39;s unique name and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).
+The request should be composed of the vehicle&#39;s unique name (9 char long) and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).
 
 ### Example
 ```java

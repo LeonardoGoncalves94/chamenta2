@@ -2,6 +2,8 @@ package com.multicert.project.v2x.pkimanager.api.rest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,11 +62,12 @@ public class RAController {
 	    public Response requestEnrollmentCert(@RequestBody Request ecRequest,
 	                                 HttpServletRequest request, HttpServletResponse response){
 	    	
-	    	byte[] encodedResponse = null;
+	    	String stringResponse = null;
 	    	
 	    	try {
 	    		
-	    		encodedResponse = raService.verifySource(ecRequest).getEncoded();
+	    		byte[] encodedResponse = raService.verifySource(ecRequest).getEncoded();	   
+	    		stringResponse = Hex.toHexString(encodedResponse);
 	   	
 			} catch (Exception e) {
 				if(e instanceof IncorrectRecipientException) {
@@ -90,7 +93,7 @@ public class RAController {
 				}
 			}
 	    	
-	    	return raService.genEcResponse(ecRequest, encodedResponse, "Success");
+	    	return raService.genEcResponse(ecRequest, stringResponse, "Success");
 	    	
 	    }
 	    

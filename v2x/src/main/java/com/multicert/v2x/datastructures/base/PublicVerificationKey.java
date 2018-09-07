@@ -8,6 +8,9 @@ import com.multicert.v2x.cryptography.AlgorithmType;
 
 import java.io.*;
 
+/**
+ * This class contains a public key to be used as a verification key
+ */
 public class PublicVerificationKey extends COERChoice
 {
     public enum PublicVerificationKeyTypes implements COERChoiceEnumeration, AlgorithmType

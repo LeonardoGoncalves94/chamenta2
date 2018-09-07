@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "request")
 public class Request {
 	
-	public Request(String requestOrigin, String requestDestination,Boolean requestType, byte[] requestEncoded) {
+	public Request(String requestOrigin, String requestDestination,Boolean requestType, String requestEncoded) {
 		super();
 		this.requestOrigin = requestOrigin;
 		this.requestDestination = requestDestination;
@@ -46,7 +46,7 @@ public class Request {
 	
 	@Column(name = "req_encoded")
 	@NotEmpty(message = "*Please provide encoded request")
-	private byte[] requestEncoded;
+	private String requestEncoded;
 
 	public Long getRequestId() {
 		return requestId;
@@ -64,11 +64,11 @@ public class Request {
 		this.requestType = requestType;
 	}
 
-	public byte[] getRequestEncoded() {
+	public String getRequestEncoded() {
 		return requestEncoded;
 	}
 
-	public void setRequestEncoded(byte[] requestEncoded) {
+	public void setRequestEncoded(String requestEncoded) {
 		this.requestEncoded = requestEncoded;
 	}
 

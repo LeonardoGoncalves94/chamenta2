@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "response")
 public class Response {
 	
-	public Response(String responseOrigin, String responseDestination,Boolean responseType, String responseMessage, byte[] responseEncoded) {
+	public Response(String responseOrigin, String responseDestination,Boolean responseType, String responseMessage, String responseEncoded) {
 		super();
 		this.responseOrigin = responseOrigin;
 		this.responseDestination = responseDestination;
@@ -46,7 +46,7 @@ public class Response {
 	private Boolean responseType;	
 	
 	@Column(name = "req_encoded")
-	private byte[] responseEncoded;
+	private String responseEncoded;
 	
 	@Column(name = "res_message")
 	@NotEmpty(message = "*Please provide a response messge")
@@ -68,11 +68,11 @@ public class Response {
 		this.responseType = requestType;
 	}
 
-	public byte[] getRequestEncoded() {
+	public String getRequestEncoded() {
 		return responseEncoded;
 	}
 
-	public void setRequestEncoded(byte[] requestEncoded) {
+	public void setRequestEncoded(String requestEncoded) {
 		this.responseEncoded = requestEncoded;
 	}
 
