@@ -15,13 +15,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Table(name = "response")
 public class Response {
 	
-	public Response(String responseOrigin, String responseDestination,Boolean responseType, String responseMessage, String responseEncoded) {
+	public Response(String responseOrigin, String responseDestination, String responseMessage, String responseEncoded, Boolean isSuccess) {
 		super();
 		this.responseOrigin = responseOrigin;
 		this.responseDestination = responseDestination;
-		this.responseType = responseType;
 		this.responseMessage = responseMessage;
 		this.responseEncoded = responseEncoded;
+		this.isSuccess = isSuccess;
 
 	}
 	
@@ -39,11 +39,7 @@ public class Response {
 	
 	@Column(name = "res_destination")
 	@NotEmpty(message = "*Please provide a valid destination")
-	private String responseDestination;
-	
-	@Column(name = "res_type")
-	@Length(min = 3, max = 30)
-	private Boolean responseType;	
+	private String responseDestination;	
 	
 	@Column(name = "req_encoded")
 	private String responseEncoded;
@@ -51,6 +47,9 @@ public class Response {
 	@Column(name = "res_message")
 	@NotEmpty(message = "*Please provide a response messge")
 	private String responseMessage;
+	
+	@Column(name = "res_succsess")
+	private Boolean isSuccess;
 
 	public Long getRequestId() {
 		return responseId;
@@ -58,14 +57,6 @@ public class Response {
 
 	public void setRequestId(Long requestId) {
 		this.responseId = requestId;
-	}
-
-	public Boolean getRequestType() {
-		return responseType;
-	}
-
-	public void setRequestType(Boolean requestType) {
-		this.responseType = requestType;
 	}
 
 	public String getRequestEncoded() {
@@ -98,6 +89,46 @@ public class Response {
 
 	public void setResponseMessage(String responseMessage) {
 		this.responseMessage = responseMessage;
+	}
+
+	public Long getResponseId() {
+		return responseId;
+	}
+
+	public void setResponseId(Long responseId) {
+		this.responseId = responseId;
+	}
+
+	public String getResponseOrigin() {
+		return responseOrigin;
+	}
+
+	public void setResponseOrigin(String responseOrigin) {
+		this.responseOrigin = responseOrigin;
+	}
+
+	public String getResponseDestination() {
+		return responseDestination;
+	}
+
+	public void setResponseDestination(String responseDestination) {
+		this.responseDestination = responseDestination;
+	}
+
+	public String getResponseEncoded() {
+		return responseEncoded;
+	}
+
+	public void setResponseEncoded(String responseEncoded) {
+		this.responseEncoded = responseEncoded;
+	}
+
+	public Boolean getIsSuccess() {
+		return isSuccess;
+	}
+
+	public void setIsSuccess(Boolean isSuccess) {
+		this.isSuccess = isSuccess;
 	}
 	
 

@@ -4,6 +4,7 @@ import java.security.PublicKey;
 import java.util.List;
 
 import com.multicert.project.v2x.pkimanager.model.CA;
+import com.multicert.project.v2x.pkimanager.model.Region;
 import com.multicert.project.v2x.pkimanager.model.Request;
 import com.multicert.project.v2x.pkimanager.model.Response;
 import com.multicert.v2x.cryptography.IncorrectRecipientException;
@@ -16,10 +17,30 @@ public interface CaService {
 	public CA getCaById(Long caId);
 	
 	public CA getCaByName(String caName);
-	
+		
 	public List<CA> getAllCas();
 	
 	public void deleteCa(Long caId);
+	
+	
+	/**
+	 * Method that gets the  valid RootCA (has keys and certificate associated)
+	 * @return RootCA, if the CA exists and is ready, null otherwise
+	 */
+	public CA getRoot();
+	
+	/**
+	 * Method that returns true if a root CA exists even if not yet valid
+	 * @return
+	 */
+	public Boolean rootExists();
+	
+	/**
+	 * Method that returns the valid subCAs 
+	 * @param caType, the type of subCa we are looking "Enrollment" or "Authorization"
+	 * @return
+	 */
+	List<CA> getValidSubCas(String caType);
 	
 	/**
 	 * This method filters the list of possible subject CAs (CAs with encryption keys associated) and returns only the ones which don't have already a certificate associated
@@ -40,13 +61,22 @@ public interface CaService {
 	 * Method that validates an enrollment request.
 	 *
 	 * @param encodedEcRequest the request to validate
+	 * @param enrollmentPeriod, vehicle profile information 
 	 * @param canonicalKey the vehicle's public caninical key
 	 * @param caName the name of the destination CA
 	 * @return 
 	 * @throws IncorrectRecipientException 
 	 * @throws Exception 
 	 */
-	EtsiTs103097Data validateEcRequest(byte[] encodedEcRequest, PublicKey canonicalKey, String caName) throws IncorrectRecipientException, Exception;
+	EtsiTs103097Data validateEcRequest(byte[] encodedEcRequest, String profile, PublicKey canonicalKey, String caName) throws IncorrectRecipientException, Exception;
+
+
+
+
+	
+
+	
+
 			
 		
 

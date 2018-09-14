@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.multicert.project.v2x.pkimanager.model.CA;
 import com.multicert.project.v2x.pkimanager.model.Certificate;
 import com.multicert.project.v2x.pkimanager.model.Key;
+import com.multicert.project.v2x.pkimanager.model.Region;
 import com.multicert.project.v2x.pkimanager.model.Request;
 import com.multicert.project.v2x.pkimanager.model.Response;
 import com.multicert.project.v2x.pkimanager.repository.CaRepository;
@@ -67,16 +68,62 @@ public class CaServiceImpl implements CaService {
 	public void deleteCa(Long caId) {
 		caRepository.delete(caId);	
 	}
-
+	
+	
 	@Override
-	public EtsiTs103097Data validateEcRequest(byte[] encryptedRequest, PublicKey canonicalKey, String caName)throws Exception{
+	public List<CA> getValidSubCas(String caType) 
+	{
+		List<CA> subCAs = caRepository.findBycaType(caType);
+		List<CA> validSubCAs = new ArrayList<CA>();
+		
+		for(CA ca : subCAs) 
+		{
+			if(isReady(ca.getCaName())) 
+			{
+				validSubCAs.add(ca);
+			}
+		}
+		return validSubCAs;
+	}
+	
+	@Override
+	public CA getRoot() {
+		List<CA> root = caRepository.findBycaType("Root");
+		if((root.size() > 0 ))
+		{
+			CA rootCA = root.get(0);
+			if(isReady(rootCA.getCaName()))
+			{
+				return rootCA;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public Boolean rootExists() {
+		List<CA> root = caRepository.findBycaType("Root");
+		if(root.size() > 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
+	
+	
+	@Override
+	public EtsiTs103097Data validateEcRequest(byte[] encryptedRequest, String profile, PublicKey canonicalKey, String caName)throws Exception{
 			
 		CA destCa = getCaByName(caName);
 		Certificate destinationCertificate = destCa.getCertificate();
 		Key encKeyPair = destCa.getEncryptionKey();
 		Key sigKeyPair = destCa.getSignatureKey();
 		
-		return v2xService.processEcRequest(encryptedRequest, destinationCertificate, encKeyPair, canonicalKey, sigKeyPair);		
+		return v2xService.processEcRequest(encryptedRequest,profile , destinationCertificate, encKeyPair, canonicalKey, sigKeyPair);		
 		
 	}
 	

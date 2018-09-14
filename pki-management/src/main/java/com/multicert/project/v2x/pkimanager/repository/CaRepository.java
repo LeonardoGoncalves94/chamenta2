@@ -19,6 +19,7 @@ public interface CaRepository extends JpaRepository<CA, Long>{
 	
 	public List<CA> findBycaGroup(String caGroup);
 	
+	public List<CA> findBycaType(String caType);
 	
 	/**
 	 * SQL query that returns a list of possible CA subjects for a given CA type. This query is used when creating a certificate to specify the certificate's subject CA

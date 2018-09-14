@@ -59,7 +59,7 @@ public class EnrollmentRequestGeneratorTest
         GeographicRegion region = Countries.getGeographicRegion(countries);
         EtsiTs103097Certificate enrollmentCACert = pki.getEnrollmentCA(); // the certificate of the recipient enrollment CA
 
-        ecRequest = requestGenerator.generateEcRequest("123456789",cankeyPair, keyPairAlgorithm,keyPair,keyPairAlgorithm,"someHostname",validityPeriod,region,3,2,enrollmentCACert);
+        ecRequest = requestGenerator.generateEcRequest("123456789",cankeyPair, keyPairAlgorithm,keyPair,keyPairAlgorithm,validityPeriod,region,3,2,enrollmentCACert);
 
 
         //decrypt the request

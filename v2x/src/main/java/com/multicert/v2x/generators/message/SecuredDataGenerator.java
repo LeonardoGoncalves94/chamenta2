@@ -23,12 +23,14 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class generates secured data such as encrypted and signed data, also it decrypts and verifies said data
- * An object of SecuredDataGenerator should be instantiated per message
+ * This class generates secured data such as encrypted and signed data, also it decrypts and verifies signed data
+ * An object of SecuredDataGenerator should be instantiated per message decryption/verification
  */
 public class SecuredDataGenerator
 {
@@ -44,16 +46,16 @@ public class SecuredDataGenerator
     }
 
 
-/**
- * Method to generate an EtsiTs103097Data-Signed structure. //TODO add support for v2x messages, right now only supports certificate requests (signEcRequest)
- * @param hashType
- * @param message the message data to sign.
- * @param headerInfo the header information to include
- * @param signerCertificate the certificate of the signer, null if self-signed
- * @param signerPrivateKey the private key to sign the message
- * @param signingAlgorithm the digital signature algorithm to use
- * @return
- */
+    /**
+    * Method to generate an EtsiTs103097Data-Signed structure. //TODO add support for v2x messages, right now only supports certificate requests (signEcRequest)
+    * @param hashType
+    * @param message the message data to sign.
+    * @param headerInfo the header information to include
+    * @param signerCertificate the certificate of the signer, null if self-signed
+    * @param signerPrivateKey the private key to sign the message
+    * @param signingAlgorithm the digital signature algorithm to use
+    * @return
+    */
     public EtsiTs103097Data createSignedData(HashAlgorithm hashType, byte[] message, HeaderInfo headerInfo, EtsiTs103097Certificate signerCertificate, PrivateKey signerPrivateKey, AlgorithmType signingAlgorithm) throws IOException, NoSuchAlgorithmException, SignatureException
     {
         HashAlgorithm hashedId = hashType;
@@ -68,7 +70,7 @@ public class SecuredDataGenerator
         }
         else
         {
-             signer = new SignerIdentifier(cryptoHelper.getCertificateHashId(signerCertificate, HashAlgorithm.SHA_256)); // set to DIGEST
+             signer = new SignerIdentifier(cryptoHelper.getCertificateHashId(signerCertificate, hashType)); // set to DIGEST
         }
 
         Signature signature = cryptoHelper.signEcRequest(toBeSignedData.getEncoded(), signerPrivateKey, signingAlgorithm);
@@ -200,7 +202,6 @@ public class SecuredDataGenerator
 
         return innerEcRequest.getRequestedSubjectAttributes().getCertIssuePermissions();
     }
-
 
 
 

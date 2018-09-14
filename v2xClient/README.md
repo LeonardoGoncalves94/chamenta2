@@ -73,7 +73,7 @@ public class RaControllerApiExample {
         RaControllerApi apiInstance = new RaControllerApi();
         VehiclePojo vehicle = new VehiclePojo(); // VehiclePojo | vehicle
         try {
-            String result = apiInstance.configureVehicleUsingPOST(vehicle);
+            ConfigResponse result = apiInstance.configureVehicleUsingPOST(vehicle);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RaControllerApi#configureVehicleUsingPOST");
@@ -96,6 +96,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [ConfigResponse](docs/ConfigResponse.md)
  - [Request](docs/Request.md)
  - [Response](docs/Response.md)
  - [VehiclePojo](docs/VehiclePojo.md)

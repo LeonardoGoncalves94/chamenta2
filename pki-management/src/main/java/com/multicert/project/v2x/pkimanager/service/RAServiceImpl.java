@@ -2,17 +2,15 @@ package com.multicert.project.v2x.pkimanager.service;
 
 
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyPair;
 import java.security.PublicKey;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.multicert.project.v2x.pkimanager.model.CA;
-import com.multicert.project.v2x.pkimanager.model.Certificate;
-import com.multicert.project.v2x.pkimanager.model.Key;
+import com.multicert.project.v2x.pkimanager.model.ConfigResponse;
 import com.multicert.project.v2x.pkimanager.model.Request;
 import com.multicert.project.v2x.pkimanager.model.Response;
 import com.multicert.project.v2x.pkimanager.model.Vehicle;
@@ -20,15 +18,13 @@ import com.multicert.project.v2x.pkimanager.model.VehiclePojo;
 import com.multicert.project.v2x.pkimanager.repository.RequestRepository;
 import com.multicert.project.v2x.pkimanager.repository.ResponseRepository;
 import com.multicert.project.v2x.pkimanager.repository.VehicleRepository;
+import com.multicert.project.v2x.pkimanager.repository.ConfigResponseRepository;
 import com.multicert.v2x.cryptography.BadContentTypeException;
-import com.multicert.v2x.cryptography.DecryptionException;
-import com.multicert.v2x.cryptography.ImcompleteRequestException;
 import com.multicert.v2x.cryptography.IncorrectRecipientException;
-import com.multicert.v2x.cryptography.InvalidSignatureException;
 import com.multicert.v2x.cryptography.UnknownItsException;
-import com.multicert.v2x.datastructures.base.EccP256CurvePoint;
 import com.multicert.v2x.datastructures.base.PublicVerificationKey;
-import com.multicert.v2x.datastructures.base.PublicVerificationKey.PublicVerificationKeyTypes;
+import com.multicert.v2x.datastructures.certificate.EtsiTs103097Certificate;
+import com.multicert.v2x.datastructures.certificate.SequenceOfCertificate;
 import com.multicert.v2x.datastructures.message.secureddata.EtsiTs103097Data;
 
 @Service("raService")
@@ -40,6 +36,8 @@ public class RAServiceImpl implements RAService {
 	private VehicleRepository vehicleRepository;
 	@Autowired
 	private ResponseRepository responseRepository;
+	@Autowired
+	private ConfigResponseRepository configResponseRepository;
 	@Autowired
 	private CaService caService;
 	@Autowired
@@ -66,9 +64,12 @@ public class RAServiceImpl implements RAService {
 		Vehicle origin = getVehicle(originName);
 		if(origin == null) 
 		{
-			throw new UnknownItsException ("Error validating EcRequest: the specified origin is not a known ITS station"); //TODO Send response to car
+			throw new UnknownItsException ("Error validating EcRequest: the specified origin is not a known ITS station");
 		}		
-		PublicKey canonicalKey = origin.getPublicKey();
+		PublicKey canonicalKey = origin.getPublicKey(); //get the origin vehicle's public key
+		
+		//get the reference the the vhielce's profile
+		String profileName = origin.getProfileName();
 		
 		String destination = ecRequest.getRequestDestination();
 		if(!caService.isReady(destination))
@@ -77,9 +78,11 @@ public class RAServiceImpl implements RAService {
 		}
 		
 		String stringEcRequest = ecRequest.getRequestEncoded();
-		byte[] encodedEcRequest = Hex.decode(stringEcRequest);
+		byte[] encodedEcRequest = decodeHex(stringEcRequest);
 		
-		return caService.validateEcRequest(encodedEcRequest, canonicalKey, destination);
+		//saveRequest(ecRequest);
+		
+		return caService.validateEcRequest(encodedEcRequest, profileName, canonicalKey, destination); // send profile info here
 	}
 	
 
@@ -111,7 +114,7 @@ public class RAServiceImpl implements RAService {
 	private Vehicle pojoToVehicle(VehiclePojo vehicleP) throws BadContentTypeException
 	{
 		String stringVerificationKey = vehicleP.getPublicKey();
-		byte[] encodedVerificationKey = Hex.decode(stringVerificationKey); //String public verification key to encoded encoded public verification key
+		byte[] encodedVerificationKey = decodeHex(stringVerificationKey); //String public verification key to encoded encoded public verification key
 		
 		try {
 			PublicVerificationKey decodedVerificationKey = new PublicVerificationKey(encodedVerificationKey); //decode the public verification key
@@ -119,7 +122,9 @@ public class RAServiceImpl implements RAService {
 			PublicKey canonicalKey = v2xService.extractPublicKey(decodedVerificationKey);
 			String vehicleId = vehicleP.getVehicleId();
 			
-			return new Vehicle(vehicleId,canonicalKey);
+			String profileName = toProfileName(vehicleP.getVehicleType()); //get a reference to the vehicle's profile 
+			
+			return new Vehicle(vehicleId,canonicalKey, profileName);
 					
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,16 +132,128 @@ public class RAServiceImpl implements RAService {
 		}	
 		
 	}
-	@Override
-	public Response genEcResponse(Request ecRequest, String encodedResponse, String resposneMessage)
+	
+	/**
+	 * Help method that converts a known vehicle type into a reference to the corresponding profile
+	 * @return
+	 */
+	private String toProfileName(int vehicleType) 
 	{
-		Response ecResponse =  new Response(ecRequest.getRequestOrigin(), ecRequest.getRequestDestination(),true, resposneMessage, encodedResponse);
-		saveResponse(ecResponse); 
+		switch(vehicleType)
+		{		
+			default:
+				return "profile1";
+		}
+	}
+	//TODO SAVE IT
+	/**
+	 * Help method that encodes bytes into string
+	 * @param bytes
+	 * @return
+	 */
+	private String encodeHex(byte[] bytes)
+	{
+		return Hex.toHexString(bytes);
+	}
+	
+	/**
+	 * Help method that encodes bytes into string
+	 * @param bytes
+	 * @return
+	 */
+	private byte[] decodeHex(String string)
+	{
+		return Hex.decode(string);
+	}
+	
+	@Override
+	public Response genEcResponse(Request ecRequest, byte[] encodedResponse, String resposneMessage, Boolean isSuccess)
+	{	
+		Response ecResponse = null;
+		
+		if(isSuccess) 
+		{
+			String stringResponse = encodeHex(encodedResponse);
+			ecResponse =  new Response(ecRequest.getRequestOrigin(), ecRequest.getRequestDestination(), resposneMessage, stringResponse, isSuccess);
+		}
+		else
+		{
+			ecResponse =  new Response(ecRequest.getRequestOrigin(), ecRequest.getRequestDestination(), resposneMessage, "", isSuccess);
+
+		}
+		
+		//saveResponse(ecResponse); 
 		return ecResponse;
 	}
+	
+	
+	@Override
+	public ConfigResponse genConfigResponse(String RAname, VehiclePojo vehicleP, boolean isSuccess, String resposneMessage) throws IOException
+	{
+		ConfigResponse confResponse = null;
+		
+		if(isSuccess)
+		{
+			CA rootCA = caService.getRoot();
+			List<CA> trustedAA = caService.getValidSubCas("Authorization");
+			List<CA> trustedEA = caService.getValidSubCas("Enrollment");
+			CA ea = selectEA(trustedEA);
+			CA aa = selectAA(trustedAA);
+			
+			String RootCert = encodeHex(rootCA.getCertificate().getEncoded());
 
+			List <EtsiTs103097Certificate> aux = new ArrayList<EtsiTs103097Certificate>(); //list that will contain the trusted AA certificates in the Etsi 103 097 format
+			for(CA ca : trustedAA)
+			{
+				aux.add(new EtsiTs103097Certificate( ca.getCertificate().getEncoded()));
+			}
+			String trustedAACerts = encodeHex(new SequenceOfCertificate(aux).getEncoded());
+			
+			String eaCert = encodeHex(ea.getCertificate().getEncoded());
+			
+			String aaCert = encodeHex(aa.getCertificate().getEncoded());
+			
+			
+			confResponse = new ConfigResponse(RAname,vehicleP.getVehicleId(), isSuccess, resposneMessage,RootCert, trustedAACerts, eaCert, aaCert);
+		
+			
+		}
+		else
+		{
+			confResponse = new ConfigResponse(RAname,vehicleP.getVehicleId(), isSuccess, resposneMessage, null, null, null, null);
+			
+		}
+		
+		//saveConfResponse(confResponse); // save in the database wait to vehicle ack then delete
+		return confResponse;
+	}
+	
+	/**
+	 * Help method that selects a random valid enrollment authority to serve a vehicle. 
+	 */
+	private CA selectEA(List<CA> trustedEa)
+	{
+		Random rand = new Random();
+		return trustedEa.get(rand.nextInt(trustedEa.size()));
+	}
+	
+	/**
+	 * Help method that selects a random valid  authorization authority  to serve a vehicle
+	 */
+	private CA selectAA(List<CA> trsutedAa)
+	{
+		Random rand = new Random();
+		return trsutedAa.get(rand.nextInt(trsutedAa.size()));
+	}
+
+	 
 	private void saveResponse(Response ecResponse) {
 		responseRepository.save(ecResponse);	
+		//TODO responses are saved on the BD but also need to be deleted, when vehicle confirms its delivery
+	}
+	
+	private void saveConfResponse(ConfigResponse configResponse) {
+		configResponseRepository.save(configResponse);	
 		//TODO responses are saved on the BD but also need to be deleted, when vehicle confirms its delivery
 	}
 	

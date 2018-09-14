@@ -10,11 +10,11 @@ Method | HTTP request | Description
 
 <a name="configureVehicleUsingPOST"></a>
 # **configureVehicleUsingPOST**
-> String configureVehicleUsingPOST(vehicle)
+> ConfigResponse configureVehicleUsingPOST(vehicle)
 
 Configure a vehicle within the RASerice.
 
-The request should be composed of the vehicle&#39;s unique name (9 char long) and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).
+The request should be composed of the vehicle&#39;s unique name (9 char long), its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097), and its type. TODO: falar da resposta colocar em bullets....
 
 ### Example
 ```java
@@ -26,7 +26,7 @@ The request should be composed of the vehicle&#39;s unique name (9 char long) an
 RaControllerApi apiInstance = new RaControllerApi();
 VehiclePojo vehicle = new VehiclePojo(); // VehiclePojo | vehicle
 try {
-    String result = apiInstance.configureVehicleUsingPOST(vehicle);
+    ConfigResponse result = apiInstance.configureVehicleUsingPOST(vehicle);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling RaControllerApi#configureVehicleUsingPOST");
@@ -42,7 +42,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**String**
+[**ConfigResponse**](ConfigResponse.md)
 
 ### Authorization
 

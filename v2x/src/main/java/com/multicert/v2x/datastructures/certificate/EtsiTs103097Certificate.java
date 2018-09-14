@@ -2,11 +2,13 @@ package com.multicert.v2x.datastructures.certificate;
 
 import com.multicert.v2x.asn1.coer.COEREnumeration;
 import com.multicert.v2x.asn1.coer.COERSequence;
+import com.multicert.v2x.datastructures.base.Hostname;
 import com.multicert.v2x.datastructures.base.Signature;
 import com.multicert.v2x.datastructures.base.Uint8;
 
 
 import java.io.*;
+import java.security.PublicKey;
 
 /**
  * This class represents the Etsi ts 103 097 certificate format, more information present in the ETSI TS 103 096 standard Section 6
@@ -155,6 +157,29 @@ public class EtsiTs103097Certificate extends COERSequence
      */
     public Signature getSignature() {
         return (Signature) getComponentValue(SIGNATURE);
+    }
+
+    private Hostname getHostname()
+    {
+        if(getToBeSigned().getId().getType() == CertificateId.CertificateIdTypes.NAME)
+        {
+            return (Hostname)getToBeSigned().getId().getValue();
+        }
+        else return null;
+    }
+
+    /**
+     * Get the hostname as a string
+     * @return
+     */
+    public String getName()
+    {
+        Hostname hostname = getHostname();
+        if(hostname != null)
+        {
+            return hostname.getUTF8String();
+        }
+        else return null;
     }
 
     /**

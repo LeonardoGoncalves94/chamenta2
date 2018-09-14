@@ -11,7 +11,7 @@ import com.multicert.v2x.datastructures.base.Signature;
 public class VehicleGenerator {
 	
 	private Map<String, Vehicle> vehicles = new HashMap<String, Vehicle>();
-	private AlgorithmType vehicleAlg = Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE;
+	private AlgorithmType vehicleAlg = Signature.SignatureTypes.ECDSA_NIST_P256_SIGNATURE; //default vehicle algorithm TODO: add some randomness in the algorithm choice for each vehicle
 	private int numberOfVehicles;
 	private static V2X v2x;
 	

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="3" failures="0" name="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" time="2.157" errors="0" skipped="0">
+<testsuite tests="3" failures="0" name="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" time="1.92" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2017.3.5"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
@@ -60,7 +60,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" name="testDecrypt" time="2.029"/>
-  <testcase classname="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" name="testEncodeAndDecode" time="0.055"/>
-  <testcase classname="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" name="testverify" time="0.073"/>
+  <testcase classname="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" name="testDecrypt" time="1.793"/>
+  <testcase classname="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" name="testEncodeAndDecode" time="0.075"/>
+  <testcase classname="com.multicert.v2x.generators.certificaterequest.EnrollmentRequestGeneratorTest" name="testverify" time="0.052"/>
 </testsuite>

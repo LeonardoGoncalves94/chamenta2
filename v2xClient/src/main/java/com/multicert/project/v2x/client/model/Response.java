@@ -23,8 +23,11 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Response
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-07T17:25:28.225+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-13T15:56:38.014+01:00")
 public class Response {
+  @JsonProperty("isSuccess")
+  private Boolean isSuccess = null;
+
   @JsonProperty("requestDestination")
   private String requestDestination = null;
 
@@ -37,11 +40,38 @@ public class Response {
   @JsonProperty("requestOrigin")
   private String requestOrigin = null;
 
-  @JsonProperty("requestType")
-  private Boolean requestType = null;
+  @JsonProperty("responseDestination")
+  private String responseDestination = null;
+
+  @JsonProperty("responseEncoded")
+  private String responseEncoded = null;
+
+  @JsonProperty("responseId")
+  private Long responseId = null;
 
   @JsonProperty("responseMessage")
   private String responseMessage = null;
+
+  @JsonProperty("responseOrigin")
+  private String responseOrigin = null;
+
+  public Response isSuccess(Boolean isSuccess) {
+    this.isSuccess = isSuccess;
+    return this;
+  }
+
+   /**
+   * Get isSuccess
+   * @return isSuccess
+  **/
+  @ApiModelProperty(value = "")
+  public Boolean getIsSuccess() {
+    return isSuccess;
+  }
+
+  public void setIsSuccess(Boolean isSuccess) {
+    this.isSuccess = isSuccess;
+  }
 
   public Response requestDestination(String requestDestination) {
     this.requestDestination = requestDestination;
@@ -115,22 +145,58 @@ public class Response {
     this.requestOrigin = requestOrigin;
   }
 
-  public Response requestType(Boolean requestType) {
-    this.requestType = requestType;
+  public Response responseDestination(String responseDestination) {
+    this.responseDestination = responseDestination;
     return this;
   }
 
    /**
-   * Get requestType
-   * @return requestType
+   * Get responseDestination
+   * @return responseDestination
   **/
   @ApiModelProperty(value = "")
-  public Boolean getRequestType() {
-    return requestType;
+  public String getResponseDestination() {
+    return responseDestination;
   }
 
-  public void setRequestType(Boolean requestType) {
-    this.requestType = requestType;
+  public void setResponseDestination(String responseDestination) {
+    this.responseDestination = responseDestination;
+  }
+
+  public Response responseEncoded(String responseEncoded) {
+    this.responseEncoded = responseEncoded;
+    return this;
+  }
+
+   /**
+   * Get responseEncoded
+   * @return responseEncoded
+  **/
+  @ApiModelProperty(value = "")
+  public String getResponseEncoded() {
+    return responseEncoded;
+  }
+
+  public void setResponseEncoded(String responseEncoded) {
+    this.responseEncoded = responseEncoded;
+  }
+
+  public Response responseId(Long responseId) {
+    this.responseId = responseId;
+    return this;
+  }
+
+   /**
+   * Get responseId
+   * @return responseId
+  **/
+  @ApiModelProperty(value = "")
+  public Long getResponseId() {
+    return responseId;
+  }
+
+  public void setResponseId(Long responseId) {
+    this.responseId = responseId;
   }
 
   public Response responseMessage(String responseMessage) {
@@ -151,6 +217,24 @@ public class Response {
     this.responseMessage = responseMessage;
   }
 
+  public Response responseOrigin(String responseOrigin) {
+    this.responseOrigin = responseOrigin;
+    return this;
+  }
+
+   /**
+   * Get responseOrigin
+   * @return responseOrigin
+  **/
+  @ApiModelProperty(value = "")
+  public String getResponseOrigin() {
+    return responseOrigin;
+  }
+
+  public void setResponseOrigin(String responseOrigin) {
+    this.responseOrigin = responseOrigin;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -161,17 +245,21 @@ public class Response {
       return false;
     }
     Response response = (Response) o;
-    return Objects.equals(this.requestDestination, response.requestDestination) &&
+    return Objects.equals(this.isSuccess, response.isSuccess) &&
+        Objects.equals(this.requestDestination, response.requestDestination) &&
         Objects.equals(this.requestEncoded, response.requestEncoded) &&
         Objects.equals(this.requestId, response.requestId) &&
         Objects.equals(this.requestOrigin, response.requestOrigin) &&
-        Objects.equals(this.requestType, response.requestType) &&
-        Objects.equals(this.responseMessage, response.responseMessage);
+        Objects.equals(this.responseDestination, response.responseDestination) &&
+        Objects.equals(this.responseEncoded, response.responseEncoded) &&
+        Objects.equals(this.responseId, response.responseId) &&
+        Objects.equals(this.responseMessage, response.responseMessage) &&
+        Objects.equals(this.responseOrigin, response.responseOrigin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(requestDestination, requestEncoded, requestId, requestOrigin, requestType, responseMessage);
+    return Objects.hash(isSuccess, requestDestination, requestEncoded, requestId, requestOrigin, responseDestination, responseEncoded, responseId, responseMessage, responseOrigin);
   }
 
 
@@ -180,12 +268,16 @@ public class Response {
     StringBuilder sb = new StringBuilder();
     sb.append("class Response {\n");
     
+    sb.append("    isSuccess: ").append(toIndentedString(isSuccess)).append("\n");
     sb.append("    requestDestination: ").append(toIndentedString(requestDestination)).append("\n");
     sb.append("    requestEncoded: ").append(toIndentedString(requestEncoded)).append("\n");
     sb.append("    requestId: ").append(toIndentedString(requestId)).append("\n");
     sb.append("    requestOrigin: ").append(toIndentedString(requestOrigin)).append("\n");
-    sb.append("    requestType: ").append(toIndentedString(requestType)).append("\n");
+    sb.append("    responseDestination: ").append(toIndentedString(responseDestination)).append("\n");
+    sb.append("    responseEncoded: ").append(toIndentedString(responseEncoded)).append("\n");
+    sb.append("    responseId: ").append(toIndentedString(responseId)).append("\n");
     sb.append("    responseMessage: ").append(toIndentedString(responseMessage)).append("\n");
+    sb.append("    responseOrigin: ").append(toIndentedString(responseOrigin)).append("\n");
     sb.append("}");
     return sb.toString();
   }

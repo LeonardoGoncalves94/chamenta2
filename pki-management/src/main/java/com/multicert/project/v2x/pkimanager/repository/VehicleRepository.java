@@ -7,5 +7,5 @@ import com.multicert.project.v2x.pkimanager.model.Vehicle;
 @Repository("vehicleRepository")
 public interface VehicleRepository extends JpaRepository<Vehicle, String>{
 
-	Vehicle findByvehicleId(String vehicleId);
+	public Vehicle findByvehicleId(String vehicleId);
 }

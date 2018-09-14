@@ -190,14 +190,13 @@
       <artifactId>spring-web</artifactId>
       <version>${spring-web-version}</version>
     </dependency>
-    	
-     <!-- V2X package -->
-    <dependency>
+    
+    <!-- V2X package -->
+	<dependency>
          <groupId>com.multicert.v2x</groupId>
          <artifactId>v2x</artifactId>
          <version>1.0-SNAPSHOT</version>
       </dependency>
-    
     
     <!-- JSON processing: jackson -->
     <dependency>

@@ -23,13 +23,37 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * VehiclePojo
  */
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-07T17:25:28.225+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-13T15:56:38.014+01:00")
 public class VehiclePojo {
+  @JsonProperty("canonicalPublicKey")
+  private String canonicalPublicKey = null;
+
   @JsonProperty("publicKey")
   private String publicKey = null;
 
   @JsonProperty("vehicleId")
   private String vehicleId = null;
+
+  @JsonProperty("vehicleType")
+  private Integer vehicleType = null;
+
+  public VehiclePojo canonicalPublicKey(String canonicalPublicKey) {
+    this.canonicalPublicKey = canonicalPublicKey;
+    return this;
+  }
+
+   /**
+   * Get canonicalPublicKey
+   * @return canonicalPublicKey
+  **/
+  @ApiModelProperty(value = "")
+  public String getCanonicalPublicKey() {
+    return canonicalPublicKey;
+  }
+
+  public void setCanonicalPublicKey(String canonicalPublicKey) {
+    this.canonicalPublicKey = canonicalPublicKey;
+  }
 
   public VehiclePojo publicKey(String publicKey) {
     this.publicKey = publicKey;
@@ -67,6 +91,24 @@ public class VehiclePojo {
     this.vehicleId = vehicleId;
   }
 
+  public VehiclePojo vehicleType(Integer vehicleType) {
+    this.vehicleType = vehicleType;
+    return this;
+  }
+
+   /**
+   * Get vehicleType
+   * @return vehicleType
+  **/
+  @ApiModelProperty(value = "")
+  public Integer getVehicleType() {
+    return vehicleType;
+  }
+
+  public void setVehicleType(Integer vehicleType) {
+    this.vehicleType = vehicleType;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -77,13 +119,15 @@ public class VehiclePojo {
       return false;
     }
     VehiclePojo vehiclePojo = (VehiclePojo) o;
-    return Objects.equals(this.publicKey, vehiclePojo.publicKey) &&
-        Objects.equals(this.vehicleId, vehiclePojo.vehicleId);
+    return Objects.equals(this.canonicalPublicKey, vehiclePojo.canonicalPublicKey) &&
+        Objects.equals(this.publicKey, vehiclePojo.publicKey) &&
+        Objects.equals(this.vehicleId, vehiclePojo.vehicleId) &&
+        Objects.equals(this.vehicleType, vehiclePojo.vehicleType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(publicKey, vehicleId);
+    return Objects.hash(canonicalPublicKey, publicKey, vehicleId, vehicleType);
   }
 
 
@@ -92,8 +136,10 @@ public class VehiclePojo {
     StringBuilder sb = new StringBuilder();
     sb.append("class VehiclePojo {\n");
     
+    sb.append("    canonicalPublicKey: ").append(toIndentedString(canonicalPublicKey)).append("\n");
     sb.append("    publicKey: ").append(toIndentedString(publicKey)).append("\n");
     sb.append("    vehicleId: ").append(toIndentedString(vehicleId)).append("\n");
+    sb.append("    vehicleType: ").append(toIndentedString(vehicleType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

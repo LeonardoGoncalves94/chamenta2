@@ -11,7 +11,10 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-
+/**
+ * This Table holds the Countries encoded as integer values (ISO 3166 Codes (Countries))
+ *
+ */
 @Entity
 @Table(name = "region")
 public class Region {
@@ -23,11 +26,11 @@ public class Region {
 	
 	@Column(name = "region_name")
 	@Length(min = 2, max = 30)
-	@NotEmpty(message = "*Please provide an Country name")
+	@NotEmpty(message = "*Please provide a Country name")
 	private String regionName;
 	
 	@Column(name = "region_number")
-	@NotEmpty(message = "*Please provide an Country number")
+	@NotEmpty(message = "*Please provide a Country number")
 	private int regionNumber;
 
 	public Long getRegionId() {

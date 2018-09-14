@@ -7,8 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -41,7 +39,6 @@ public class Request {
 	private String requestDestination;
 	
 	@Column(name = "req_type")
-	@Length(min = 3, max = 30)
 	private Boolean requestType;	
 	
 	@Column(name = "req_encoded")

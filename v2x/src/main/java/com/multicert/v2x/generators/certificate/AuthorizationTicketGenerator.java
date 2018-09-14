@@ -30,8 +30,6 @@ public class AuthorizationTicketGenerator extends CertificateGenerator
      * @param region
      * @param appPermissions used to indicate message signing permissions, i.e. permissions to sign v2x messages
      * @param certRequestPermissions
-     * @param cracaid
-     * @param crlSeries
      * @param assuranceLevel
      * @param confidenceLevel
      * @param issuerSigningAlgorithm
@@ -50,8 +48,6 @@ public class AuthorizationTicketGenerator extends CertificateGenerator
                                                                GeographicRegion region,
                                                                PsidSsp[] appPermissions,
                                                                PsidSspRange[] certRequestPermissions,
-                                                               byte[] cracaid,
-                                                               int crlSeries,
                                                                int assuranceLevel,
                                                                int confidenceLevel,
                                                                AlgorithmType issuerSigningAlgorithm,

@@ -27,6 +27,8 @@ import com.multicert.project.v2x.pkimanager.model.Key;
 import com.multicert.project.v2x.pkimanager.model.Region;
 import com.multicert.project.v2x.pkimanager.model.Role;
 import com.multicert.project.v2x.pkimanager.model.User;
+import com.multicert.project.v2x.pkimanager.model.VehicleProfiles;
+import com.multicert.project.v2x.pkimanager.model.VehicleProfiles.Profile;
 import com.multicert.project.v2x.pkimanager.repository.RoleRepository;
 import com.multicert.project.v2x.pkimanager.repository.UserRepository;
 import com.multicert.v2x.IdentifiedRegions.Countries;
@@ -198,17 +200,17 @@ public class V2XServiceImpl implements V2XService{
 	}
 	
 	@Override
-	public EtsiTs103097Data processEcRequest(byte[] encryptedRequest, Certificate destinationCertificate, Key decriptionPair, PublicKey canonicalKey, Key sigKeyPair) throws Exception 
+	public EtsiTs103097Data processEcRequest(byte[] encryptedRequest, String profile, Certificate destinationCertificate, Key decriptionPair, PublicKey canonicalKey, Key sigKeyPair) throws Exception 
 	{
 		
-		SecuredDataGenerator securedDataGenerator = new SecuredDataGenerator(cryptoHelper);
+		SecuredDataGenerator securedDataGenerator = new SecuredDataGenerator(cryptoHelper); // this object will contain the vehicle shared key (used for encryptiont he response) and the innerEcRequest (used for building the rnollment credential)
 		
 		EtsiTs103097Certificate destCert = new EtsiTs103097Certificate(destinationCertificate.getEncoded());
 		PrivateKey decryptionKey = JavaKeyStore.getKeyPair(decriptionPair.getAlias()).getPrivate();
 		KeyPair signatureKeys = JavaKeyStore.getKeyPair(sigKeyPair.getAlias());
-		AlgorithmType sigAlg = getSignatureType(decriptionPair.getAlgorithm());
-		byte[] decyptedBytes;
+		AlgorithmType sigAlg = getSignatureType(sigKeyPair.getAlgorithm());
 		
+		byte[] decyptedBytes;
 		decyptedBytes = securedDataGenerator.decryptEncryptedData(new EtsiTs103097Data(encryptedRequest),destCert ,decryptionKey); //if the CA cant decrypt the request, it cannot encrypt the response. The RA is notified of this.
 		SecretKey sharedKey = securedDataGenerator.getSharedKey();
 		
@@ -221,12 +223,12 @@ public class V2XServiceImpl implements V2XService{
 				| BadContentTypeException | InvalidSignatureException e) {
 			e.printStackTrace();
 			responseCode = exceptionToResponseCode(e);
-			genResponse(decryptedRequest,sharedKey, responseCode, destCert, signatureKeys, sigAlg, securedDataGenerator);
+			genResponse(decryptedRequest, profile, sharedKey, responseCode, destCert, signatureKeys, sigAlg, securedDataGenerator);
 			return null;
 		}
 		// in case the request was successfully decrypted and the vehicle's signature checks, we need to check if the requested attributes are plausible for this vehicle's profile
 		responseCode = verifyRequestedSubjectAttributes();
-		 return genResponse(decryptedRequest,sharedKey, responseCode, destCert, signatureKeys, sigAlg, securedDataGenerator);		
+		 return genResponse(decryptedRequest,profile, sharedKey, responseCode, destCert, signatureKeys, sigAlg, securedDataGenerator);		
 	}
 	
 	/**
@@ -243,6 +245,8 @@ public class V2XServiceImpl implements V2XService{
 	/**
 	 * Method that generates a response to the vehicle (Only called when the CA is able to decrypt the original request)
 	 * @param signedRequest 
+	 * @param enrollmentPeriod the validity period of the returned enrollment certificate
+	 * @param countries the region validity of the returned enrolment certificate
 	 * @param sharedKey
 	 * @param responseCode
 	 * @param destCert
@@ -252,7 +256,7 @@ public class V2XServiceImpl implements V2XService{
 	 * @throws GeneralSecurityException 
 	 * @throws IOException 
 	 */
-	private EtsiTs103097Data genResponse(EtsiTs103097Data signedRequest, SecretKey sharedKey, 
+	private EtsiTs103097Data genResponse(EtsiTs103097Data signedRequest, String profile, SecretKey sharedKey, 
 			EnrollmentResonseCode responseCode, EtsiTs103097Certificate EAcertificate, 
 			KeyPair signatureKeys, AlgorithmType signingAlgorithm, SecuredDataGenerator securedDataGenerator) throws IOException, GeneralSecurityException
 	{	
@@ -263,20 +267,22 @@ public class V2XServiceImpl implements V2XService{
 		else
 		{
 			InnerEcRequest innerRequest = securedDataGenerator.getInnerEcRequest();
-			EtsiTs103097Certificate enrollmentCredential =  genEnrollmentCredential(innerRequest, signingAlgorithm,EAcertificate, signatureKeys, securedDataGenerator);
+			EtsiTs103097Certificate enrollmentCredential =  genEnrollmentCredential(innerRequest, profile, signingAlgorithm,EAcertificate, signatureKeys, securedDataGenerator);
 			return eResponseGenerator.generateEcResponse(signedRequest, sharedKey, responseCode, enrollmentCredential, EAcertificate, signatureKeys, signingAlgorithm); //positive response with new enrollment credential is returned
 		}
 		
 	}
 	
-	private EtsiTs103097Certificate genEnrollmentCredential(InnerEcRequest innerRequest,
-			AlgorithmType signingAlgorithm, EtsiTs103097Certificate EAcertificate,
+	
+	
+	private EtsiTs103097Certificate genEnrollmentCredential(InnerEcRequest innerRequest, 
+			String profileName, AlgorithmType signingAlgorithm, EtsiTs103097Certificate EAcertificate,
 			KeyPair signatureKeys, SecuredDataGenerator securedDataGenerator) throws InvalidKeySpecException, SignatureException, NoSuchAlgorithmException, IOException
 	{
 		String itsId = innerRequest.getItsId();
-		ValidityPeriod validityPeriod = innerRequest.getRequestedSubjectAttributes().getValidityPeriod();
-		GeographicRegion validityRegion = innerRequest.getRequestedSubjectAttributes().getRegion();
-		
+		Profile vehicleProfile = getProfile(profileName);
+		ValidityPeriod validityPeriod = new ValidityPeriod(new Date(),DurationTypes.YEARS, vehicleProfile.getEnrollmentPeriod());
+		GeographicRegion validityRegion = getGeographicRegion(vehicleProfile.getCountries());		
 		SubjectAssurance assurance = innerRequest.getRequestedSubjectAttributes().getAssuranceLevel();
 		int assuranceLevel = assurance.getAssuranceLevel();
 		int confidenceLevel = assurance.getConfidenceLevel();
@@ -286,13 +292,20 @@ public class V2XServiceImpl implements V2XService{
 		PublicKey vehicleVerificationKey = securedDataGenerator.getRequestPublicKey();
 		
 		return enrollmentCertGenerator.generateEnrollmentCredential(itsId,validityPeriod,validityRegion,assuranceLevel,confidenceLevel,signingAlgorithm, vehicleVerificationKey, EAcertificate, signatureKeys, null, null, null); //Encryption information is set to null
-		
-			
-		
+						
 	}
 	
-	 
+	/**
+	 * Help method to get the vehicle profile
+	 * @param profileName, a reference to the profile
+	 * @return
+	 */
+	private Profile getProfile(String profileName)
+	{
+		return VehicleProfiles.vehicleProfiles.get(profileName);
+	}
     
+	
 	
 	@Override
 	public PublicKey extractPublicKey(PublicVerificationKey verificationKey) throws InvalidKeySpecException {

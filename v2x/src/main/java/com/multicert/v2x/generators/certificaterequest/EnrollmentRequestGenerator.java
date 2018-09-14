@@ -56,11 +56,10 @@ public class EnrollmentRequestGenerator extends SecuredDataGenerator
      *
      * Method that generates an enrollment certificate request of a given ITS-S according to Etsi102 0941 standard
      * @param itsID The identifier of the requesting ITS-S, more details in InnerEcRequest. Required //TODO RE-ENROLLMENT !!!!!!!!!!
-     * @param canonicalKeys the canonical keypair generated at vehicle manufactured, from which the public key is shared with the RA
-     * @param canonicalAlgorithm the algorithm of the canonical Keypair
+     * @param canonicalKeys the canonical keypair generated at vehicle manufactured, from which the public key is shared with the RA. Required
+     * @param canonicalAlgorithm the algorithm of the canonical Keypair. Required
      * @param verificationKeys The newly generated verification key pair to be certified in the enrollment certificate. Required.
      * @param verificationAlgorithm The algorithm used for signing and verification by the ITS-S. Required.
-     * @param hostname The name of the ITS-S. Required.
      * @param validityPeriod The Validity period of the requested enrollment certificate. Optional.
      * @param geographicRegion The Validity region of the requested enrollment certificate. Optional.
      * @param assuranceLevel The assurance level of the requested enrollment certificate. Required
@@ -70,7 +69,7 @@ public class EnrollmentRequestGenerator extends SecuredDataGenerator
      * @throws NoSuchAlgorithmException
      * @throws SignatureException
      */
-    public EtsiTs103097Data generateEcRequest(String itsID, KeyPair canonicalKeys,  AlgorithmType canonicalAlgorithm, KeyPair verificationKeys, AlgorithmType verificationAlgorithm, String hostname,
+    public EtsiTs103097Data generateEcRequest(String itsID, KeyPair canonicalKeys,  AlgorithmType canonicalAlgorithm, KeyPair verificationKeys, AlgorithmType verificationAlgorithm,
                                               ValidityPeriod validityPeriod, GeographicRegion geographicRegion,
                                               int assuranceLevel, int confidenceLevel, EtsiTs103097Certificate EnrollmentAuthorityCertificate) throws IOException, GeneralSecurityException
     {
@@ -79,7 +78,7 @@ public class EnrollmentRequestGenerator extends SecuredDataGenerator
 
         PrivateKey canonicalsigninKey = canonicalKeys.getPrivate();
 
-        innerEcRequest = createInnerECRequest(itsID, verificationKey, verificationAlgorithm, hostname, validityPeriod, geographicRegion, assuranceLevel, confidenceLevel);
+        innerEcRequest = createInnerECRequest(itsID, verificationKey, verificationAlgorithm, validityPeriod, geographicRegion, assuranceLevel, confidenceLevel);
 
         InnerECRequestSignedForPOP = createRequestSignedData(innerEcRequest.getEncoded(),signingKey , verificationAlgorithm); //inner signed data which self signed by the ITS-S to prove possession of the new generated verification key pair
 
@@ -95,14 +94,14 @@ public class EnrollmentRequestGenerator extends SecuredDataGenerator
     /**
      * Method that created the InnerEcRequest structure of the enrollment certificate request.
      */
-    private InnerEcRequest createInnerECRequest(String itsID, PublicKey verificationKey, AlgorithmType signingAlgorithm, String hostname,
+    private InnerEcRequest createInnerECRequest(String itsID, PublicKey verificationKey, AlgorithmType signingAlgorithm,
                                                ValidityPeriod validityPeriod, GeographicRegion geographicRegionegion, int assuranceLevel,
                                                int confidenceLevel) throws IOException
     {
         PublicVerificationKey publicVerificationKey = new PublicVerificationKey(certificateGenerator.getPublicVerificationKeyType(signingAlgorithm), certificateGenerator.convertToPoint(signingAlgorithm, verificationKey)); // type and key
         PublicKeys publicKeys = new PublicKeys(publicVerificationKey, null); // no encryption key, only the verification key to be certified in the Enrollment credential
 
-        CertificateId name = new CertificateId(new Hostname(hostname));
+        CertificateId name = new CertificateId(new Hostname(itsID));
 
         SubjectAssurance subjectAssurance = new SubjectAssurance(assuranceLevel, confidenceLevel);
 

@@ -92,5 +92,6 @@ public class Key {
 
 	public void setKeyType(String keyType) {
 		this.keyType = keyType;
-	}	
+	}
+
 }

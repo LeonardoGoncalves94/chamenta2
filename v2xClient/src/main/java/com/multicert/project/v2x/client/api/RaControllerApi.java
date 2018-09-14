@@ -2,6 +2,7 @@ package com.multicert.project.v2x.client.api;
 
 import com.multicert.project.v2x.client.invoker.ApiClient;
 
+import com.multicert.project.v2x.client.model.ConfigResponse;
 import com.multicert.project.v2x.client.model.Request;
 import com.multicert.project.v2x.client.model.Response;
 import com.multicert.project.v2x.client.model.VehiclePojo;
@@ -22,7 +23,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-07T17:25:28.225+01:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-09-13T15:56:38.014+01:00")
 @Component("com.multicert.project.v2x.client.api.RaControllerApi")
 public class RaControllerApi {
     private ApiClient apiClient;
@@ -46,16 +47,16 @@ public class RaControllerApi {
 
     /**
      * Configure a vehicle within the RASerice.
-     * The request should be composed of the vehicle&#39;s unique name (9 char long) and its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097).
+     * The request should be composed of the vehicle&#39;s unique name (9 char long), its canonical public key (encoded PublicVerificationKey structure as defined in EtsiTs 103 097), and its type. TODO: falar da resposta colocar em bullets....
      * <p><b>201</b> - Created
      * <p><b>401</b> - Unauthorized
      * <p><b>403</b> - Forbidden
      * <p><b>404</b> - Not Found
      * @param vehicle vehicle
-     * @return String
+     * @return ConfigResponse
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public String configureVehicleUsingPOST(VehiclePojo vehicle) throws RestClientException {
+    public ConfigResponse configureVehicleUsingPOST(VehiclePojo vehicle) throws RestClientException {
         Object postBody = vehicle;
         
         // verify the required parameter 'vehicle' is set
@@ -80,7 +81,7 @@ public class RaControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<String> returnType = new ParameterizedTypeReference<String>() {};
+        ParameterizedTypeReference<ConfigResponse> returnType = new ParameterizedTypeReference<ConfigResponse>() {};
         return apiClient.invokeAPI(path, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

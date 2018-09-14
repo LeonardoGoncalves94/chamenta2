@@ -39,6 +39,9 @@ import java.math.BigInteger;
 import java.security.*;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -140,6 +143,22 @@ public class CryptoHelper {
         }
         return new SecretKeySpec(keyData, "AES");
     }
+
+    /**
+     * Method to build a cert store map of HashedId8 to Certificate from a collection of certificates.
+     * @param certificates array of certificate to build store of.
+     * @return a map of HashedId8 to certificate.
+     */
+    public Map<HashedId8, EtsiTs103097Certificate> buildCertStore(EtsiTs103097Certificate[] certificates, HashAlgorithm hashAlgorithm) throws IllegalArgumentException, NoSuchAlgorithmException, IOException{
+        Map<HashedId8, EtsiTs103097Certificate> retval = new HashMap<HashedId8, EtsiTs103097Certificate>();
+
+        for(EtsiTs103097Certificate cert : Arrays.asList(certificates)){
+            retval.put(new HashedId8(digest(cert.getEncoded(), hashAlgorithm)), cert);
+        }
+
+        return retval;
+    }
+
 
     /**
      * Method that converts a public key of a given algorithm to a EccP256CurvePoint structure (encode point)

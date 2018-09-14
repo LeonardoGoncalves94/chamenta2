@@ -56,6 +56,7 @@ public class CaManagementController {
 		if(currentCa == null) {
 			ra.addFlashAttribute("message", "Specified CA does not exist");
 			ra.addFlashAttribute("type", "danger");
+			return "redirect:/admin/ca";
 		}
 		
 		currentCa.setCaCountry(caCountry);
@@ -77,9 +78,15 @@ public class CaManagementController {
 
 	@RequestMapping(value = "/admin/addca", method = RequestMethod.POST)
 	public String addCa(@RequestParam("caName") String caName, @RequestParam("caCountry") String caCountry, @RequestParam("caType") String caType, final RedirectAttributes ra) {
-		
+		if(caType.equals("Root") && (caManagementService.rootExists())) // if we are tying to add a root CA and there is already a root CA defined
+		{
+			ra.addFlashAttribute("message", "A root Ca already exists for this domain");
+			ra.addFlashAttribute("type", "danger");
+			
+			return "redirect:/admin/ca";
+		}
 		CA ca = new CA(caName, caCountry, caType, getGroup(caType));
-
+		
 		caManagementService.saveOrUpdateCaData(ca);
 
 		ra.addFlashAttribute("message", "Certification authority successfully added");

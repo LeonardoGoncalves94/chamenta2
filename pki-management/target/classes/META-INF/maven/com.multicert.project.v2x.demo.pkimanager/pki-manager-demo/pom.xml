@@ -71,11 +71,12 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- V2X package -->
 		<dependency>
-         <groupId>com.multicert.v2x</groupId>
-         <artifactId>v2x</artifactId>
-         <version>1.0-SNAPSHOT</version>
-      </dependency>
+         	<groupId>com.multicert.v2x</groupId>
+         	<artifactId>v2x</artifactId>
+         	<version>1.0-SNAPSHOT</version>
+     	 </dependency>
 
 		<!-- https://mvnrepository.com/artifact/net.sourceforge.nekohtml/nekohtml -->
 		<dependency>

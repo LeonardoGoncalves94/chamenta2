@@ -1,5 +1,7 @@
 package com.multicert.project.v2x.client;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class Main {
@@ -10,10 +12,13 @@ public class Main {
 		init();
 		VehicleGenerator vg = new VehicleGenerator(1, v2x);
 		vg.init();
+		Map<String, Vehicle> vehicles = vg.getVehicles();
 		
-		for (Entry<String, Vehicle> entry : vg.getVehicles().entrySet())
+		
+		for (Entry<String, Vehicle> entry : vehicles.entrySet())
 		{
 			entry.getValue().configureVehicle();
+			
 		}
 		
 	}

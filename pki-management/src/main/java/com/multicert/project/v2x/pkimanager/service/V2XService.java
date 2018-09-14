@@ -54,13 +54,14 @@ public interface V2XService {
 	 * Method that processes an enrollment request
 	 * This method decrypts the request, verifies the vehicle's signature and composes the response
 	 * @param encryptedRequest the encoded request
+	 * @param enrollmentPeriod, vehicle profile information (used to generate an enrollment certificate)
 	 * @param decriptionPair the decryption keypair that belongs to the destination CA (used to decrypt the request)
 	 * @param canonicalKey the canonical public key that belongs to the vehicle (used to verify its signature)
 	 * @param signingPair the signing keypair that belongs to the destination cA (used to sign the response) 
 	 * @throws Exception
 	 * @returns the enrollment response 
 	 */
-	EtsiTs103097Data processEcRequest(byte[] encryptedRequest, Certificate destinationCertificate, Key decriptionPair, PublicKey canonicalKey, Key signingPair) throws Exception;
+	EtsiTs103097Data processEcRequest(byte[] encryptedRequest, String profile, Certificate destinationCertificate, Key decriptionPair, PublicKey canonicalKey, Key signingPair) throws Exception;
 	
 	/**
 	 * Method to extract the PublicKey from the PublicVerificationKey structure

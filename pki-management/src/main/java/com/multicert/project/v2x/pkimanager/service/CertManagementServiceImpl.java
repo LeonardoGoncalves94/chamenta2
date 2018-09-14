@@ -33,8 +33,7 @@ public class CertManagementServiceImpl implements CertManagementService {
 
 	@Override
 	public void deleteCertificate(Long certID) {
-		certRepository.delete(certID);
-		
+		certRepository.delete(certID);	
 	}	
 	
 	/**

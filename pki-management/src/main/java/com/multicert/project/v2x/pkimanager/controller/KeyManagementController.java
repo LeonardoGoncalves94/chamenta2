@@ -57,6 +57,8 @@ public class KeyManagementController {
 		if(currentKey == null) {
 			ra.addFlashAttribute("message", "Specified key does not exist");
 			ra.addFlashAttribute("type", "danger");
+			
+			return "redirect:/admin/key";
 		}
 		
 		currentKey.setAlias(alias);
